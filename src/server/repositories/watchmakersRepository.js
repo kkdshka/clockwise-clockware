@@ -11,8 +11,7 @@ function addWatchmaker(watchmaker) {
 }
 
 function editWatchmaker(watchmaker) {
-    const data = {name: watchmaker.name, city: watchmaker.city, rate: watchmaker.rate, id: watchmaker.id};
-    pool.query("UPDATE watchmakers SET ? WHERE id = ?", data, function (error, results, fields) {
+    pool.query("UPDATE watchmakers SET ? WHERE id = ?", watchmaker, function (error, results, fields) {
         if (error)
             throw error;
         console.log('Watchmaker edited');
@@ -36,7 +35,7 @@ function getAllWatchmakers() {
             let models = [];
             for (let i = 0; i < results.length; i++) {
                 const row = results[i];
-                const watchmaker = new Watchmaker(row.name, row.city, row.rate, row.id);
+                const watchmaker = new Watchmaker(row.name, row.city, row.rating, row.id);
                 models.push(watchmaker);
             }
             resolve(models);

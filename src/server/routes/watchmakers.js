@@ -8,4 +8,16 @@ router.get('/', function (req, res) {
     });
 });
 
+router.post('/', function (req, res) {
+    const watchmakerData = {
+        name: req.body.name,
+        city: req.body.city,
+        rating: req.body.rating
+    };
+    watchmakersRepository.add(watchmakerData);
+    watchmakersRepository.getAll().then((models) => {
+        res.json(models);
+    });
+});
+
 module.exports = router;

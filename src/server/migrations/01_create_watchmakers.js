@@ -5,7 +5,7 @@ function createWatchmakers() {
             "id int NOT NULL AUTO_INCREMENT, " +
             "name varchar(255) NOT NULL, " +
             "city varchar(255) NOT NULL, " +
-            "rate int NOT NULL, " +
+            "rating int NOT NULL, " +
             "PRIMARY KEY (id))";
 
     pool.query(createWatchmakersTable, function (error, results, fields) {
@@ -17,8 +17,8 @@ function createWatchmakers() {
 
 function addWatchmakers() {
     const watchmakers = [
-        {name: "Mike", city: "Dnipro", rate: "5"},
-        {name: "Ivan", city: "Uzhgorod", rate: "4"}
+        {name: "Mike", city: "Dnipro", rating: "5"},
+        {name: "Ivan", city: "Uzhgorod", rating: "4"}
     ];
     
     watchmakers.forEach((watchmaker) => {

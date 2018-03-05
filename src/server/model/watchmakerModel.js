@@ -1,8 +1,8 @@
 class Watchmaker {
-    constructor(name, city, rate, id) {
+    constructor(name, city, rating, id) {
         this.name = name;
         this.city = city;
-        this.rate = rate;
+        this.rating = rating;
         this.id = id;
     }
 }

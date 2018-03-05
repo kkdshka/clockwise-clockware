@@ -1,6 +1,12 @@
 var express = require('express');
 var app = express();
 
+var bodyParser = require('body-parser');
+app.use(bodyParser.json());
+
+//var migrations = require('./migrations');
+//migrations.createTable();
+
 var index = require('./routes/index');
 var watchmakers = require('./routes/watchmakers.js');
 
@@ -9,6 +15,3 @@ app.listen(3000); //listens on port 3000 -> http://localhost:3000/
 
 app.use('/', index);
 app.use('/watchmakers', watchmakers);
-
-//var migrations = require('./migrations');
-//migrations.createTable();
