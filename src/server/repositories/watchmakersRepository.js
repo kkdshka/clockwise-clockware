@@ -11,15 +11,17 @@ function addWatchmaker(watchmaker) {
 }
 
 function editWatchmaker(watchmaker) {
-    pool.query("UPDATE watchmakers SET ? WHERE id = ?", watchmaker, function (error, results, fields) {
+    const sql = "UPDATE watchmakers SET name = ?, city = ?, rating = ? WHERE id = ?";
+    const data = [watchmaker.name, watchmaker.city, watchmaker.rating, watchmaker.id];
+    pool.query(sql, data, function (error, results, fields) {
         if (error)
             throw error;
         console.log('Watchmaker edited');
     });
 }
 
-function deleteWatchmaker(watchmaker) {
-    pool.query("DELETE FROM watchmakers WHERE id = ?", watchmaker.id, function (error, results, fields) {
+function deleteWatchmaker(id) {
+    pool.query("DELETE FROM watchmakers WHERE id = ?", id, function (error, results, fields) {
         if (error)
             throw error;
         console.log('Watchmaker edited');
