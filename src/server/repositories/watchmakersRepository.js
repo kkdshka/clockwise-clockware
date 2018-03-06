@@ -24,7 +24,7 @@ function deleteWatchmaker(id) {
     pool.query("DELETE FROM watchmakers WHERE id = ?", id, function (error, results, fields) {
         if (error)
             throw error;
-        console.log('Watchmaker edited');
+        console.log('Watchmaker deleted');
     });
 }
 

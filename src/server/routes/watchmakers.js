@@ -1,8 +1,13 @@
 var express = require('express');
 var router = express.Router();
+var path = require('path');
 var watchmakersRepository = require('../repositories/watchmakersRepository');
 
 router.get('/', function (req, res) {
+    res.sendFile(path.join(__dirname, "../../../index.html"));
+});
+
+router.get('/data', function (req, res) {
     watchmakersRepository.getAll().then((models) => {
         res.json(models);
     });
