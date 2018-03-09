@@ -1,47 +1,43 @@
 var express = require('express');
 var router = express.Router();
 var path = require('path');
-var watchmakersRepository = require('../repositories/watchmakersRepository');
+var citiesRepository = require('../repositories/citiesRepository');
 
 router.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, "../../../index.html"));
 });
 
 router.get('/data', function (req, res) {
-    watchmakersRepository.getAll().then((models) => {
+    citiesRepository.getAll().then((models) => {
         res.json(models);
     });
 });
 
 router.post('/', function (req, res) {
-    const watchmakerData = {
-        name: req.body.name,
-        city: req.body.city,
-        rating: req.body.rating
+    const cityData = {
+        name: req.body.name
     };
-    watchmakersRepository.add(watchmakerData);
-    watchmakersRepository.getAll().then((models) => {
+    citiesRepository.add(cityData);
+    citiesRepository.getAll().then((models) => {
         res.json(models);
     });
 });
 
 router.put('/', function (req, res) {
-    const watchmakerData = {
+    const cityData = {
         name: req.body.name,
-        city: req.body.city,
-        rating: req.body.rating,
         id: req.body.id
     };
-    watchmakersRepository.edit(watchmakerData);
-    watchmakersRepository.getAll().then((models) => {
+    citiesRepository.edit(cityData);
+    citiesRepository.getAll().then((models) => {
         res.json(models);
     });
 });
 
 router.delete('/', function (req, res) {
     const id = req.body.id;
-    watchmakersRepository.delete(id);
-    watchmakersRepository.getAll().then((models) => {
+    citiesRepository.delete(id);
+    citiesRepository.getAll().then((models) => {
         res.json(models);
     });
 });

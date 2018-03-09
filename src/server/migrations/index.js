@@ -1,5 +1,7 @@
-var createTable = require('./01_create_watchmakers');
+var createWatchmakersTable = require('./01_create_watchmakers');
+var createCitiesTable = require('./create_cities');
 
 module.exports = {
-    createTable: createTable
+    createWatchmakersTable: createWatchmakersTable,
+    createCitiesTable: createCitiesTable
 };
