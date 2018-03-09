@@ -9,7 +9,8 @@ export default class Watchmakers extends Component {
             watchmakers: [],
             modalCreate: 'closed',
             modalUpdate: 'closed',
-            editing: {}
+            editing: {},
+            cities: []
         };
     }
 
@@ -18,6 +19,15 @@ export default class Watchmakers extends Component {
             .then(res => {
                 const watchmakers = res.data;
                 this.setState({watchmakers});
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+        axios.get('/admin/cities/data')
+            .then(res => {
+                const cities = res.data;
+                this.setState({cities});
             })
             .catch(function (error) {
                 console.log(error);
@@ -49,6 +59,7 @@ export default class Watchmakers extends Component {
         axios.post('/admin/watchmakers/', data)
             .then(res => {
                 const watchmakers = res.data;
+                this.setState({modalCreate: 'closed'});
                 this.setState({watchmakers});
             })
             .catch(function (error) {
@@ -66,6 +77,7 @@ export default class Watchmakers extends Component {
         axios.put('/admin/watchmakers/', data)
             .then(res => {
                 const watchmakers = res.data;
+                this.setState({modalCreate: 'closed'});
                 this.setState({watchmakers});
             })
             .catch(function (error) {
@@ -99,23 +111,30 @@ export default class Watchmakers extends Component {
         return watchmakers;
     }
 
+    renderCities() {
+        const cities = [];
+        this.state.cities.forEach(city => {
+            cities.push(<option>{city.name}</option>);
+        });
+        return cities;
+    }
+
     renderModalCreate() {
         if (this.state.modalCreate === 'opened') {
             return (
                 <form>
                     <div className="form-group">
-                        <label htmlFor="name">Name:</label>
+                        <label htmlFor="name">Имя:</label>
                         <input type="text" className="form-control" id="name" ref="name"/>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="city">City:</label>
+                        <label htmlFor="city">Город:</label>
                         <select className="form-control" id="city" ref="city">
-                            <option>Dnipro</option>
-                            <option>Uzhgorod</option>
+                            {this.renderCities()}
                         </select>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="rating">Rating:</label>
+                        <label htmlFor="rating">Рейтинг:</label>
                         <select className="form-control" id="rating" ref="rating">
                             <option>1</option>
                             <option>2</option>
@@ -125,10 +144,10 @@ export default class Watchmakers extends Component {
                         </select>
                     </div>
                     <button type={'button'} className="btn btn-primary"
-                            onClick={this.handleOnSubmitAdd.bind(this)}>Submit
+                            onClick={this.handleOnSubmitAdd.bind(this)}>Принять
                     </button>
                     <button type={'button'} className="btn float-right"
-                            onClick={() => this.setState({modalCreate: 'closed'})}>Close
+                            onClick={() => this.setState({modalCreate: 'closed'})}>Закрыть
                     </button>
                 </form>
             );
@@ -140,19 +159,18 @@ export default class Watchmakers extends Component {
             return (
                 <form className={'form'}>
                     <div className="form-group">
-                        <label htmlFor="name">Name:</label>
+                        <label htmlFor="name">Имя:</label>
                         <input type="text" className="form-control" id="name" ref="name"
                                defaultValue={this.state.editing.name}/>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="city">City:</label>
+                        <label htmlFor="city">Город:</label>
                         <select className="form-control" id="city" ref="city" defaultValue={this.state.editing.city}>
-                            <option>Dnipro</option>
-                            <option>Uzhgorod</option>
+                            {this.renderCities()}
                         </select>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="rating">Rating:</label>
+                        <label htmlFor="rating">Рейтинг:</label>
                         <select className="form-control" id="rating" ref="rating"
                                 defaultValue={this.state.editing.rating}>
                             <option>1</option>
@@ -162,8 +180,8 @@ export default class Watchmakers extends Component {
                             <option>5</option>
                         </select>
                     </div>
-                    <button className="btn btn-primary" onClick={this.handleOnSubmitEdit.bind(this)}>Submit</button>
-                    <button className="btn float-right" onClick={() => this.setState({modalUpdate: 'closed'})}>Close</button>
+                    <button className="btn btn-primary" onClick={this.handleOnSubmitEdit.bind(this)}>Принять</button>
+                    <button className="btn float-right" onClick={() => this.setState({modalUpdate: 'closed'})}>Закрыть</button>
                 </form>
             );
         }
@@ -174,18 +192,18 @@ export default class Watchmakers extends Component {
             <div className="row">
                 <div className="col-md-6">
                     <div className="navbar navbar-light">
-                        <Link className={'nav-link'} to={'/admin/clients'}>Clients</Link>
-                        <Link className={'nav-link'} to={'/admin/watchmakers'}>Watchmakers</Link>
-                        <Link className={'nav-link'} to={'/admin/cities'}>Cities</Link>
-                        <Link className={'nav-link'} to={'/admin/reservations'}>Reservations</Link>
+                        <Link className={'nav-link'} to={'/admin/clients'}>Клиенты</Link>
+                        <Link className={'nav-link'} to={'/admin/watchmakers'}>Мастера</Link>
+                        <Link className={'nav-link'} to={'/admin/cities'}>Города</Link>
+                        <Link className={'nav-link'} to={'/admin/reservations'}>Бронирования</Link>
                     </div>
-                    <h3 className="row justify-content-md-center">Watchmakers</h3>
+                    <h3 className="row justify-content-md-center">Мастера</h3>
                     <table className="table table-striped">
                         <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>City</th>
-                            <th>Rating</th>
+                            <th>Имя</th>
+                            <th>Город</th>
+                            <th>Рейтинг</th>
                             <th></th>
                             <th></th>
                         </tr>
@@ -195,7 +213,7 @@ export default class Watchmakers extends Component {
                         </tbody>
                     </table>
                     <button className="btn btn-success" onClick={() => this.setState({modalCreate: 'opened'})}>
-                        <i className="fa fa-plus"></i> Add
+                        <i className="fa fa-plus"></i> Добавить
                     </button>
                     <div className="row">{this.renderModalCreate()}</div>
                     <div className="row">{this.renderModalUpdate()}</div>

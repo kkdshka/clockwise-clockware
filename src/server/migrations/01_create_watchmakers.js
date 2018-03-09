@@ -17,8 +17,8 @@ function createWatchmakers() {
 
 function addWatchmakers() {
     const watchmakers = [
-        {name: "Mike", city: "Dnipro", rating: "5"},
-        {name: "Ivan", city: "Uzhgorod", rating: "4"}
+        {name: "Михаил", city: "Днепр", rating: "5"},
+        {name: "Иван", city: "Ужгород", rating: "4"}
     ];
     
     watchmakers.forEach((watchmaker) => {
