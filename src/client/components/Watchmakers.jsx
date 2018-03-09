@@ -124,8 +124,12 @@ export default class Watchmakers extends Component {
                             <option>5</option>
                         </select>
                     </div>
-                    <button className="btn btn-primary" onClick={this.handleOnSubmitAdd.bind(this)}>Submit</button>
-                    <button className="btn" onClick={() => this.setState({modalCreate: 'closed'})}>Close</button>
+                    <button type={'button'} className="btn btn-primary"
+                            onClick={this.handleOnSubmitAdd.bind(this)}>Submit
+                    </button>
+                    <button type={'button'} className="btn float-right"
+                            onClick={() => this.setState({modalCreate: 'closed'})}>Close
+                    </button>
                 </form>
             );
         }
@@ -134,7 +138,7 @@ export default class Watchmakers extends Component {
     renderModalUpdate() {
         if (this.state.modalUpdate === 'opened') {
             return (
-                <form>
+                <form className={'form'}>
                     <div className="form-group">
                         <label htmlFor="name">Name:</label>
                         <input type="text" className="form-control" id="name" ref="name"
@@ -159,7 +163,7 @@ export default class Watchmakers extends Component {
                         </select>
                     </div>
                     <button className="btn btn-primary" onClick={this.handleOnSubmitEdit.bind(this)}>Submit</button>
-                    <button className="btn" onClick={() => this.setState({modalUpdate: 'closed'})}>Close</button>
+                    <button className="btn float-right" onClick={() => this.setState({modalUpdate: 'closed'})}>Close</button>
                 </form>
             );
         }
@@ -169,11 +173,11 @@ export default class Watchmakers extends Component {
         return (
             <div className="row">
                 <div className="col-md-6">
-                    <div className="row">
-                        <Link to={'/admin/clients'}>Clients</Link>
-                        <Link to={'/admin/watchmakers'}>Watchmakers</Link>
-                        <Link to={'/admin/cities'}>Cities</Link>
-                        <Link to={'/admin/reservations'}>Reservations</Link>
+                    <div className="navbar navbar-light">
+                        <Link className={'nav-link'} to={'/admin/clients'}>Clients</Link>
+                        <Link className={'nav-link'} to={'/admin/watchmakers'}>Watchmakers</Link>
+                        <Link className={'nav-link'} to={'/admin/cities'}>Cities</Link>
+                        <Link className={'nav-link'} to={'/admin/reservations'}>Reservations</Link>
                     </div>
                     <h3 className="row justify-content-md-center">Watchmakers</h3>
                     <table className="table table-striped">

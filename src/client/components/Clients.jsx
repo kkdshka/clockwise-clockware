@@ -6,11 +6,11 @@ export default class Clients extends React.Component{
         return (
             <div className="row">
                 <div className="col-md-6">
-                    <div className="row">
-                        <Link className="btn-link" to={'/admin/clients'}>Clients</Link>
-                        <Link className="btn-link" to={'/admin/watchmakers'}>Watchmakers</Link>
-                        <Link className="btn-link" to={'/admin/cities'}>Cities</Link>
-                        <Link className="btn-link" to={'/admin/reservations'}>Reservations</Link>
+                    <div className="navbar navbar-light">
+                        <Link className={'nav-link'} to={'/admin/clients'}>Clients</Link>
+                        <Link className={'nav-link'} to={'/admin/watchmakers'}>Watchmakers</Link>
+                        <Link className={'nav-link'} to={'/admin/cities'}>Cities</Link>
+                        <Link className={'nav-link'} to={'/admin/reservations'}>Reservations</Link>
                     </div>
                     <h2 className={'row'}>Clients</h2>
                 </div>
