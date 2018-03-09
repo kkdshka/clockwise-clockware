@@ -1,4 +1,4 @@
-var Watchmaker = require('../model/watchmakerModel');
+var Watchmaker = require('../models/watchmakerModel');
 var pool = require('../database');
 
 //watchmaker = {name, city, rate, id}
