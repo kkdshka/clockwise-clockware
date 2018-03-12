@@ -1,7 +1,7 @@
-var express = require('express');
-var router = express.Router();
-var path = require('path');
-var citiesRepository = require('../repositories/citiesRepository');
+const express = require('express');
+const router = express.Router();
+const path = require('path');
+const citiesRepository = require('../repositories/citiesRepository');
 
 router.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, "../../../index.html"));

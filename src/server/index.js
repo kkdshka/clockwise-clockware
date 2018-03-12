@@ -1,16 +1,17 @@
-var express = require('express');
-var app = express();
+const express = require('express');
+const app = express();
 
-var bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 
-var migrations = require('./migrations');
+const migrations = require('./migrations');
 // migrations.createWatchmakersTable();
 // migrations.createCitiesTable();
+// migrations.createClientsTable();
 
-var index = require('./routes/index');
-var watchmakers = require('./routes/watchmakers.js');
-var cities = require('./routes/cities.js');
+const index = require('./routes/index');
+const watchmakers = require('./routes/watchmakers.js');
+const cities = require('./routes/cities.js');
 
 app.use(express.static(__dirname +'./../../')); //serves the index.html
 app.listen(3000); //listens on port 3000 -> http://localhost:3000/

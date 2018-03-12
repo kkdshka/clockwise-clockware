@@ -1,4 +1,4 @@
-var pool = require('../database');
+const pool = require('../database');
 
 function createWatchmakers() {
     const createWatchmakersTable = "CREATE TABLE IF NOT EXISTS watchmakers(" +

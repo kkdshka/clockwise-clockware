@@ -1,9 +1,9 @@
-var City = require('../models/cityModel');
-var pool = require('../database');
+const City = require('../models/cityModel');
+const pool = require('../database');
 
 //city = {name, id}
 function addCity(city) {
-    pool.query("INSERT INTO cities SET ?", city, function (error, results) {
+    pool.query("INSERT INTO cities SET ? ON DUPLICATE KEY UPDATE name = name", city, function (error, results) {
         if (error)
             throw error;
         console.log('City added with id ' + results.insertId);
