@@ -114,7 +114,7 @@ export default class Clients extends React.Component{
     renderCities() {
         const cities = [];
         this.state.cities.forEach(city => {
-            cities.push(<option>{city.name}</option>);
+            cities.push(<option key={'city' + city.id}>{city.name}</option>);
         });
         return cities;
     }
