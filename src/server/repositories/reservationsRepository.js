@@ -11,8 +11,8 @@ function addReservation(reservation) {
 }
 
 function editReservation(reservation) {
-    const sql = "UPDATE clients SET name = ?, city = ?, email = ?, clock_size = ?, date = ? WHERE id = ?";
     const data = [reservation.name, reservation.city, reservation.email, reservation.clock_size, reservation.date, reservation.id];
+    const sql = "UPDATE reservations SET name = ?, city = ?, email = ?, clock_size = ?, date = ? WHERE id = ?";
     pool.query(sql, data, function (error) {
         if (error)
             throw error;
@@ -37,7 +37,7 @@ function getAllReservations() {
             let models = [];
             for (let i = 0; i < results.length; i++) {
                 const row = results[i];
-                const reservation = new Reservation(row.name, row.city, row.email, row.clock_size, row.date, row.id);
+                const reservation = new Reservation(row.name, row.city, row.email, row.clock_size, (new Date(row.date)), row.id);
                 models.push(reservation);
             }
             resolve(models);
