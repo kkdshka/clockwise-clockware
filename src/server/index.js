@@ -23,4 +23,5 @@ app.use('/admin/watchmakers', watchmakers);
 app.use('/admin/cities', cities);
 app.use('/admin/clients', clients);
 app.use('/admin/reservations', reservations);
+app.use('./admin', index);
 app.use('/', index);

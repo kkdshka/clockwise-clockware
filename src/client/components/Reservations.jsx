@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import Navigation from './AdminNavigation.jsx';
 import axios from "axios/index";
 
 export default class Reservations extends React.Component{
@@ -120,14 +120,14 @@ export default class Reservations extends React.Component{
                         <button
                             className="btn btn-warning"
                             onClick={() => this.handleOnEditClick(reservation)}>
-                            <span className="fa fa-pencil"></span>
+                            <i className="fa fa-pencil" />
                         </button>
                     </td>
                     <td>
                         <button
                             className="btn btn-danger"
                             onClick={() => this.handleOnDeleteClick(reservation.id)}>
-                            <span className="fa fa-remove"></span>
+                            <i className="fa fa-remove" />
                         </button>
                     </td>
                 </tr>));
@@ -225,12 +225,7 @@ export default class Reservations extends React.Component{
         return (
             <div className="row">
                 <div className="col-md-6">
-                    <div className="navbar navbar-light">
-                        <Link className={'nav-link'} to={'/admin/clients'}>Клиенты</Link>
-                        <Link className={'nav-link'} to={'/admin/watchmakers'}>Мастера</Link>
-                        <Link className={'nav-link'} to={'/admin/cities'}>Города</Link>
-                        <Link className={'nav-link'} to={'/admin/reservations'}>Бронирования</Link>
-                    </div>
+                    <Navigation active="reservations"/>
                     <h3 className="row justify-content-md-center">Клиенты</h3>
                     <table className="table table-striped">
                         <thead>
@@ -240,8 +235,8 @@ export default class Reservations extends React.Component{
                             <th>Email</th>
                             <th>Размер часов</th>
                             <th>Дата</th>
-                            <th></th>
-                            <th></th>
+                            <th/>
+                            <th/>
                         </tr>
                         </thead>
                         <tbody>
@@ -249,7 +244,7 @@ export default class Reservations extends React.Component{
                         </tbody>
                     </table>
                     <button className="btn btn-success" onClick={() => this.setState({modalCreate: 'opened'})}>
-                        <i className="fa fa-plus"></i> Добавить
+                        <i className="fa fa-plus" /> Добавить
                     </button>
                     <div className="row">{this.renderModalCreate()}</div>
                     <div className="row">{this.renderModalUpdate()}</div>
