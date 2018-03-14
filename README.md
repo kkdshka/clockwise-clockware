@@ -8,25 +8,28 @@ To start the project you will need npm.
 
 You will find instructions for installing npm here: https://www.npmjs.com/get-npm
 
+Also you will need MySQL CLI. Open it and create database _test_ and give permissions to user 'admin':
+```sh
+create database test;
+grant all on test.* to 'admin'@'localhost' identified by 'passwordsecret';
+```
 Then run your CLI, _cd_ to your projects folder and use commands:
  
 ```sh
 $ git clone git@github.com:kkdshka/clockwise-clockware.git
-
 $ cd clockwise-clockware/
-
 $ npm install
-
-$ npm start
-
 ```
-Run another CLI, _cd_ to your projects folder and use commands:
+Then uncomment some rows with migrations in _src/server/index.js_
+
+And use in CLI command:
+```sh
+$ npm start
+```
+Run another CLI, _cd_ to project folder and use commands:
 
 ```sh
-$ cd clockwise-clockware/
-
 $ npm run webpack
-
 ```
 Then open your browser and go to http://localhost:3000.
 
