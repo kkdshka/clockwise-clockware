@@ -19,11 +19,7 @@ Then run your CLI, _cd_ to your projects folder and use commands:
 $ git clone git@github.com:kkdshka/clockwise-clockware.git
 $ cd clockwise-clockware/
 $ npm install
-```
-Then uncomment some rows with migrations in _src/server/index.js_
-
-And use in CLI command:
-```sh
+$ node migration.js up
 $ npm start
 ```
 Run another CLI, _cd_ to project folder and use commands:

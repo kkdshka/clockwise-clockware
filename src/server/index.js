@@ -4,12 +4,6 @@ const app = express();
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 
-const migrations = require('./migrations');
-// migrations.createWatchmakersTable();
-// migrations.createCitiesTable();
-// migrations.createClientsTable();
-// migrations.createReservationsTable();
-
 const index = require('./routes/index');
 const watchmakers = require('./routes/watchmakers.js');
 const cities = require('./routes/cities.js');
