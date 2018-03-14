@@ -4,7 +4,9 @@ const queryUp = "CREATE TABLE reservations(" +
     "email varchar(255) NOT NULL UNIQUE, " +
     "city varchar(255) NOT NULL, " +
     "clock_size varchar(255) NOT NULL, " +
-    "date datetime NOT NULL, " + //Format: YYYY-MM-DD HH:MI:SS
+    "date DATE NOT NULL, " + //Format: YYYY-MM-DD
+    "time TIME NOT NULL, " +// HH:MI:SS
+    "watchmaker_id INT NOT NULL, " +
     "PRIMARY KEY (id))";
 
 const queryDown = "DROP TABLE reservations";

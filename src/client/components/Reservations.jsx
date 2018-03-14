@@ -10,7 +10,8 @@ export default class Reservations extends React.Component{
             modalCreate: 'closed',
             modalUpdate: 'closed',
             editing: {},
-            cities: []
+            cities: [],
+            watchmakers: []
         };
     }
 
@@ -28,6 +29,14 @@ export default class Reservations extends React.Component{
             .then(res => {
                 const cities = res.data;
                 this.setState({cities});
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        axios.get('/admin/watchmakers/data')
+            .then(res => {
+                const watchmakers = res.data;
+                this.setState({watchmakers});
             })
             .catch(function (error) {
                 console.log(error);
@@ -56,7 +65,9 @@ export default class Reservations extends React.Component{
             city: this.refs.city.value,
             email: this.refs.email.value,
             clockSize: this.refs.clockSize.value,
-            date: this.refs.date.value
+            date: this.refs.date.value,
+            time: this.refs.time.value,
+            watchmakerId: this.refs.watchmakerId.value
         };
         axios.post('/admin/reservations/', data)
             .then(res => {
@@ -76,6 +87,7 @@ export default class Reservations extends React.Component{
             email: this.refs.email.value,
             clockSize: this.refs.clockSize.value,
             date: this.refs.date.value,
+            time: this.refs.time.value,
             id: this.refs.id.value
         };
         axios.put('/admin/reservations/', data)
@@ -100,10 +112,7 @@ export default class Reservations extends React.Component{
 
         return newDate.getUTCFullYear() +
             '-' + pad(newDate.getUTCMonth() + 1) +
-            '-' + pad(newDate.getUTCDate()) +
-            ' ' + pad(newDate.getUTCHours()) +
-            ':' + pad(newDate.getUTCMinutes()) +
-            ':' + pad(newDate.getUTCSeconds());
+            '-' + pad(newDate.getUTCDate());
     }
 
     renderReservations() {
@@ -116,6 +125,7 @@ export default class Reservations extends React.Component{
                     <td>{reservation.email}</td>
                     <td>{reservation.clockSize}</td>
                     <td>{this.dateToString(reservation.date)}</td>
+                    <td>{reservation.time}</td>
                     <td>
                         <button
                             className="btn btn-warning"
@@ -140,6 +150,14 @@ export default class Reservations extends React.Component{
             cities.push(<option key={'city' + city.id}>{city.name}</option>);
         });
         return cities;
+    }
+
+    renderWatchmakers() {
+        const watchmakers = [];
+        this.state.watchmakers.forEach(watchmaker => {
+            watchmakers.push(<option key={'watchmaker' + watchmaker.id} value={watchmaker.id}>{watchmaker.name}</option>);
+        });
+        return watchmakers;
     }
 
     renderModalCreate() {
@@ -169,8 +187,16 @@ export default class Reservations extends React.Component{
                         </select>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="date">Дата (Формат: YYYY-MM-DD HH:MI:SS):</label>
-                        <input type="text" className="form-control" id="date" ref="date"/>
+                        <label htmlFor="date">Дата:</label>
+                        <input type="date" className="form-control" id="date" ref="date" />
+                        <label htmlFor="time">Время:</label>
+                        <input type="time" min="09:00" max="18:00" step={60 * 60} className="form-control" id="time" ref="time" />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="city">Мастер:</label>
+                        <select className="form-control" id="watchmaker" ref="watchmakerId">
+                            {this.renderWatchmakers()}
+                        </select>
                     </div>
                     <button type={'button'} className="btn btn-primary"
                             onClick={this.handleOnSubmitAdd.bind(this)}>Принять
@@ -211,8 +237,16 @@ export default class Reservations extends React.Component{
                         </select>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="date">Дата (Формат: YYYY-MM-DD HH:MI:SS):</label>
-                        <input type="text" className="form-control" id="date" ref="date" defaultValue={this.dateToString(this.state.editing.date)} />
+                        <label htmlFor="date">Дата:</label>
+                        <input type="date" className="form-control" id="date" ref="date" />
+                        <label htmlFor="time">Время:</label>
+                        <input type="time" min="09:00" max="18:00" step={60 * 60} className="form-control" id="time" ref="time" />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="city">Мастер:</label>
+                        <select className="form-control" id="watchmaker" ref="watchmakerId">
+                            {this.renderWatchmakers()}
+                        </select>
                     </div>
                     <button className="btn btn-primary" onClick={this.handleOnSubmitEdit.bind(this)}>Принять</button>
                     <button className="btn float-right" onClick={() => this.setState({modalUpdate: 'closed'})}>Закрыть</button>
@@ -224,9 +258,9 @@ export default class Reservations extends React.Component{
     render(){
         return (
             <div className="row">
-                <div className="col-md-6">
+                <div className="col-ms">
                     <Navigation active="reservations"/>
-                    <h3 className="row justify-content-md-center">Клиенты</h3>
+                    <h3 className="row justify-content-md-center">Бронирования</h3>
                     <table className="table table-striped">
                         <thead>
                         <tr>
@@ -235,6 +269,7 @@ export default class Reservations extends React.Component{
                             <th>Email</th>
                             <th>Размер часов</th>
                             <th>Дата</th>
+                            <th>Время</th>
                             <th/>
                             <th/>
                         </tr>

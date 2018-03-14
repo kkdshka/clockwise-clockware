@@ -19,7 +19,9 @@ router.post('/', function (req, res) {
         city: req.body.city,
         email: req.body.email,
         clock_size: req.body.clockSize,
-        date: req.body.date
+        date: req.body.date,
+        time: req.body.time,
+        watchmaker_id: req.body.watchmakerId
     };
     reservationsRepository.add(reservationsData);
     reservationsRepository.getAll().then((models) => {
@@ -34,6 +36,8 @@ router.put('/', function (req, res) {
         email: req.body.email,
         clock_size: req.body.clockSize,
         date: req.body.date,
+        time: req.body.time,
+        watchmaker_id: req.body.watchmakerId,
         id: req.body.id
     };
     reservationsRepository.edit(reservationsData);

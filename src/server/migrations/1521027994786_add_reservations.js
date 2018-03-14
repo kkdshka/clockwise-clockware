@@ -1,6 +1,6 @@
 const reservations = [
-    ["Максим", "Днепр", "max@example.com", 'маленькие', dateToString(new Date(Date.now()))],
-    ["Данил", "Ужгород", "dan@example.com", 'средние', dateToString(new Date(Date.now()))]
+    ["Максим", "Днепр", "max@example.com", 'маленькие', '2018.03.14', '15:00:00', '1'],
+    ["Данил", "Ужгород", "dan@example.com", 'средние', '2018.03.14', '15:00:00', '1']
 ];
 
 function dateToString(date) {
@@ -18,7 +18,7 @@ function dateToString(date) {
         ':00:00';
 }
 
-const queryUp = "INSERT INTO reservations (name, city, email, clock_size, date) VALUES ?";
+const queryUp = "INSERT INTO reservations (name, city, email, clock_size, date, time, watchmaker_id) VALUES ?";
 const queryDown = "TRUNCATE reservations";
 
 module.exports = {
