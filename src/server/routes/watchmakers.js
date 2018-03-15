@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const watchmakersRepository = require('../repositories/watchmakersRepository');
+const FreeWatchmakers = require('../models/freeWatchmakersService');
 
 router.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, "../../../index.html"));
@@ -9,6 +10,12 @@ router.get('/', function (req, res) {
 
 router.get('/data', function (req, res) {
     watchmakersRepository.getAll().then((models) => {
+        res.json(models);
+    });
+});
+
+router.get('/free-watchmakers',  function (req, res) {
+    (new FreeWatchmakers(req.params)).getAll().then((models) => {
         res.json(models);
     });
 });

@@ -45,9 +45,29 @@ function getAllWatchmakers() {
     });
 }
 
+function getFreeWatchmakers(data) {
+    const query = "SELECT watchmaker FROM watchmakers WHERE id NOT IN " +
+        "(SELECT watchmaker_id FROM reservations WHERE city = ?, date = ?, time BETWEEN ? AND ?)";
+    return new Promise((resolve, reject) => {
+        pool.query(query, data, (error, results) => {
+            if (error) {
+                return reject(error);
+            }
+            let models = [];
+            for (let i = 0; i < results.length; i++) {
+                const row = results[i];
+                const watchmaker = new Watchmaker(row.name, row.city, row.rating, row.id);
+                models.push(watchmaker);
+            }
+            resolve(models);
+        });
+    });
+}
+
 module.exports = {
     add: addWatchmaker,
     edit: editWatchmaker,
     delete: deleteWatchmaker,
-    getAll: getAllWatchmakers
+    getAll: getAllWatchmakers,
+    getFreeWatchmakers: getFreeWatchmakers
 };
