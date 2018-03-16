@@ -29,11 +29,13 @@ class FreeWatchmakers {
     }
 
     get data() {
-        return [this.city, this.date, this.startTime, this.finishTime];
+        return [this.city, this.city, this.date, this.startTime, this.finishTime];
     }
 
     getAll() {
-        return watchmakersRepository.getFreeWatchmakers(this.data);
+        const data = watchmakersRepository.getFreeWatchmakers(this.data);
+        console.log(data);
+        return data;
     }
 }
 

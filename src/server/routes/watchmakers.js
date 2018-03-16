@@ -15,7 +15,9 @@ router.get('/data', function (req, res) {
 });
 
 router.get('/free-watchmakers',  function (req, res) {
-    (new FreeWatchmakers(req.params)).getAll().then((models) => {
+    const data = (new FreeWatchmakers(req.query)).data;
+    watchmakersRepository.getFreeWatchmakers(data)
+    .then((models) => {
         res.json(models);
     });
 });

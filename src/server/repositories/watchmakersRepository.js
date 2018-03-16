@@ -46,8 +46,8 @@ function getAllWatchmakers() {
 }
 
 function getFreeWatchmakers(data) {
-    const query = "SELECT watchmaker FROM watchmakers WHERE id NOT IN " +
-        "(SELECT watchmaker_id FROM reservations WHERE city = ?, date = ?, time BETWEEN ? AND ?)";
+    const query = "SELECT * FROM watchmakers WHERE city = ? AND id NOT IN " +
+        "(SELECT watchmaker_id FROM reservations WHERE city = ? AND date = ? AND time BETWEEN ? AND ?)";
     return new Promise((resolve, reject) => {
         pool.query(query, data, (error, results) => {
             if (error) {
