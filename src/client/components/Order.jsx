@@ -141,6 +141,18 @@ export default class Order extends React.Component {
         }
     }
 
+    minDate() {
+        function pad(number) {
+            if (number < 10) {
+                return '0' + number;
+            }
+            return number;
+        }
+
+        const date = new Date();
+        return date.getFullYear() + "-" + pad(date.getMonth() + 1) + "-" + pad(date.getDate());
+    }
+
     render() {
         return (
             <div className="row">
@@ -170,7 +182,7 @@ export default class Order extends React.Component {
                         </div>
                         <div className="form-group">
                             <label htmlFor="date">Дата:</label>
-                            <input type="date" className="form-control" id="date" ref="date"/>
+                            <input type="date" min={this.minDate()} className="form-control" id="date" ref="date"/>
                             <label htmlFor="time">Время:</label>
                             <input type="time" min="09:00" max="18:00" step={60 * 60} className="form-control" id="time"
                                    ref="time"/>
