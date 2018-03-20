@@ -73,6 +73,11 @@ export default class Order extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
+        axios.post('/admin/clients', {
+            name: this.state.reservation.name,
+            email: this.state.reservation.email,
+            city: this.state.reservation.city
+        });
         this.setState({confirmation: 'opened'});
     }
 
