@@ -2,7 +2,7 @@ import React from 'react';
 import Navigation from './AdminNavigation.jsx';
 import axios from "axios/index";
 
-export default class Clients extends React.Component{
+export default class Clients extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -97,14 +97,14 @@ export default class Clients extends React.Component{
                         <button
                             className="btn btn-warning"
                             onClick={() => this.handleOnEditClick(client)}>
-                            <i className="fa fa-pencil" />
+                            <i className="fa fa-pencil"/>
                         </button>
                     </td>
                     <td>
                         <button
                             className="btn btn-danger"
                             onClick={() => this.handleOnDeleteClick(client.id)}>
-                            <i className="fa fa-remove" />
+                            <i className="fa fa-remove"/>
                         </button>
                     </td>
                 </tr>));
@@ -159,7 +159,8 @@ export default class Clients extends React.Component{
                     </div>
                     <div className="form-group">
                         <label htmlFor="name">Email:</label>
-                        <input type="text" className="form-control" id="email" ref="email" defaultValue={this.state.editing.email}/>
+                        <input type="text" className="form-control" id="email" ref="email"
+                               defaultValue={this.state.editing.email}/>
                     </div>
                     <div className="form-group">
                         <label htmlFor="city">Город:</label>
@@ -168,39 +169,42 @@ export default class Clients extends React.Component{
                         </select>
                     </div>
                     <button className="btn btn-primary" onClick={this.handleOnSubmitEdit.bind(this)}>Принять</button>
-                    <button className="btn float-right" onClick={() => this.setState({modalUpdate: 'closed'})}>Закрыть</button>
+                    <button className="btn float-right" onClick={() => this.setState({modalUpdate: 'closed'})}>Закрыть
+                    </button>
                 </form>
             );
         }
     }
 
-    render(){
-        return (
-            <div className="row">
-                <div className="col-md-6">
-                    <Navigation active="clients"/>
-                    <h3 className="row justify-content-md-center">Клиенты</h3>
-                    <table className="table table-striped">
-                        <thead>
-                        <tr>
-                            <th>Имя</th>
-                            <th>Город</th>
-                            <th>Email</th>
-                            <th/>
-                            <th/>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {this.renderClients()}
-                        </tbody>
-                    </table>
-                    <button className="btn btn-success" onClick={() => this.setState({modalCreate: 'opened'})}>
-                        <i className="fa fa-plus" /> Добавить
-                    </button>
-                    <div className="row">{this.renderModalCreate()}</div>
-                    <div className="row">{this.renderModalUpdate()}</div>
+    render() {
+        return <div className="row">
+            <div className="col-sm">
+                <Navigation active="clients"/>
+                <div className={'row'}>
+                    <div className={'col-md-4'}>
+                        <h3 className="row justify-content-md-center">Клиенты</h3>
+                        <table className="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Имя</th>
+                                <th>Город</th>
+                                <th>Email</th>
+                                <th/>
+                                <th/>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {this.renderClients()}
+                            </tbody>
+                        </table>
+                        <button className="btn btn-success" onClick={() => this.setState({modalCreate: 'opened'})}>
+                            <i className="fa fa-plus"/> Добавить
+                        </button>
+                        <div className="row">{this.renderModalCreate()}</div>
+                        <div className="row">{this.renderModalUpdate()}</div>
+                    </div>
                 </div>
             </div>
-        );
+        </div>;
     }
 }

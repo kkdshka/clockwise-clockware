@@ -258,7 +258,7 @@ export default class Reservations extends React.Component{
     render(){
         return (
             <div className="row">
-                <div className="col-ms">
+                <div className="col-sm">
                     <Navigation active="reservations"/>
                     <h3 className="row justify-content-md-center">Бронирования</h3>
                     <table className="table table-striped">

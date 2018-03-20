@@ -2,7 +2,7 @@ import React from 'react';
 import Navigation from './AdminNavigation.jsx';
 import axios from "axios/index";
 
-export default class Cities extends React.Component{
+export default class Cities extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -124,37 +124,40 @@ export default class Cities extends React.Component{
                                defaultValue={this.state.editing.name}/>
                     </div>
                     <button className="btn btn-primary" onClick={this.handleOnSubmitEdit.bind(this)}>Принять</button>
-                    <button className="btn float-right" onClick={() => this.setState({modalUpdate: 'closed'})}>Закрыть</button>
+                    <button className="btn float-right" onClick={() => this.setState({modalUpdate: 'closed'})}>Закрыть
+                    </button>
                 </form>
             );
         }
     }
 
-    render(){
-        return (
-            <div className="row">
-                <div className="col-md-6">
-                    <Navigation active="cities"/>
-                    <h3 className="row justify-content-md-center">Города</h3>
-                    <table className="table table-striped">
-                        <thead>
-                        <tr>
-                            <th>Название</th>
-                            <th/>
-                            <th/>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {this.renderCities()}
-                        </tbody>
-                    </table>
-                    <button className="btn btn-success" onClick={() => this.setState({modalCreate: 'opened'})}>
-                        <i className="fa fa-plus"/> Добавить
-                    </button>
-                    <div className="row">{this.renderModalCreate()}</div>
-                    <div className="row">{this.renderModalUpdate()}</div>
+    render() {
+        return <div className="row">
+            <div className="col-sm">
+                <Navigation active="cities"/>
+                <div className={'row'}>
+                    <div className={'col-md-4'}>
+                        <h3 className="row justify-content-md-center">Города</h3>
+                        <table className="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Название</th>
+                                <th/>
+                                <th/>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {this.renderCities()}
+                            </tbody>
+                        </table>
+                        <button className="btn btn-success" onClick={() => this.setState({modalCreate: 'opened'})}>
+                            <i className="fa fa-plus"/> Добавить
+                        </button>
+                        <div className="row">{this.renderModalCreate()}</div>
+                        <div className="row">{this.renderModalUpdate()}</div>
+                    </div>
                 </div>
             </div>
-        );
+        </div>
     }
 }

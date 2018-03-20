@@ -188,32 +188,34 @@ export default class Watchmakers extends Component {
     }
 
     render() {
-        return (
-            <div className="row">
-                <div className="col-md-6">
-                    <Navigation active="watchmakers"/>
-                    <h3 className="row justify-content-md-center">Мастера</h3>
-                    <table className="table table-striped">
-                        <thead>
-                        <tr>
-                            <th>Имя</th>
-                            <th>Город</th>
-                            <th>Рейтинг</th>
-                            <th/>
-                            <th/>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {this.renderWatchmakers()}
-                        </tbody>
-                    </table>
-                    <button className="btn btn-success" onClick={() => this.setState({modalCreate: 'opened'})}>
-                        <i className="fa fa-plus" /> Добавить
-                    </button>
-                    <div className="row">{this.renderModalCreate()}</div>
-                    <div className="row">{this.renderModalUpdate()}</div>
+        return <div className="row">
+            <div className="col-sm">
+                <Navigation active="watchmakers"/>
+                <div className={'row'}>
+                    <div className={'col-md-4'}>
+                        <h3 className="row justify-content-md-center">Мастера</h3>
+                        <table className="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Имя</th>
+                                <th>Город</th>
+                                <th>Рейтинг</th>
+                                <th/>
+                                <th/>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {this.renderWatchmakers()}
+                            </tbody>
+                        </table>
+                        <button className="btn btn-success" onClick={() => this.setState({modalCreate: 'opened'})}>
+                            <i className="fa fa-plus"/> Добавить
+                        </button>
+                        <div className="row">{this.renderModalCreate()}</div>
+                        <div className="row">{this.renderModalUpdate()}</div>
+                    </div>
                 </div>
             </div>
-        );
+        </div>;
     }
 }
