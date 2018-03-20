@@ -1,7 +1,7 @@
 const queryUp = "CREATE TABLE reservations(" +
     "id int NOT NULL AUTO_INCREMENT, " +
     "name varchar(255) NOT NULL, " +
-    "email varchar(255) NOT NULL UNIQUE, " +
+    "email varchar(255) NOT NULL, " +
     "city varchar(255) NOT NULL, " +
     "clock_size varchar(255) NOT NULL, " +
     "date DATE NOT NULL, " + //Format: YYYY-MM-DD

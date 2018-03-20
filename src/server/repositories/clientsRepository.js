@@ -3,7 +3,7 @@ const pool = require('../database');
 
 //client = {name, city, email, id}
 function addClient(client) {
-    pool.query("INSERT INTO clients SET ?", client, function (error, results) {
+    pool.query("INSERT INTO clients SET ? ON DUPLICATE KEY UPDATE name = name, city = city", client, function (error, results) {
         if (error)
             throw error;
         console.log('Client added with id ' + results.insertId);
