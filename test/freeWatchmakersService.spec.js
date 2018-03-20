@@ -10,7 +10,12 @@ describe('FreeWatchmakers', () => {
         let freeWatchmakers;
 
         beforeEach(() => {
-            freeWatchmakers = new FreeWatchmakers({clockSize: 'medium', city: 'Днепр', date: '2018-03-16', time: '09:00'});
+            freeWatchmakers = new FreeWatchmakers({
+                clockSize: 'средние',
+                city: 'Днепр',
+                date: '2018-03-16',
+                time: '09:00'
+            });
         });
 
         it('returns repairing time', () => {
@@ -21,5 +26,8 @@ describe('FreeWatchmakers', () => {
             freeWatchmakers.finishTime.should.equal('11:00');
         });
 
+        it('returns repairing data', () => {
+            freeWatchmakers.data.should.to.deep.equal(['Днепр', 'Днепр', '2018-03-16', '09:00', '11:00']);
+        });
     });
 });

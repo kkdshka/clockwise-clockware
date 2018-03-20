@@ -6,15 +6,18 @@ class FreeWatchmakers {
         this.date = params.date;
         this.startTime = params.time;
         this.city = params.city;
-        this.timeToReapir = {
-            "small": "01:00",
-            "medium": "02:00",
-            "large": "03:00"
-        }
     }
 
     get repairingTime() {
-        return new Date("1970-01-01" + "T" + this.timeToReapir[this.size]);
+        if (this.size === 'Маленькие') {
+            return new Date("1970-01-01T01:00");
+        }
+        else if (this.size === 'Средние') {
+            return new Date("1970-01-01T02:00");
+        }
+        else if (this.size === 'Большие') {
+            return new Date("1970-01-01T03:00");
+        }
     }
 
     get finishTime() {
@@ -30,12 +33,6 @@ class FreeWatchmakers {
 
     get data() {
         return [this.city, this.city, this.date, this.startTime, this.finishTime];
-    }
-
-    getAll() {
-        const data = watchmakersRepository.getFreeWatchmakers(this.data);
-        console.log(data);
-        return data;
     }
 }
 

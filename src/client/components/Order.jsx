@@ -45,22 +45,24 @@ export default class Order extends React.Component {
                 time: this.refs.time.value
             }
         });
-        axios.get('/admin/watchmakers/free-watchmakers', {
+        const params = {
             params: {
-                city: this.state.reservation.city,
-                clockSize: this.state.reservation.clockSize,
-                date: this.state.reservation.date,
-                time: this.state.reservation.time
+                city: this.refs.city.value,
+                clockSize: this.refs.clockSize.value,
+                date: this.refs.date.value,
+                time: this.refs.time.value
             }
-        })
+        };
+        console.log(params);
+        axios.get('/admin/watchmakers/free-watchmakers', params)
             .then(res => {
                 const freeWatchmakers = res.data;
-                this.setState({freeWatchmakers});
+                this.setState({freeWatchmakers: freeWatchmakers});
             })
             .catch(function (error) {
                 console.log(error);
             });
-        this.setState({chooseWatchmakers: 'opened'})
+        this.setState({chooseWatchmakers: 'opened'});
     }
 
     handleOnSubmitWatchmaker(event) {
