@@ -88,7 +88,8 @@ export default class Reservations extends React.Component{
             clockSize: this.refs.clockSize.value,
             date: this.refs.date.value,
             time: this.refs.time.value,
-            id: this.refs.id.value
+            watchmakerId: this.refs.watchmakerId.value,
+            id: this.state.editing.id
         };
         axios.put('/admin/reservations/', data)
             .then(res => {
@@ -238,9 +239,11 @@ export default class Reservations extends React.Component{
                     </div>
                     <div className="form-group">
                         <label htmlFor="date">Дата:</label>
-                        <input type="date" className="form-control" id="date" ref="date" />
+                        <input type="date" className="form-control" id="date" ref="date"
+                               defaultValue={this.dateToString(this.state.editing.date)}/>
                         <label htmlFor="time">Время:</label>
-                        <input type="time" min="09:00" max="18:00" step={60 * 60} className="form-control" id="time" ref="time" />
+                        <input type="time" min="09:00" max="18:00" step={60 * 60} className="form-control" id="time"
+                               ref="time" defaultValue={this.state.editing.time}/>
                     </div>
                     <div className="form-group">
                         <label htmlFor="city">Мастер:</label>

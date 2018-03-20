@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const reservationsRepository = require('../repositories/reservationsRepository');
+const sendEmail = require('../sender');
 
 router.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, "../../../index.html"));
@@ -14,7 +15,7 @@ router.get('/data', function (req, res) {
 });
 
 router.post('/', function (req, res) {
-    const reservationsData = {
+    const reservationData = {
         name: req.body.name,
         city: req.body.city,
         email: req.body.email,
@@ -23,14 +24,15 @@ router.post('/', function (req, res) {
         time: req.body.time,
         watchmaker_id: req.body.watchmakerId
     };
-    reservationsRepository.add(reservationsData);
+    sendEmail(reservationData.email, reservationData);
+    reservationsRepository.add(reservationData);
     reservationsRepository.getAll().then((models) => {
         res.json(models);
     });
 });
 
 router.put('/', function (req, res) {
-    const reservationsData = {
+    const reservationData = {
         name: req.body.name,
         city: req.body.city,
         email: req.body.email,
@@ -40,7 +42,7 @@ router.put('/', function (req, res) {
         watchmaker_id: req.body.watchmakerId,
         id: req.body.id
     };
-    reservationsRepository.edit(reservationsData);
+    reservationsRepository.edit(reservationData);
     reservationsRepository.getAll().then((models) => {
         res.json(models);
     });
