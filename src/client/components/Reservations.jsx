@@ -113,7 +113,7 @@ export default class Reservations extends React.Component{
 
         return newDate.getUTCFullYear() +
             '-' + pad(newDate.getUTCMonth() + 1) +
-            '-' + pad(newDate.getUTCDate());
+            '-' + pad(newDate.getUTCDate() + 1);
     }
 
     renderReservations() {
