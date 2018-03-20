@@ -7,7 +7,10 @@ export default class Order extends React.Component {
         this.state = {
             cities: [],
             freeWatchmakers: [],
-            chooseWatchmakers: 'closed'
+            chooseWatchmakers: 'closed',
+            chosenWatchmaker: {},
+            reservation: {},
+            confirmation: 'closed'
         };
     }
 
@@ -30,22 +33,24 @@ export default class Order extends React.Component {
         return cities;
     }
 
-    handleOnSubmit(event) {
+    handleOnSubmitForm(event) {
         event.preventDefault();
-        const data = {
-            name: this.refs.name.value,
-            city: this.refs.city.value,
-            email: this.refs.email.value,
-            clockSize: this.refs.clockSize.value,
-            date: this.refs.date.value,
-            time: this.refs.time.value
-        };
-        axios.get('/admin/watchmakers/free-watchmakers?ID=12345', {
+        this.setState({
+            reservation: {
+                name: this.refs.name.value,
+                city: this.refs.city.value,
+                email: this.refs.email.value,
+                clockSize: this.refs.clockSize.value,
+                date: this.refs.date.value,
+                time: this.refs.time.value
+            }
+        });
+        axios.get('/admin/watchmakers/free-watchmakers', {
             params: {
-                city: data.city,
-                clockSize: data.clockSize,
-                date: data.date,
-                time: data.time
+                city: this.state.reservation.city,
+                clockSize: this.state.reservation.clockSize,
+                date: this.state.reservation.date,
+                time: this.state.reservation.time
             }
         })
             .then(res => {
@@ -58,11 +63,49 @@ export default class Order extends React.Component {
         this.setState({chooseWatchmakers: 'opened'})
     }
 
+    handleOnSubmitWatchmaker(event) {
+        event.preventDefault();
+        console.log(this.state.reservation);
+        axios.post('/admin/reservations/', this.state.reservation)
+            .then(res => {
+                this.setState({chooseWatchmakers: 'closed'});
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        this.setState({confirmation: 'opened'});
+    }
+
+    handleOnWatchmakerClick(watchmaker, event) {
+        this.setState({chosenWatchmaker: watchmaker});
+        event.currentTarget.classList.add("table-active");
+        this.setState({
+            reservation: {
+                ...this.state.reservation,
+                watchmakerId: watchmaker.id
+            }
+        });
+    }
+
+    renderConfirmation() {
+        if (this.state.confirmation === 'opened') {
+            return (
+                <div>
+                    <h5>
+                        Ваш заказ принят.
+                        Подтверждение отправлено на почту: {this.state.reservation.email}
+                    </h5>
+                </div>
+            )
+        }
+    }
+
     renderWatchmakers() {
         const watchmakers = [];
         this.state.freeWatchmakers.forEach(watchmaker =>
             watchmakers.push(
-                <tr key={'watchmaker' + watchmaker.id}>
+                <tr key={'watchmaker' + watchmaker.id}
+                    onClick={(event) => this.handleOnWatchmakerClick(watchmaker, event)}>
                     <td>{watchmaker.name}</td>
                     <td>{watchmaker.city}</td>
                     <td>{watchmaker.rating}</td>
@@ -90,6 +133,9 @@ export default class Order extends React.Component {
                         {this.renderWatchmakers()}
                         </tbody>
                     </table>
+                    <button className="btn btn-primary"
+                            onClick={(event) => this.handleOnSubmitWatchmaker(event)}>Принять
+                    </button>
                 </div>
             );
         }
@@ -129,10 +175,13 @@ export default class Order extends React.Component {
                             <input type="time" min="09:00" max="18:00" step={60 * 60} className="form-control" id="time"
                                    ref="time"/>
                         </div>
-                        <button className="btn btn-primary" onClick={(event) => this.handleOnSubmit(event)}>Принять</button>
+                        <button className="btn btn-primary"
+                                onClick={(event) => this.handleOnSubmitForm(event)}>Принять
+                        </button>
                     </form>
                 </div>
                 <div className={'col'}>{this.renderChooseWatchmakers()}</div>
+                <div className={'col'}>{this.renderConfirmation()}</div>
             </div>
         );
     }
