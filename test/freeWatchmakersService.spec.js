@@ -1,6 +1,4 @@
 const chai = require('chai');
-const path = require('path');
-const expect = chai.expect;
 chai.should();
 
 const FreeWatchmakers = require('../src/server/models/freeWatchmakersService');
@@ -11,7 +9,7 @@ describe('FreeWatchmakers', () => {
 
         beforeEach(() => {
             freeWatchmakers = new FreeWatchmakers({
-                clockSize: 'средние',
+                clockSize: 'Средние',
                 city: 'Днепр',
                 date: '2018-03-16',
                 time: '09:00'
