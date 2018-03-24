@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const clientsRepository = require('../repositories/clientsRepository');
+const auth = require('../authenticationMiddleware');
 
-router.get('/', function (req, res) {
+router.get('/', auth, function (req, res) {
     res.sendFile(path.join(__dirname, "../../../index.html"));
 });
 

@@ -6,6 +6,7 @@ import AdminHome from './components/AdminHome.jsx';
 import Clients from './components/Clients.jsx';
 import Cities from './components/Cities.jsx';
 import Reservations from './components/Reservations.jsx';
+import Login from './components/Login.jsx';
 import NotFound from './components/notfound.jsx';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 
@@ -14,6 +15,7 @@ ReactDOM.render(
         <Switch>
             <Route exact path="/" component={Home}/>
             <Route exact path="/admin" component={AdminHome}/>
+            <Route path="/login" component={Login}/>
             <Route path="/admin/watchmakers" component={Watchmakers}/>
             <Route path="/admin/clients" component={Clients}/>
             <Route path="/admin/cities" component={Cities}/>

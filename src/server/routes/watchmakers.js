@@ -3,8 +3,9 @@ const router = express.Router();
 const path = require('path');
 const watchmakersRepository = require('../repositories/watchmakersRepository');
 const FreeWatchmakers = require('../models/freeWatchmakersService');
+const auth = require('../authenticationMiddleware');
 
-router.get('/', function (req, res) {
+router.get('/', auth, function (req, res) {
     res.sendFile(path.join(__dirname, "../../../index.html"));
 });
 
