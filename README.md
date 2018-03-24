@@ -29,6 +29,8 @@ $ npm run webpack
 ```
 Then open your browser and go to http://localhost:3000.
 
+To enter as an admin go to http://localhost:3000/admin and log in.
+
 ### Build with
 
 * React
