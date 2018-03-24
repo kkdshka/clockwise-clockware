@@ -97,14 +97,14 @@ export default class Watchmakers extends Component {
                         <button
                             className="btn btn-warning"
                             onClick={() => this.handleOnEditClick(watchmaker)}>
-                            <i className="fa fa-pencil" />
+                            <i className="fa fa-pencil"/>
                         </button>
                     </td>
                     <td>
                         <button
                             className="btn btn-danger"
                             onClick={() => this.handleOnDeleteClick(watchmaker.id)}>
-                            <i className="fa fa-remove" />
+                            <i className="fa fa-remove"/>
                         </button>
                     </td>
                 </tr>));
@@ -123,6 +123,7 @@ export default class Watchmakers extends Component {
         if (this.state.modalCreate === 'opened') {
             return (
                 <form>
+                    <h4>Добавить мастера</h4>
                     <div className="form-group">
                         <label htmlFor="name">Имя:</label>
                         <input type="text" className="form-control" id="name" ref="name"/>
@@ -158,6 +159,7 @@ export default class Watchmakers extends Component {
         if (this.state.modalUpdate === 'opened') {
             return (
                 <form className={'form'}>
+                    <h4>Изменить мастера</h4>
                     <div className="form-group">
                         <label htmlFor="name">Имя:</label>
                         <input type="text" className="form-control" id="name" ref="name"
@@ -181,41 +183,46 @@ export default class Watchmakers extends Component {
                         </select>
                     </div>
                     <button className="btn btn-primary" onClick={this.handleOnSubmitEdit.bind(this)}>Принять</button>
-                    <button className="btn float-right" onClick={() => this.setState({modalUpdate: 'closed'})}>Закрыть</button>
+                    <button className="btn float-right" onClick={() => this.setState({modalUpdate: 'closed'})}>Закрыть
+                    </button>
                 </form>
             );
         }
     }
 
     render() {
-        return <div className="row">
-            <div className="col-sm">
-                <Navigation active="watchmakers"/>
-                <div className={'row'}>
-                    <div className={'col-md-4'}>
-                        <h3 className="row justify-content-md-center">Мастера</h3>
-                        <table className="table table-striped">
-                            <thead>
-                            <tr>
-                                <th>Имя</th>
-                                <th>Город</th>
-                                <th>Рейтинг</th>
-                                <th/>
-                                <th/>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {this.renderWatchmakers()}
-                            </tbody>
-                        </table>
-                        <button className="btn btn-success" onClick={() => this.setState({modalCreate: 'opened'})}>
-                            <i className="fa fa-plus"/> Добавить
-                        </button>
-                        <div className="row">{this.renderModalCreate()}</div>
-                        <div className="row">{this.renderModalUpdate()}</div>
-                    </div>
+        return <div>
+            <div className="row">
+                <div className="col">
+                    <Navigation active="watchmakers"/>
                 </div>
             </div>
-        </div>;
+            <div className={'row mt-4'}>
+                <div className={'col-md-4'}>
+                    <h4 className="row justify-content-md-center">Мастера</h4>
+                    <table className="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Имя</th>
+                            <th>Город</th>
+                            <th>Рейтинг</th>
+                            <th/>
+                            <th/>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {this.renderWatchmakers()}
+                        </tbody>
+                    </table>
+                    <button className="btn btn-success" onClick={() => this.setState({modalCreate: 'opened'})}>
+                        <i className="fa fa-plus"/> Добавить
+                    </button>
+                </div>
+                <div className="col-md-4 ml-4">
+                    <div>{this.renderModalCreate()}</div>
+                    <div>{this.renderModalUpdate()}</div>
+                </div>
+            </div>
+        </div>
     }
 }

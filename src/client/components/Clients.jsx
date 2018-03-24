@@ -123,6 +123,7 @@ export default class Clients extends React.Component {
         if (this.state.modalCreate === 'opened') {
             return (
                 <form>
+                    <h4>Добавить клиента</h4>
                     <div className="form-group">
                         <label htmlFor="name">Имя:</label>
                         <input type="text" className="form-control" id="name" ref="name"/>
@@ -152,6 +153,7 @@ export default class Clients extends React.Component {
         if (this.state.modalUpdate === 'opened') {
             return (
                 <form className={'form'}>
+                    <h4>Изменить клиента</h4>
                     <div className="form-group">
                         <label htmlFor="name">Имя:</label>
                         <input type="text" className="form-control" id="name" ref="name"
@@ -177,34 +179,38 @@ export default class Clients extends React.Component {
     }
 
     render() {
-        return <div className="row">
-            <div className="col-sm">
-                <Navigation active="clients"/>
-                <div className={'row'}>
-                    <div className={'col-md-4'}>
-                        <h3 className="row justify-content-md-center">Клиенты</h3>
-                        <table className="table table-striped">
-                            <thead>
-                            <tr>
-                                <th>Имя</th>
-                                <th>Город</th>
-                                <th>Email</th>
-                                <th/>
-                                <th/>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {this.renderClients()}
-                            </tbody>
-                        </table>
-                        <button className="btn btn-success" onClick={() => this.setState({modalCreate: 'opened'})}>
-                            <i className="fa fa-plus"/> Добавить
-                        </button>
-                        <div className="row">{this.renderModalCreate()}</div>
-                        <div className="row">{this.renderModalUpdate()}</div>
-                    </div>
+        return <div>
+            <div className="row">
+                <div className="col-sm">
+                    <Navigation active="clients"/>
                 </div>
             </div>
-        </div>;
+            <div className="row mt-4">
+                <div className={'col-md-6'}>
+                    <h4 className="row justify-content-md-center">Клиенты</h4>
+                    <table className="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Имя</th>
+                            <th>Город</th>
+                            <th>Email</th>
+                            <th/>
+                            <th/>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {this.renderClients()}
+                        </tbody>
+                    </table>
+                    <button className="btn btn-success" onClick={() => this.setState({modalCreate: 'opened'})}>
+                        <i className="fa fa-plus"/> Добавить
+                    </button>
+                </div>
+                <div className="col-md-6">
+                    <div>{this.renderModalCreate()}</div>
+                    <div>{this.renderModalUpdate()}</div>
+                </div>
+            </div>
+        </div>
     }
 }

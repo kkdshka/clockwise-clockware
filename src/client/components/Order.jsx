@@ -50,11 +50,11 @@ export default class Order extends React.Component {
 
         if (validation['isValid' + capitalize(fieldName)](this.refs[fieldName].value)) {
             this.setState({[fieldName]: {isValid: true, message: ''}});
-            element.className = 'form-control is-valid';
+            element.className = 'form-control form-control-sm is-valid';
         }
         else {
             this.setState({[fieldName]: {isValid: false, message: message}});
-            element.className = 'form-control is-invalid';
+            element.className = 'form-control form-control-sm is-invalid';
         }
     }
 
@@ -220,55 +220,69 @@ export default class Order extends React.Component {
     }
 
     render() {
-        return (
-            <div className="row">
-                <div className="col">
+        return <div>
+            <div className="row mt-4">
+                <div className="col-sm-5">
+                    {this.renderFormError()}
                     <form className={'form'}>
-                        <div className="form-group">
-                            <label htmlFor="name">Имя:</label>
-                            <input type="text" className="form-control" id="name" ref="name"
-                                   onBlur={(event) => this.handleOnChangeName(event)}/>
-                            <div className="invalid-feedback">{this.state.name.message}</div>
+                        <div className="form-group row">
+                            <label className="col-4 col-form-label" htmlFor="name">Имя:</label>
+                            <div className="col-sm-8">
+                                <input type="text" className="form-control " id="name" ref="name"
+                                       onBlur={(event) => this.handleOnChangeName(event)}/>
+                                <div className="invalid-feedback">{this.state.name.message}</div>
+                            </div>
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="name">Email:</label>
-                            <input type="text" className="form-control" id="email" ref="email"
-                                   onBlur={(event) => this.handleOnChangeEmail(event)}/>
-                            <div className="invalid-feedback">{this.state.email.message}</div>
+                        <div className="form-group row">
+                            <label className="col-4 col-form-label" htmlFor="name">Email:</label>
+                            <div className="col-sm-8">
+                                <input type="text" className="form-control" id="email" ref="email"
+                                       onBlur={(event) => this.handleOnChangeEmail(event)}/>
+                                <div className="invalid-feedback">{this.state.email.message}</div>
+                            </div>
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="city">Город:</label>
-                            <select className="form-control" id="city" ref="city">{this.renderCities()}</select>
+                        <div className="form-group row">
+                            <label className="col-4 col-form-label" htmlFor="city">Город:</label>
+                            <div className="col-sm-8">
+                                <select className="form-control" id="city"
+                                        ref="city">{this.renderCities()}</select>
+                            </div>
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="clock-size">Размер часов:</label>
-                            <select className="form-control" id="clock-size" ref="clockSize">
-                                <option>Маленькие</option>
-                                <option>Средние</option>
-                                <option>Большие</option>
-                            </select>
+                        <div className="form-group row">
+                            <label className="col-4 col-form-label" htmlFor="clock-size">Размер часов:</label>
+                            <div className="col-sm-8">
+                                <select className="form-control" id="clock-size" ref="clockSize">
+                                    <option>Маленькие</option>
+                                    <option>Средние</option>
+                                    <option>Большие</option>
+                                </select>
+                            </div>
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="date">Дата:</label>
-                            <input type="date" min={this.minDate()} className="form-control" id="date" ref="date"
-                                   onBlur={(event) => this.handleOnChangeDate(event)}/>
-                            <div className="invalid-feedback">{this.state.date.message}</div>
+                        <div className="form-group row">
+                            <label className="col-4 col-form-label" htmlFor="date">Дата:</label>
+                            <div className="col-sm-8">
+                                <input type="date" min={this.minDate()} className="form-control"
+                                       id="date" ref="date" onBlur={(event) => this.handleOnChangeDate(event)}/>
+                                <div className="invalid-feedback">{this.state.date.message}</div>
+                            </div>
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="time">Время:</label>
-                            <input type="time" min="09:00" max="18:00" step={60 * 60} className="form-control" id="time"
-                                   ref="time" onBlur={(event) => this.handleOnChangeTime(event)}/>
-                            <div className="invalid-feedback">{this.state.time.message}</div>
+                        <div className="form-group row">
+                            <label className="col-4 col-form-label" htmlFor="time">Время:</label>
+                            <div className="col-sm-8">
+                                <input type="time" min="09:00" max="18:00" step={60 * 60}
+                                       className="form-control" id="time"
+                                       ref="time" onBlur={(event) => this.handleOnChangeTime(event)}/>
+                                <div className="invalid-feedback">{this.state.time.message}</div>
+                            </div>
                         </div>
                         <button className="btn btn-primary"
                                 onClick={(event) => this.handleOnSubmitForm(event)}>Принять
                         </button>
-                        {this.renderFormError()}
                     </form>
                 </div>
                 <div className={'col'}>{this.renderChooseWatchmakers()}</div>
                 <div className={'col'}>{this.renderConfirmation()}</div>
             </div>
-        );
+        </div>
     }
 }
