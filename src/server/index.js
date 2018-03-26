@@ -36,4 +36,5 @@ app.use('/login', login);
 app.use('/logout', logout);
 
 app.use('/', index);
-app.listen(3000); //listens on port 3000 -> http://localhost:3000/
+const PORT = process.env.PORT || 3000;
+app.listen(PORT); //listens on port 3000 -> http://localhost:3000/
