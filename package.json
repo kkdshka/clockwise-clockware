@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/server/index.js",
-    "postinstall": "./node_modules/.bin/webpack -w --mode production",
+    "postinstall": "./node_modules/.bin/webpack --mode production",
     "webpack": "./node_modules/.bin/webpack -w --mode production",
     "test": "mocha --compilers babel-core/register ./test/*test.js"
   },
@@ -21,7 +21,7 @@
     "nodemailer": "^4.6.3",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-router-dom": "^4.2.2"
+    "react-router-dom": "^4.2.2",
     "axios": "^0.18.0",
     "babel": "^6.23.0",
     "babel-core": "^6.26.0",
