@@ -18,7 +18,7 @@ export default class Login extends React.Component {
         };
         axios.post('/login', data, {
             withCredentials: true,
-            validateStatus: status => status < 500
+            validateStatus: status => status === 401 || status < 400
         })
             .then(res => {
                 if (res.status === 200) {
