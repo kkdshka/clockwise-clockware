@@ -44,8 +44,7 @@ export default class Reservations extends React.Component {
     }
 
     handleOnEditClick(reservations) {
-        this.setState({modalUpdate: 'opened'});
-        this.setState({editing: reservations});
+        this.setState({modalUpdate: 'opened', editing: reservations});
     }
 
     handleOnDeleteClick(id) {
@@ -72,8 +71,7 @@ export default class Reservations extends React.Component {
         axios.post('/admin/reservations/', data)
             .then(res => {
                 const reservations = res.data;
-                this.setState({modalCreate: 'closed'});
-                this.setState({reservations: reservations});
+                this.setState({modalCreate: 'closed', reservations: reservations});
             })
             .catch(function (error) {
                 console.log(error);
@@ -94,8 +92,7 @@ export default class Reservations extends React.Component {
         axios.put('/admin/reservations/', data)
             .then(res => {
                 const reservations = res.data;
-                this.setState({modalUpdate: 'closed'});
-                this.setState({reservations: reservations});
+                this.setState({modalUpdate: 'closed', reservations: reservations});
             })
             .catch(function (error) {
                 console.log(error);
@@ -118,49 +115,42 @@ export default class Reservations extends React.Component {
     }
 
     renderReservations() {
-        const reservations = [];
-        this.state.reservations.map(reservation =>
-            reservations.push(
-                <tr key={'reservation' + reservation.id}>
-                    <td>{reservation.name}</td>
-                    <td>{reservation.city}</td>
-                    <td>{reservation.email}</td>
-                    <td>{reservation.clockSize}</td>
-                    <td>{this.dateToString(reservation.date)}</td>
-                    <td>{reservation.time}</td>
-                    <td>
-                        <button
-                            className="btn btn-warning"
-                            onClick={() => this.handleOnEditClick(reservation)}>
-                            <i className="fa fa-pencil"/>
-                        </button>
-                    </td>
-                    <td>
-                        <button
-                            className="btn btn-danger"
-                            onClick={() => this.handleOnDeleteClick(reservation.id)}>
-                            <i className="fa fa-remove"/>
-                        </button>
-                    </td>
-                </tr>));
-        return reservations;
+        return this.state.reservations.map(reservation => {
+            return <tr key={'reservation' + reservation.id}>
+                <td>{reservation.name}</td>
+                <td>{reservation.city}</td>
+                <td>{reservation.email}</td>
+                <td>{reservation.clockSize}</td>
+                <td>{this.dateToString(reservation.date)}</td>
+                <td>{reservation.time}</td>
+                <td>
+                    <button
+                        className="btn btn-warning"
+                        onClick={() => this.handleOnEditClick(reservation)}>
+                        <i className="fa fa-pencil"/>
+                    </button>
+                </td>
+                <td>
+                    <button
+                        className="btn btn-danger"
+                        onClick={() => this.handleOnDeleteClick(reservation.id)}>
+                        <i className="fa fa-remove"/>
+                    </button>
+                </td>
+            </tr>
+        });
     }
 
     renderCities() {
-        const cities = [];
-        this.state.cities.forEach(city => {
-            cities.push(<option key={'city' + city.id}>{city.name}</option>);
+        return this.state.cities.map(city => {
+            return <option key={'city' + city.id}>{city.name}</option>
         });
-        return cities;
     }
 
     renderWatchmakers() {
-        const watchmakers = [];
-        this.state.watchmakers.forEach(watchmaker => {
-            watchmakers.push(<option key={'watchmaker' + watchmaker.id}
-                                     value={watchmaker.id}>{watchmaker.name}</option>);
+        return this.state.watchmakers.map(watchmaker => {
+            return <option key={'watchmaker' + watchmaker.id} value={watchmaker.id}>{watchmaker.name}</option>
         });
-        return watchmakers;
     }
 
     renderModalCreate() {

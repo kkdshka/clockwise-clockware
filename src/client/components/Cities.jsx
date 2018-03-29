@@ -25,8 +25,7 @@ export default class Cities extends React.Component {
     }
 
     handleOnEditClick(city) {
-        this.setState({modalUpdate: 'opened'});
-        this.setState({editing: city});
+        this.setState({modalUpdate: 'opened', editing: city});
     }
 
     handleOnDeleteClick(id) {
@@ -47,8 +46,7 @@ export default class Cities extends React.Component {
         axios.post('/admin/cities/', data)
             .then(res => {
                 const cities = res.data;
-                this.setState({modalCreate: 'closed'});
-                this.setState({cities});
+                this.setState({modalCreate: 'closed', cities: cities});
             })
             .catch(function (error) {
                 console.log(error);
@@ -63,8 +61,7 @@ export default class Cities extends React.Component {
         axios.put('/admin/cities/', data)
             .then(res => {
                 const cities = res.data;
-                this.setState({modalUpdate: 'closed'});
-                this.setState({cities});
+                this.setState({modalUpdate: 'closed', cities: cities});
             })
             .catch(function (error) {
                 console.log(error);
@@ -72,27 +69,25 @@ export default class Cities extends React.Component {
     }
 
     renderCities() {
-        const cities = [];
-        this.state.cities.map(city =>
-            cities.push(
-                <tr key={'city' + city.id}>
-                    <td>{city.name}</td>
-                    <td>
-                        <button
-                            className="btn btn-warning"
-                            onClick={() => this.handleOnEditClick(city)}>
-                            <i className="fa fa-pencil"/>
-                        </button>
-                    </td>
-                    <td>
-                        <button
-                            className="btn btn-danger"
-                            onClick={() => this.handleOnDeleteClick(city.id)}>
-                            <i className="fa fa-remove"/>
-                        </button>
-                    </td>
-                </tr>));
-        return cities;
+        return this.state.cities.map(city => {
+            return <tr key={'city' + city.id}>
+                <td>{city.name}</td>
+                <td>
+                    <button
+                        className="btn btn-warning"
+                        onClick={() => this.handleOnEditClick(city)}>
+                        <i className="fa fa-pencil"/>
+                    </button>
+                </td>
+                <td>
+                    <button
+                        className="btn btn-danger"
+                        onClick={() => this.handleOnDeleteClick(city.id)}>
+                        <i className="fa fa-remove"/>
+                    </button>
+                </td>
+            </tr>
+        });
     }
 
     renderModalCreate() {

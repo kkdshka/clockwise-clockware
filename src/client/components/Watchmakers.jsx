@@ -35,8 +35,7 @@ export default class Watchmakers extends Component {
     }
 
     handleOnEditClick(watchmaker) {
-        this.setState({modalUpdate: 'opened'});
-        this.setState({editing: watchmaker});
+        this.setState({modalUpdate: 'opened', editing: watchmaker});
     }
 
     handleOnDeleteClick(id) {
@@ -59,8 +58,7 @@ export default class Watchmakers extends Component {
         axios.post('/admin/watchmakers/', data)
             .then(res => {
                 const watchmakers = res.data;
-                this.setState({modalCreate: 'closed'});
-                this.setState({watchmakers});
+                this.setState({modalCreate: 'closed', watchmakers: watchmakers});
             })
             .catch(function (error) {
                 console.log(error);
@@ -77,8 +75,7 @@ export default class Watchmakers extends Component {
         axios.put('/admin/watchmakers/', data)
             .then(res => {
                 const watchmakers = res.data;
-                this.setState({modalCreate: 'closed'});
-                this.setState({watchmakers});
+                this.setState({modalCreate: 'closed', watchmakers: watchmakers});
             })
             .catch(function (error) {
                 console.log(error);
@@ -86,10 +83,8 @@ export default class Watchmakers extends Component {
     }
 
     renderWatchmakers() {
-        const watchmakers = [];
-        this.state.watchmakers.map(watchmaker =>
-            watchmakers.push(
-                <tr key={'watchmaker' + watchmaker.id}>
+        return this.state.watchmakers.map(watchmaker => {
+            return <tr key={'watchmaker' + watchmaker.id}>
                     <td>{watchmaker.name}</td>
                     <td>{watchmaker.city}</td>
                     <td>{watchmaker.rating}</td>
@@ -107,16 +102,14 @@ export default class Watchmakers extends Component {
                             <i className="fa fa-remove"/>
                         </button>
                     </td>
-                </tr>));
-        return watchmakers;
+            </tr>
+        });
     }
 
     renderCities() {
-        const cities = [];
-        this.state.cities.forEach(city => {
-            cities.push(<option key={'city' + city.id}>{city.name}</option>);
+        return this.state.cities.forEach(city => {
+            return <option key={'city' + city.id}>{city.name}</option>
         });
-        return cities;
     }
 
     renderModalCreate() {

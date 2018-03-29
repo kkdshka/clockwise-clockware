@@ -34,11 +34,9 @@ export default class Order extends React.Component {
     }
 
     renderCities() {
-        const cities = [];
-        this.state.cities.forEach(city => {
-            cities.push(<option key={'city' + city.id}>{city.name}</option>);
+        return this.state.cities.map(city => {
+            return <option key={'city' + city.id}>{city.name}</option>
         });
-        return cities;
     }
 
     validator(fieldName, element, message) {
@@ -58,21 +56,7 @@ export default class Order extends React.Component {
         }
     }
 
-    handleOnChangeName(event) {
-        this.validator('name', event.currentTarget, 'Имя не может быть короче трех букв');
-    }
-
-    handleOnChangeEmail(event) {
-        this.validator('email', event.currentTarget, 'Введите правильный почтовый адрес');
-    }
-
-    handleOnChangeDate(event) {
-        this.validator('date', event.currentTarget, 'Выберите дату с сегодняшней');
-    }
-
-    handleOnChangeTime(event) {
-        this.validator('time', event.currentTarget, 'Выберите время с 9:00 до 18:00');
-    }
+    handleValidation = (type, message) => event => this.validator(type, event.currentTarget, message);
 
     renderFormError() {
         if (this.state.formError) {
@@ -113,12 +97,12 @@ export default class Order extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
-        this.setState({reservation: params.params});
-        this.setState({chooseWatchmakers: 'opened'});
+        this.setState({reservation: params.params, chooseWatchmakers: 'opened'});
     }
 
     handleOnSubmitWatchmaker(event) {
         event.preventDefault();
+        console.dir(this.state.chosenWatchmaker);
         if (Object.keys(this.state.chosenWatchmaker).length === 0) {
             this.setState({selectWatchmakerError: true});
             return;
@@ -142,13 +126,13 @@ export default class Order extends React.Component {
     }
 
     handleOnWatchmakerClick(watchmaker, event) {
-        this.setState({chosenWatchmaker: watchmaker});
         event.currentTarget.classList.add("table-active");
         this.setState({
             reservation: {
                 ...this.state.reservation,
-                watchmakerId: watchmaker.id
-            }
+                watchmakerId: watchmaker.id,
+            },
+            chosenWatchmaker: watchmaker
         });
     }
 
@@ -166,16 +150,14 @@ export default class Order extends React.Component {
     }
 
     renderWatchmakers() {
-        const watchmakers = [];
-        this.state.freeWatchmakers.forEach(watchmaker =>
-            watchmakers.push(
-                <tr key={'watchmaker' + watchmaker.id}
-                    onClick={(event) => this.handleOnWatchmakerClick(watchmaker, event)}>
-                    <td>{watchmaker.name}</td>
-                    <td>{watchmaker.city}</td>
-                    <td>{watchmaker.rating}</td>
-                </tr>));
-        return watchmakers;
+        return this.state.freeWatchmakers.map(watchmaker => {
+            return <tr key={'watchmaker' + watchmaker.id}
+                       onClick={(event) => this.handleOnWatchmakerClick(watchmaker, event)}>
+                <td>{watchmaker.name}</td>
+                <td>{watchmaker.city}</td>
+                <td>{watchmaker.rating}</td>
+            </tr>
+        });
     }
 
     renderChooseWatchmakers() {
@@ -185,6 +167,7 @@ export default class Order extends React.Component {
             }
             return (
                 <div>
+                    {this.renderChooseWatchmakersError()}
                     <h5>Выберите мастера:</h5>
                     <table className="table table-striped table-hover">
                         <thead>
@@ -201,7 +184,6 @@ export default class Order extends React.Component {
                     <button className="btn btn-primary"
                             onClick={(event) => this.handleOnSubmitWatchmaker(event)}>Принять
                     </button>
-                    {this.renderChooseWatchmakersError()}
                 </div>
             );
         }
@@ -229,7 +211,7 @@ export default class Order extends React.Component {
                             <label className="col-4 col-form-label" htmlFor="name">Имя:</label>
                             <div className="col-sm-8">
                                 <input type="text" className="form-control " id="name" ref="name"
-                                       onBlur={(event) => this.handleOnChangeName(event)}/>
+                                       onBlur={this.handleValidation('name', 'Имя не может быть короче трех букв')}/>
                                 <div className="invalid-feedback">{this.state.name.message}</div>
                             </div>
                         </div>
@@ -237,7 +219,7 @@ export default class Order extends React.Component {
                             <label className="col-4 col-form-label" htmlFor="name">Email:</label>
                             <div className="col-sm-8">
                                 <input type="text" className="form-control" id="email" ref="email"
-                                       onBlur={(event) => this.handleOnChangeEmail(event)}/>
+                                       onBlur={this.handleValidation('email', 'Введите правильный почтовый адрес')}/>
                                 <div className="invalid-feedback">{this.state.email.message}</div>
                             </div>
                         </div>
@@ -261,17 +243,17 @@ export default class Order extends React.Component {
                         <div className="form-group row">
                             <label className="col-4 col-form-label" htmlFor="date">Дата:</label>
                             <div className="col-sm-8">
-                                <input type="date" min={this.minDate()} className="form-control"
-                                       id="date" ref="date" onBlur={(event) => this.handleOnChangeDate(event)}/>
+                                <input type="date" min={this.minDate()} className="form-control" id="date" ref="date"
+                                       onBlur={this.handleValidation('date', 'Введите дату с сегодняшней')}/>
                                 <div className="invalid-feedback">{this.state.date.message}</div>
                             </div>
                         </div>
                         <div className="form-group row">
                             <label className="col-4 col-form-label" htmlFor="time">Время:</label>
                             <div className="col-sm-8">
-                                <input type="time" min="09:00" max="18:00" step={60 * 60}
-                                       className="form-control" id="time"
-                                       ref="time" onBlur={(event) => this.handleOnChangeTime(event)}/>
+                                <input type="time" min="09:00" max="18:00" step={60 * 60} //one hour
+                                       className="form-control" id="time" ref="time"
+                                       onBlur={this.handleValidation('time', 'Выберите время с 9:00 до 18:00')}/>
                                 <div className="invalid-feedback">{this.state.time.message}</div>
                             </div>
                         </div>

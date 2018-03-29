@@ -35,8 +35,7 @@ export default class Clients extends React.Component {
     }
 
     handleOnEditClick(client) {
-        this.setState({modalUpdate: 'opened'});
-        this.setState({editing: client});
+        this.setState({modalUpdate: 'opened', editing: client});
     }
 
     handleOnDeleteClick(id) {
@@ -59,8 +58,7 @@ export default class Clients extends React.Component {
         axios.post('/admin/clients/', data)
             .then(res => {
                 const clients = res.data;
-                this.setState({modalCreate: 'closed'});
-                this.setState({clients: clients});
+                this.setState({modalCreate: 'closed', clients: clients});
             })
             .catch(function (error) {
                 console.log(error);
@@ -77,8 +75,7 @@ export default class Clients extends React.Component {
         axios.put('/admin/clients/', data)
             .then(res => {
                 const clients = res.data;
-                this.setState({modalUpdate: 'closed'});
-                this.setState({clients: clients});
+                this.setState({modalUpdate: 'closed', clients: clients});
             })
             .catch(function (error) {
                 console.log(error);
@@ -86,37 +83,33 @@ export default class Clients extends React.Component {
     }
 
     renderClients() {
-        const clients = [];
-        this.state.clients.map(client =>
-            clients.push(
-                <tr key={'client' + client.id}>
-                    <td>{client.name}</td>
-                    <td>{client.city}</td>
-                    <td>{client.email}</td>
-                    <td>
-                        <button
-                            className="btn btn-warning"
-                            onClick={() => this.handleOnEditClick(client)}>
-                            <i className="fa fa-pencil"/>
-                        </button>
-                    </td>
-                    <td>
-                        <button
-                            className="btn btn-danger"
-                            onClick={() => this.handleOnDeleteClick(client.id)}>
-                            <i className="fa fa-remove"/>
-                        </button>
-                    </td>
-                </tr>));
-        return clients;
+        return this.state.clients.map(client => {
+            return <tr key={'client' + client.id}>
+                <td>{client.name}</td>
+                <td>{client.city}</td>
+                <td>{client.email}</td>
+                <td>
+                    <button
+                        className="btn btn-warning"
+                        onClick={() => this.handleOnEditClick(client)}>
+                        <i className="fa fa-pencil"/>
+                    </button>
+                </td>
+                <td>
+                    <button
+                        className="btn btn-danger"
+                        onClick={() => this.handleOnDeleteClick(client.id)}>
+                        <i className="fa fa-remove"/>
+                    </button>
+                </td>
+            </tr>
+        });
     }
 
     renderCities() {
-        const cities = [];
-        this.state.cities.forEach(city => {
-            cities.push(<option key={'city' + city.id}>{city.name}</option>);
+        return this.state.cities.forEach(city => {
+            return <option key={'city' + city.id}>{city.name}</option>
         });
-        return cities;
     }
 
     renderModalCreate() {
