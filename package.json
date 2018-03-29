@@ -4,9 +4,9 @@
   "description": "Web application for receiving orders online",
   "main": "index.js",
   "scripts": {
-    "start": "node src/server/index.js",
+    "start": "nodemon src/server/index.js",
     "postinstall": "./node_modules/.bin/webpack --mode production",
-    "webpack": "./node_modules/.bin/webpack -w --mode production",
+    "webpack": "./node_modules/.bin/webpack -w --mode development",
     "test": "mocha --compilers babel-core/register ./test/*test.js"
   },
   "author": "kkdshka",
