@@ -34,12 +34,9 @@ function getAllWatchmakers() {
             if (error) {
                 return reject(error);
             }
-            let models = [];
-            for (let i = 0; i < results.length; i++) {
-                const row = results[i];
-                const watchmaker = new Watchmaker(row.name, row.city, row.rating, row.id);
-                models.push(watchmaker);
-            }
+            const models = results.map((result) => {
+                return new Watchmaker(result.name, result.city, result.rating, result.id);
+            });
             resolve(models);
         });
     });

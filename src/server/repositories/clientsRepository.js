@@ -34,12 +34,9 @@ function getAllClients() {
             if (err) {
                 return reject(err);
             }
-            let models = [];
-            for (let i = 0; i < results.length; i++) {
-                const row = results[i];
-                const client = new Client(row.name, row.city, row.email, row.id);
-                models.push(client);
-            }
+            const models = results.map((result) => {
+                return new Client(result.name, result.city, result.email, result.id);
+            });
             resolve(models);
         });
     });

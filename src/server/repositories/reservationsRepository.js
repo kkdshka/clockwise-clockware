@@ -43,12 +43,9 @@ function getAllReservations() {
             if (err) {
                 return reject(err);
             }
-            let models = [];
-            for (let i = 0; i < results.length; i++) {
-                const row = results[i];
-                const reservation = new Reservation(row.name, row.city, row.email, row.clock_size, row.date, row.time, row.watchmaker_id, row.id);
-                models.push(reservation);
-            }
+            const models = results.map((result) => {
+                return new Reservation(result.name, result.city, result.email, result.clock_size, result.date, result.time, result.watchmaker_id, result.id);
+            });
             resolve(models);
         });
     });

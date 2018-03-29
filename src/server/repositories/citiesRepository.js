@@ -34,12 +34,9 @@ function getAllCities() {
             if (error) {
                 return reject(error);
             }
-            let models = [];
-            for (let i = 0; i < results.length; i++) {
-                const row = results[i];
-                const city = new City(row.name, row.id);
-                models.push(city);
-            }
+            const models = results.map((result) => {
+                return new City(result.name, result.id);
+            });
             resolve(models);
         });
     });
