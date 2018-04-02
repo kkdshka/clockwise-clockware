@@ -123,6 +123,7 @@ export default class Reservations extends React.Component {
                 <td>{reservation.clockSize}</td>
                 <td>{this.dateToString(reservation.date)}</td>
                 <td>{reservation.time}</td>
+                <td>{reservation.watchmaker.name}</td>
                 <td>
                     <button
                         className="btn btn-warning"
@@ -286,6 +287,7 @@ export default class Reservations extends React.Component {
                             <th>Размер часов</th>
                             <th>Дата</th>
                             <th>Время</th>
+                            <th>Мастер</th>
                             <th/>
                             <th/>
                         </tr>
