@@ -4,6 +4,7 @@ const path = require('path');
 const reservationsRepository = require('../repositories/reservationsRepository');
 const sendEmail = require('../sender');
 const auth = require('../authenticationMiddleware');
+const getFinishTime = require('../models/timeHelper').getFinishTime;
 
 router.get('/', auth, function (req, res) {
     res.sendFile(path.join(__dirname, "../../../index.html"));
@@ -23,8 +24,10 @@ router.post('/', function (req, res) {
         clock_size: req.body.clockSize,
         date: req.body.date,
         time: req.body.time,
-        watchmaker_id: req.body.watchmakerId
+        watchmaker_id: req.body.watchmakerId,
+        end_time: getFinishTime(req.body.time, req.body.clockSize)
     };
+    console.log(reservationData);
     sendEmail(reservationData.email, reservationData);
     reservationsRepository.add(reservationData);
     reservationsRepository.getAll().then((models) => {
@@ -41,6 +44,7 @@ router.put('/', function (req, res) {
         date: req.body.date,
         time: req.body.time,
         watchmaker_id: req.body.watchmakerId,
+        end_time: getFinishTime(req.body.time, req.body.clockSize),
         id: req.body.id
     };
     reservationsRepository.edit(reservationData);

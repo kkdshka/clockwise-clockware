@@ -43,19 +43,23 @@ function getAllWatchmakers() {
 }
 
 function getFreeWatchmakers(data) {
+    //   SELECT * FROM watchmakers WHERE city = 'Ужгород' AND id NOT IN (SELECT watchmaker_id FROM reservations WHERE city = 'Ужгород' AND date = '2018-03-14'  AND ((end_time > '15:00' AND end_time <= '17:00') OR (time < '17:00' AND time >= '15:00')));
     const query = "SELECT * FROM watchmakers WHERE city = ? AND id NOT IN " +
-        "(SELECT watchmaker_id FROM reservations WHERE city = ? AND date = ? AND time BETWEEN ? AND ?)";
+        "(SELECT watchmaker_id FROM reservations WHERE city = ? AND date = ?  AND (" +
+        "(end_time > ? AND end_time <= ?)" +
+        " OR " +
+        "(time < ? AND time >= ?)" +
+        " OR " +
+        "(time <= ? AND end_time >= ?)" +
+        "))";
     return new Promise((resolve, reject) => {
         pool.query(query, data, (error, results) => {
             if (error) {
                 return reject(error);
             }
-            let models = [];
-            for (let i = 0; i < results.length; i++) {
-                const row = results[i];
-                const watchmaker = new Watchmaker(row.name, row.city, row.rating, row.id);
-                models.push(watchmaker);
-            }
+            const models = results.map((result) => {
+                return new Watchmaker(result.name, result.city, result.rating, result.id);
+            });
             resolve(models);
         });
     });

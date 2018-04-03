@@ -32,7 +32,7 @@ class FreeWatchmakers {
     }
 
     get data() {
-        return [this.city, this.city, this.date, this.startTime, this.finishTime];
+        return [this.city, this.city, this.date, this.startTime, this.finishTime, this.finishTime, this.startTime, this.startTime, this.finishTime];
     }
 }
 

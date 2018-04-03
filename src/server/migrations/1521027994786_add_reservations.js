@@ -1,6 +1,6 @@
 const reservations = [
     ["Максим", "Днепр", "max@example.com", 'маленькие', '2018.03.14', '15:00:00', '1'],
-    ["Данил", "Ужгород", "dan@example.com", 'средние', '2018.03.14', '15:00:00', '1']
+    ["Данил", "Ужгород", "dan@example.com", 'средние', '2018.03.14', '15:00:00', '2']
 ];
 
 const queryUp = "INSERT INTO reservations (name, city, email, clock_size, date, time, watchmaker_id) VALUES ?";
