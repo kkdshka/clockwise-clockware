@@ -4,7 +4,7 @@ const clients = [
 ];
 
 const queryUp = "INSERT INTO clients (name, city, email) VALUES ?";
-const queryDown = "TRUNCATE clients";
+const queryDown = "DELETE FROM clients WHERE email = ?";
 
 module.exports = {
     'up': function (connection, cb) {
@@ -16,11 +16,16 @@ module.exports = {
         });
     },
     'down': function (connection, cb) {
-        connection.query(queryDown, function (error) {
+        connection.query(queryDown, clients[0][2], function (error) {
             if (error)
                 throw error;
-            console.log('Clients table cleared');
-            cb();
+            console.log("Client " + clients[0][0] + " deleted");
+            connection.query(queryDown, clients[1][2], function (error) {
+                if (error)
+                    throw error;
+                console.log("Client " + clients[1][0] + " deleted");
+                cb();
+            });
         });
     },
 };

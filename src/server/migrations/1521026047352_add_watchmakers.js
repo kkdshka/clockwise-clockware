@@ -4,7 +4,7 @@ const watchmakers = [
 ];
 
 const queryUp = "INSERT INTO watchmakers (name, city, rating) VALUES ?";
-const queryDown = "TRUNCATE watchmakers";
+const queryDown = "DELETE FROM watchmakers WHERE name = ? AND city = ? AND rating = ?";
 
 module.exports = {
     'up': function (connection, cb) {
@@ -16,11 +16,16 @@ module.exports = {
         });
     },
     'down': function (connection, cb) {
-        connection.query(queryDown, function (error) {
+        connection.query(queryDown, watchmakers[0], function (error) {
             if (error)
                 throw error;
-            console.log('Watchmakers table cleared');
-            cb();
+            console.log("Watchmaker " + watchmakers[0][0] + " deleted");
+            connection.query(queryDown, watchmakers[1], function (error) {
+                if (error)
+                    throw error;
+                console.log("Watchmaker " + watchmakers[1][0] + " deleted");
+                cb();
+            });
         });
-    },
+    }
 };

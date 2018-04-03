@@ -4,7 +4,7 @@ const cities = [
 ];
 
 const queryUp = "INSERT INTO cities (name) VALUES ?";
-const queryDown = "TRUNCATE cities";
+const queryDown = "DELETE FROM cities WHERE name = ?";
 
 module.exports = {
     'up': function (connection, cb) {
@@ -16,11 +16,16 @@ module.exports = {
         });
     },
     'down': function (connection, cb) {
-        connection.query(queryDown, function (error) {
+        connection.query(queryDown, cities[0], function (error) {
             if (error)
                 throw error;
-            console.log('Cities table cleared');
-            cb();
+            console.log("City " + cities[0][0] + " deleted");
+            connection.query(queryDown, cities[1], function (error) {
+                if (error)
+                    throw error;
+                console.log("City " + cities[1][0] + " deleted");
+                cb();
+            });
         });
     },
 };
