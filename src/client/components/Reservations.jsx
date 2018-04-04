@@ -47,12 +47,12 @@ export default class Reservations extends React.Component {
             });
     }
 
-    handleOnEditClick(reservations) {
+    handleOnEditClick = (reservations) => () => {
         this.setState({editing: reservations});
         this.openModalUpdate();
-    }
+    };
 
-    handleOnDeleteClick(id) {
+    handleOnDeleteClick = (id) => () => {
         axios.delete('/admin/reservations/', {data: {id: id}})
             .then(res => {
                 const reservations = res.data;
@@ -61,9 +61,9 @@ export default class Reservations extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
-    }
+    };
 
-    handleOnSubmitAdd() {
+    handleOnSubmitAdd = () => {
         const data = {
             name: this.refs.addName.value,
             city: this.refs.addCity.value,
@@ -82,9 +82,9 @@ export default class Reservations extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
-    }
+    };
 
-    handleOnSubmitEdit() {
+    handleOnSubmitEdit = () => {
         const data = {
             name: this.refs.editName.value,
             city: this.refs.editCity.value,
@@ -104,7 +104,7 @@ export default class Reservations extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
-    }
+    };
 
     dateToString(date) {
         const newDate = new Date(date);
@@ -133,13 +133,13 @@ export default class Reservations extends React.Component {
                 <td>{reservation.watchmaker.name}</td>
                 <td>
                     <button type="button" className="btn btn-warning"
-                            onClick={() => this.handleOnEditClick(reservation)}>
+                            onClick={this.handleOnEditClick(reservation)}>
                         <i className="fa fa-pencil"/>
                     </button>
                 </td>
                 <td>
                     <button type="button" className="btn btn-danger"
-                            onClick={() => this.handleOnDeleteClick(reservation.id)}>
+                            onClick={this.handleOnDeleteClick(reservation.id)}>
                         <i className="fa fa-remove"/>
                     </button>
                 </td>
@@ -218,7 +218,7 @@ export default class Reservations extends React.Component {
                 </form>
             </div>
             <div className="modal-footer">
-                <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitAdd.bind(this)}>
+                <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitAdd}>
                     Принять
                 </button>
                 <button type="button" className="btn float-right" onClick={this.hideModalCreate}>
@@ -293,7 +293,7 @@ export default class Reservations extends React.Component {
                 </form>
             </div>
             <div className="modal-footer">
-                <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitEdit.bind(this)}>
+                <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitEdit}>
                     Принять
                 </button>
                 <button type="button" className="btn float-right" onClick={this.hideModalUpdate}>Закрыть</button>

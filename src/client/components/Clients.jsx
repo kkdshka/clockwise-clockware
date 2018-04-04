@@ -35,12 +35,12 @@ export default class Clients extends React.Component {
             });
     }
 
-    handleOnEditClick(client) {
+    handleOnEditClick = (client) => () => {
         this.setState({editing: client});
         this.openModalUpdate();
-    }
+    };
 
-    handleOnDeleteClick(id) {
+    handleOnDeleteClick = (id) => () => {
         axios.delete('/admin/clients/', {data: {id: id}})
             .then(res => {
                 const clients = res.data;
@@ -49,9 +49,9 @@ export default class Clients extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
-    }
+    };
 
-    handleOnSubmitAdd() {
+    handleOnSubmitAdd = () => {
         const data = {
             name: this.refs.addName.value,
             city: this.refs.addCity.value,
@@ -66,9 +66,9 @@ export default class Clients extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
-    }
+    };
 
-    handleOnSubmitEdit() {
+    handleOnSubmitEdit = () => {
         const data = {
             name: this.refs.editName.value,
             city: this.refs.editCity.value,
@@ -84,7 +84,7 @@ export default class Clients extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
-    }
+    };
 
     renderClients() {
         return this.state.clients.map(client => {
@@ -93,13 +93,13 @@ export default class Clients extends React.Component {
                 <td>{client.city}</td>
                 <td>{client.email}</td>
                 <td>
-                    <button type="button" className="btn btn-warning" onClick={() => this.handleOnEditClick(client)}>
+                    <button type="button" className="btn btn-warning" onClick={this.handleOnEditClick(client)}>
                         <i className="fa fa-pencil"/>
                     </button>
                 </td>
                 <td>
                     <button type="button" className="btn btn-danger"
-                            onClick={() => this.handleOnDeleteClick(client.id)}>
+                            onClick={this.handleOnDeleteClick(client.id)}>
                         <i className="fa fa-remove"/>
                     </button>
                 </td>
@@ -149,7 +149,7 @@ export default class Clients extends React.Component {
                 </form>
             </div>
             <div className="modal-footer">
-                <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitAdd.bind(this)}>
+                <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitAdd}>
                     Принять
                 </button>
                 <button type="button" className="btn float-right" onClick={this.hideModalCreate}>
@@ -198,7 +198,7 @@ export default class Clients extends React.Component {
                 </form>
             </div>
             <div className="modal-footer">
-                <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitEdit.bind(this)}>
+                <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitEdit}>
                     Принять
                 </button>
                 <button type="button" className="btn float-right" onClick={this.hideModalUpdate}>Закрыть</button>

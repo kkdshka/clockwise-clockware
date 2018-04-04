@@ -35,12 +35,12 @@ export default class Watchmakers extends Component {
             });
     }
 
-    handleOnEditClick(watchmaker) {
+    handleOnEditClick = (watchmaker) => () => {
         this.setState({editing: watchmaker});
         this.openModalUpdate();
-    }
+    };
 
-    handleOnDeleteClick(id) {
+    handleOnDeleteClick = (id) => () => {
         axios.delete('/admin/watchmakers/', {data: {id: id}})
             .then(res => {
                 const watchmakers = res.data;
@@ -49,9 +49,9 @@ export default class Watchmakers extends Component {
             .catch(function (error) {
                 console.log(error);
             });
-    }
+    };
 
-    handleOnSubmitAdd() {
+    handleOnSubmitAdd = () => {
         const data = {
             name: this.refs.addName.value,
             city: this.refs.addCity.value,
@@ -66,9 +66,9 @@ export default class Watchmakers extends Component {
             .catch(function (error) {
                 console.log(error);
             });
-    }
+    };
 
-    handleOnSubmitEdit() {
+    handleOnSubmitEdit = () => {
         const data = {
             name: this.refs.editName.value,
             city: this.refs.editCity.value,
@@ -84,7 +84,7 @@ export default class Watchmakers extends Component {
             .catch(function (error) {
                 console.log(error);
             });
-    }
+    };
 
     renderWatchmakers() {
         return this.state.watchmakers.map(watchmaker => {
@@ -94,13 +94,13 @@ export default class Watchmakers extends Component {
                     <td>{watchmaker.rating}</td>
                     <td>
                         <button type="button" className="btn btn-warning"
-                                onClick={() => this.handleOnEditClick(watchmaker)}>
+                                onClick={this.handleOnEditClick(watchmaker)}>
                             <i className="fa fa-pencil"/>
                         </button>
                     </td>
                     <td>
                         <button type="button" className="btn btn-danger"
-                                onClick={() => this.handleOnDeleteClick(watchmaker.id)}>
+                                onClick={this.handleOnDeleteClick(watchmaker.id)}>
                             <i className="fa fa-remove"/>
                         </button>
                     </td>
@@ -156,7 +156,7 @@ export default class Watchmakers extends Component {
                 </form>
             </div>
             <div className="modal-footer">
-                <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitAdd.bind(this)}>
+                <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitAdd}>
                     Принять
                     </button>
                 <button type="button" className="btn float-right" onClick={this.hideModalCreate}>
@@ -210,7 +210,7 @@ export default class Watchmakers extends Component {
                 </form>
             </div>
             <div className="modal-footer">
-                <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitEdit.bind(this)}>
+                <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitEdit}>
                     Принять
                 </button>
                 <button type="button" className="btn float-right" onClick={this.hideModalUpdate}>
