@@ -1,17 +1,20 @@
 import React from 'react';
 import Navigation from './AdminNavigation.jsx';
 import axios from "axios/index";
+import Modal from 'react-bootstrap4-modal';
 
 export default class Reservations extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             reservations: [],
+            cities: [],
+            watchmakers: [],
             modalCreate: 'closed',
             modalUpdate: 'closed',
+            isModalCreateOpened: false,
+            isModalUpdateOpened: false,
             editing: {},
-            cities: [],
-            watchmakers: []
         };
     }
 
@@ -33,6 +36,7 @@ export default class Reservations extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
+
         axios.get('/admin/watchmakers/data')
             .then(res => {
                 const watchmakers = res.data;
@@ -44,7 +48,8 @@ export default class Reservations extends React.Component {
     }
 
     handleOnEditClick(reservations) {
-        this.setState({modalUpdate: 'opened', editing: reservations});
+        this.setState({editing: reservations});
+        this.openModalUpdate();
     }
 
     handleOnDeleteClick(id) {
@@ -60,18 +65,19 @@ export default class Reservations extends React.Component {
 
     handleOnSubmitAdd() {
         const data = {
-            name: this.refs.name.value,
-            city: this.refs.city.value,
-            email: this.refs.email.value,
-            clockSize: this.refs.clockSize.value,
-            date: this.refs.date.value,
-            time: this.refs.time.value,
-            watchmakerId: this.refs.watchmakerId.value
+            name: this.refs.addName.value,
+            city: this.refs.addCity.value,
+            email: this.refs.addEmail.value,
+            clockSize: this.refs.addClockSize.value,
+            date: this.refs.addDate.value,
+            time: this.refs.addTime.value,
+            watchmakerId: this.refs.addWatchmakerId.value
         };
         axios.post('/admin/reservations/', data)
             .then(res => {
                 const reservations = res.data;
-                this.setState({modalCreate: 'closed', reservations: reservations});
+                this.setState({reservations: reservations});
+                this.hideModalCreate();
             })
             .catch(function (error) {
                 console.log(error);
@@ -80,19 +86,20 @@ export default class Reservations extends React.Component {
 
     handleOnSubmitEdit() {
         const data = {
-            name: this.refs.name.value,
-            city: this.refs.city.value,
-            email: this.refs.email.value,
-            clockSize: this.refs.clockSize.value,
-            date: this.refs.date.value,
-            time: this.refs.time.value,
-            watchmakerId: this.refs.watchmakerId.value,
+            name: this.refs.editName.value,
+            city: this.refs.editCity.value,
+            email: this.refs.editEmail.value,
+            clockSize: this.refs.editClockSize.value,
+            date: this.refs.editDate.value,
+            time: this.refs.editTime.value,
+            watchmakerId: this.refs.editWatchmakerId.value,
             id: this.state.editing.id
         };
         axios.put('/admin/reservations/', data)
             .then(res => {
                 const reservations = res.data;
-                this.setState({modalUpdate: 'closed', reservations: reservations});
+                this.setState({reservations: reservations});
+                this.hideModalUpdate();
             })
             .catch(function (error) {
                 console.log(error);
@@ -125,16 +132,14 @@ export default class Reservations extends React.Component {
                 <td>{reservation.time}</td>
                 <td>{reservation.watchmaker.name}</td>
                 <td>
-                    <button
-                        className="btn btn-warning"
-                        onClick={() => this.handleOnEditClick(reservation)}>
+                    <button type="button" className="btn btn-warning"
+                            onClick={() => this.handleOnEditClick(reservation)}>
                         <i className="fa fa-pencil"/>
                     </button>
                 </td>
                 <td>
-                    <button
-                        className="btn btn-danger"
-                        onClick={() => this.handleOnDeleteClick(reservation.id)}>
+                    <button type="button" className="btn btn-danger"
+                            onClick={() => this.handleOnDeleteClick(reservation.id)}>
                         <i className="fa fa-remove"/>
                     </button>
                 </td>
@@ -154,118 +159,146 @@ export default class Reservations extends React.Component {
         });
     }
 
+    openModalCreate = () => {
+        this.setState({
+            isModalCreateOpened: true
+        });
+    };
+
+    hideModalCreate = () => {
+        this.setState({
+            isModalCreateOpened: false
+        });
+    };
+
     renderModalCreate() {
-        if (this.state.modalCreate === 'opened') {
-            return (
+        return <Modal visible={this.state.isModalCreateOpened} onClickBackdrop={this.hideModalCreate}>
+            <div className="modal-header">
+                <h4 className="modal-title">Добавить заказ</h4>
+            </div>
+            <div className="modal-body">
                 <form>
-                    <div className="form-row">
-                        <div className="form-group col-md-3">
-                            <label htmlFor="name">Имя:</label>
-                            <input type="text" className="form-control" id="name" ref="name"/>
-                        </div>
-                        <div className="form-group col-md-3">
-                            <label htmlFor="name">Email:</label>
-                            <input type="text" className="form-control" id="email" ref="email"/>
-                        </div>
-                        <div className="form-group col-md-3">
-                            <label htmlFor="city">Город:</label>
-                            <select className="form-control" id="city" ref="city">
-                                {this.renderCities()}
-                            </select>
-                        </div>
-                        <div className="form-group col-md-3">
-                            <label htmlFor="clock-size">Размер часов:</label>
-                            <select className="form-control" id="clock-size" ref="clockSize">
-                                <option>Маленькие</option>
-                                <option>Средние</option>
-                                <option>Большие</option>
-                            </select>
-                        </div>
+                    <div className="form-group">
+                        <label htmlFor="add-name">Имя:</label>
+                        <input type="text" className="form-control" id="add-name" ref="addName"/>
                     </div>
-                    <div className="form-row">
-                        <div className="form-group col-md-4">
-                            <label htmlFor="date">Дата:</label>
-                            <input type="date" className="form-control" id="date" ref="date"/>
-                        </div>
-                        <div className="form-group col-md-4">
-                            <label htmlFor="time">Время:</label>
-                            <input type="time" min="09:00" max="18:00" step={60 * 60} className="form-control" id="time"
-                                   ref="time"/>
-                        </div>
-                        <div className="form-group col-md-4">
-                            <label htmlFor="city">Мастер:</label>
-                            <select className="form-control" id="watchmaker" ref="watchmakerId">
-                                {this.renderWatchmakers()}
-                            </select>
-                        </div>
+                    <div className="form-group">
+                        <label htmlFor="add-email">Email:</label>
+                        <input type="text" className="form-control" id="add-email" ref="addEmail"/>
                     </div>
-                    <button type={'button'} className="btn btn-primary"
-                            onClick={this.handleOnSubmitAdd.bind(this)}>Принять
-                    </button>
-                    <button type={'button'} className="btn float-right"
-                            onClick={() => this.setState({modalCreate: 'closed'})}>Закрыть
-                    </button>
+                    <div className="form-group">
+                        <label htmlFor="add-city">Город:</label>
+                        <select className="form-control" id="add-city" ref="addCity">
+                            {this.renderCities()}
+                        </select>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="add-clock-size">Размер часов:</label>
+                        <select className="form-control" id="add-clock-size" ref="addClockSize">
+                            <option>Маленькие</option>
+                            <option>Средние</option>
+                            <option>Большие</option>
+                        </select>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="add-date">Дата:</label>
+                        <input type="date" className="form-control" id="add-date" ref="addDate"/>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="add-time">Время:</label>
+                        <input type="time" min="09:00" max="18:00" step={60 * 60} className="form-control" id="add-time"
+                               ref="addTime"/>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="add-watchmaker">Мастер:</label>
+                        <select className="form-control" id="add-watchmaker" ref="addWatchmakerId">
+                            {this.renderWatchmakers()}
+                        </select>
+                    </div>
                 </form>
-            );
-        }
+            </div>
+            <div className="modal-footer">
+                <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitAdd.bind(this)}>
+                    Принять
+                </button>
+                <button type="button" className="btn float-right" onClick={this.hideModalCreate}>
+                    Закрыть
+                </button>
+            </div>
+        </Modal>
     }
 
+    openModalUpdate = () => {
+        this.setState({
+            isModalUpdateOpened: true
+        });
+    };
+
+    hideModalUpdate = () => {
+        this.setState({
+            isModalUpdateOpened: false
+        });
+    };
+
     renderModalUpdate() {
-        if (this.state.modalUpdate === 'opened') {
-            return (
-                <form className={'form'}>
-                    <div className="form-row">
-                        <div className="form-group col-md-3">
-                            <label htmlFor="name">Имя:</label>
-                            <input type="text" className="form-control" id="name" ref="name"
-                                   defaultValue={this.state.editing.name}/>
-                        </div>
-                        <div className="form-group col-md-3">
-                            <label htmlFor="name">Email:</label>
-                            <input type="text" className="form-control" id="email" ref="email"
-                                   defaultValue={this.state.editing.email}/>
-                        </div>
-                        <div className="form-group col-md-3">
-                            <label htmlFor="city">Город:</label>
-                            <select className="form-control" id="city" ref="city"
-                                    defaultValue={this.state.editing.city}>
-                                {this.renderCities()}
-                            </select>
-                        </div>
-                        <div className="form-group col-md-3">
-                            <label htmlFor="clock-size">Размер часов:</label>
-                            <select className="form-control" id="clock-size" ref="clockSize"
-                                    defaultValue={this.state.editing.clockSize}>
-                                <option>Маленькие</option>
-                                <option>Средние</option>
-                                <option>Большие</option>
-                            </select>
-                        </div>
+        return <Modal visible={this.state.isModalUpdateOpened} onClickBackdrop={this.hideModalUpdate}>
+            <div className="modal-header">
+                <h4 className="modal-title">Изменить заказ</h4>
+            </div>
+            <div className="modal-body">
+                <form>
+                    <div className="form-group">
+                        <label htmlFor="edit-name">Имя:</label>
+                        <input type="text" className="form-control" id="edit-name" ref="editName"
+                               value={this.state.editing.name}/>
                     </div>
-                    <div className="form-row">
-                        <div className="form-group col-md-4">
-                            <label htmlFor="date">Дата:</label>
-                            <input type="date" className="form-control" id="date" ref="date"
-                                   defaultValue={this.dateToString(this.state.editing.date)}/>
-                        </div>
-                        <div className="form-group col-md-4">
-                            <label htmlFor="time">Время:</label>
-                            <input type="time" min="09:00" max="18:00" step={60 * 60} className="form-control" id="time"
-                                   ref="time" defaultValue={this.state.editing.time}/>
-                        </div>
-                        <div className="form-group col-md-4">
-                            <label htmlFor="city">Мастер:</label>
-                            <select className="form-control" id="watchmaker" ref="watchmakerId">
-                                {this.renderWatchmakers()}
-                            </select>
-                        </div>
+                    <div className="form-group">
+                        <label htmlFor="edit-name">Email:</label>
+                        <input type="text" className="form-control" id="edit-email" ref="editEmail"
+                               value={this.state.editing.email}/>
                     </div>
-                    <button className="btn btn-primary" onClick={this.handleOnSubmitEdit.bind(this)}>Принять</button>
-                    <button className="btn float-right" onClick={() => this.setState({modalUpdate: 'closed'})}>Закрыть
-                    </button>
+                    <div className="form-group">
+                        <label htmlFor="edit-city">Город:</label>
+                        <select className="form-control" id="edit-city" ref="editCity"
+                                value={this.state.editing.city}>
+                            {this.renderCities()}
+                        </select>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="edit-clock-size">Размер часов:</label>
+                        <select className="form-control" id="edit-clock-size" ref="editClockSize"
+                                value={this.state.editing.clockSize}>
+                            <option>Маленькие</option>
+                            <option>Средние</option>
+                            <option>Большие</option>
+                        </select>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="edit-date">Дата:</label>
+                        <input type="date" className="form-control" id="edit-date" ref="editDate"
+                               value={this.dateToString(this.state.editing.date)}/>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="edit-time">Время:</label>
+                        <input type="time" min="09:00" max="18:00" step={60 * 60} className="form-control"
+                               id="edit-time"
+                               ref="editTime" value={this.state.editing.time}/>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="edit-watchmaker">Мастер:</label>
+                        <select className="form-control" id="edit-watchmaker" ref="editWatchmakerId">
+                            {this.renderWatchmakers()}
+                        </select>
+                    </div>
                 </form>
-            );
-        }
+            </div>
+            <div className="modal-footer">
+                <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitEdit.bind(this)}>
+                    Принять
+                </button>
+                <button type="button" className="btn float-right" onClick={this.hideModalUpdate}>Закрыть</button>
+            </div>
+        </Modal>
     }
 
     render() {
@@ -296,7 +329,7 @@ export default class Reservations extends React.Component {
                         {this.renderReservations()}
                         </tbody>
                     </table>
-                    <button className="btn btn-success" onClick={() => this.setState({modalCreate: 'opened'})}>
+                    <button className="btn btn-success" onClick={this.openModalCreate}>
                         <i className="fa fa-plus"/> Добавить
                     </button>
                 </div>

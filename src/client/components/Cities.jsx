@@ -1,16 +1,18 @@
 import React from 'react';
 import Navigation from './AdminNavigation.jsx';
 import axios from "axios/index";
+import Modal from 'react-bootstrap4-modal';
 
 export default class Cities extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             cities: [],
-            modalCreate: 'closed',
-            modalUpdate: 'closed',
-            editing: {}
+            isModalCreateOpened: false,
+            isModalUpdateOpened: false,
+            editing: {},
         };
+
     }
 
     componentDidMount() {
@@ -24,11 +26,12 @@ export default class Cities extends React.Component {
             });
     }
 
-    handleOnEditClick(city) {
-        this.setState({modalUpdate: 'opened', editing: city});
-    }
+    handleOnEditClick = (city) => () => {
+        this.openModalUpdate();
+        this.setState({editing: city});
+    };
 
-    handleOnDeleteClick(id) {
+    handleOnDeleteClick = (id) => () => {
         axios.delete('/admin/cities/', {data: {id: id}})
             .then(res => {
                 const cities = res.data;
@@ -37,52 +40,50 @@ export default class Cities extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
-    }
+    };
 
-    handleOnSubmitAdd() {
+    handleOnSubmitAdd = () => {
         const data = {
-            name: this.refs.name.value,
+            name: this.refs.addName.value,
         };
         axios.post('/admin/cities/', data)
             .then(res => {
                 const cities = res.data;
-                this.setState({modalCreate: 'closed', cities: cities});
+                this.setState({cities: cities});
+                this.hideModalCreate();
             })
             .catch(function (error) {
                 console.log(error);
             });
-    }
+    };
 
-    handleOnSubmitEdit() {
+    handleOnSubmitEdit = () => {
         const data = {
-            name: this.refs.name.value,
+            name: this.refs.editName.value,
             id: this.state.editing.id
         };
         axios.put('/admin/cities/', data)
             .then(res => {
                 const cities = res.data;
-                this.setState({modalUpdate: 'closed', cities: cities});
+                this.setState({cities: cities});
+                this.hideModalUpdate();
             })
             .catch(function (error) {
                 console.log(error);
             });
-    }
+    };
 
     renderCities() {
         return this.state.cities.map(city => {
             return <tr key={'city' + city.id}>
                 <td>{city.name}</td>
                 <td>
-                    <button
-                        className="btn btn-warning"
-                        onClick={() => this.handleOnEditClick(city)}>
+                    <button type="button" className="btn btn-warning" onClick={this.handleOnEditClick(city)}>
                         <i className="fa fa-pencil"/>
                     </button>
                 </td>
                 <td>
-                    <button
-                        className="btn btn-danger"
-                        onClick={() => this.handleOnDeleteClick(city.id)}>
+                    <button type="button" className="btn btn-danger" onClick={this.handleOnDeleteClick(city.id)}>
                         <i className="fa fa-remove"/>
                     </button>
                 </td>
@@ -90,42 +91,71 @@ export default class Cities extends React.Component {
         });
     }
 
+    openModalCreate = () => {
+        this.setState({
+            isModalCreateOpened: true
+        });
+    };
+
+    hideModalCreate = () => {
+        this.setState({
+            isModalCreateOpened: false
+        });
+    };
+
     renderModalCreate() {
-        if (this.state.modalCreate === 'opened') {
-            return (
+        return <Modal visible={this.state.isModalCreateOpened} onClickBackdrop={this.hideModalCreate}>
+            <div className="modal-header">
+                <h4 className="modal-title">Добавить город</h4>
+            </div>
+            <div className="modal-body">
                 <form>
-                    <h4>Добавить город</h4>
                     <div className="form-group">
-                        <label htmlFor="name">Название:</label>
-                        <input type="text" className="form-control" id="name" ref="name"/>
+                        <label htmlFor="add-name">Название:</label>
+                        <input type="text" className="form-control" id="add-name" ref="addName"/>
                     </div>
-                    <button type={'button'} className="btn btn-primary"
-                            onClick={this.handleOnSubmitAdd.bind(this)}>Принять
-                    </button>
-                    <button type={'button'} className="btn float-right"
-                            onClick={() => this.setState({modalCreate: 'closed'})}>Закрыть
-                    </button>
                 </form>
-            );
-        }
+            </div>
+            <div className="modal-footer">
+                <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitAdd}>
+                    Принять
+                </button>
+                <button type="button" className="btn float-right" onClick={this.hideModalCreate}>Закрыть</button>
+            </div>
+        </Modal>
     }
 
+    openModalUpdate = () => {
+        this.setState({
+            isModalUpdateOpened: true
+        });
+    };
+
+    hideModalUpdate = () => {
+        this.setState({
+            isModalUpdateOpened: false
+        });
+    };
+
     renderModalUpdate() {
-        if (this.state.modalUpdate === 'opened') {
-            return (
-                <form className={'form'}>
-                    <h4>Изменить город</h4>
+        return <Modal visible={this.state.isModalUpdateOpened} onClickBackdrop={this.hideModalUpdate}>
+            <div className="modal-header">
+                <h4>Изменить город</h4>
+            </div>
+            <div className="modal-body">
+                <form>
                     <div className="form-group">
-                        <label htmlFor="name">Название:</label>
-                        <input type="text" className="form-control" id="name" ref="name"
-                               defaultValue={this.state.editing.name}/>
+                        <label htmlFor="edit-name">Название:</label>
+                        <input type="text" className="form-control" id="edit-name" ref="editName"
+                               value={this.state.editing.name}/>
                     </div>
-                    <button className="btn btn-primary" onClick={this.handleOnSubmitEdit.bind(this)}>Принять</button>
-                    <button className="btn float-right" onClick={() => this.setState({modalUpdate: 'closed'})}>Закрыть
-                    </button>
                 </form>
-            );
-        }
+            </div>
+            <div className={'modal-footer'}>
+                <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitEdit}>Принять</button>
+                <button type="button" className="btn float-right" onClick={this.hideModalUpdate}>Закрыть</button>
+            </div>
+        </Modal>
     }
 
     render() {
@@ -135,8 +165,8 @@ export default class Cities extends React.Component {
                     <Navigation active="cities"/>
                 </div>
             </div>
-            <div className={'row mt-4'}>
-                <div className={'col-sm-4'}>
+            <div className="row mt-4">
+                <div className="col-sm-4">
                     <h4 className="row justify-content-md-center">Города</h4>
                     <table className="table table-striped">
                         <thead>
@@ -150,7 +180,7 @@ export default class Cities extends React.Component {
                         {this.renderCities()}
                         </tbody>
                     </table>
-                    <button className="btn btn-success" onClick={() => this.setState({modalCreate: 'opened'})}>
+                    <button type="button" className="btn btn-success" onClick={this.openModalCreate}>
                         <i className="fa fa-plus"/> Добавить
                     </button>
                 </div>

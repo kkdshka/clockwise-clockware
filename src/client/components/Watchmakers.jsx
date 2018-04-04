@@ -1,16 +1,17 @@
 import React, {Component} from 'react';
 import Navigation from './AdminNavigation.jsx';
 import axios from 'axios';
+import Modal from 'react-bootstrap4-modal';
 
 export default class Watchmakers extends Component {
     constructor(props) {
         super(props);
         this.state = {
             watchmakers: [],
-            modalCreate: 'closed',
-            modalUpdate: 'closed',
+            cities: [],
+            isModalCreateOpened: false,
+            isModalUpdateOpened: false,
             editing: {},
-            cities: []
         };
     }
 
@@ -35,7 +36,8 @@ export default class Watchmakers extends Component {
     }
 
     handleOnEditClick(watchmaker) {
-        this.setState({modalUpdate: 'opened', editing: watchmaker});
+        this.setState({editing: watchmaker});
+        this.openModalUpdate();
     }
 
     handleOnDeleteClick(id) {
@@ -51,14 +53,15 @@ export default class Watchmakers extends Component {
 
     handleOnSubmitAdd() {
         const data = {
-            name: this.refs.name.value,
-            city: this.refs.city.value,
-            rating: this.refs.rating.value
+            name: this.refs.addName.value,
+            city: this.refs.addCity.value,
+            rating: this.refs.addRating.value
         };
         axios.post('/admin/watchmakers/', data)
             .then(res => {
                 const watchmakers = res.data;
-                this.setState({modalCreate: 'closed', watchmakers: watchmakers});
+                this.setState({watchmakers: watchmakers});
+                this.hideModalCreate();
             })
             .catch(function (error) {
                 console.log(error);
@@ -67,15 +70,16 @@ export default class Watchmakers extends Component {
 
     handleOnSubmitEdit() {
         const data = {
-            name: this.refs.name.value,
-            city: this.refs.city.value,
-            rating: this.refs.rating.value,
+            name: this.refs.editName.value,
+            city: this.refs.editCity.value,
+            rating: this.refs.editRating.value,
             id: this.state.editing.id
         };
         axios.put('/admin/watchmakers/', data)
             .then(res => {
                 const watchmakers = res.data;
-                this.setState({modalCreate: 'closed', watchmakers: watchmakers});
+                this.setState({watchmakers: watchmakers});
+                this.hideModalUpdate();
             })
             .catch(function (error) {
                 console.log(error);
@@ -89,16 +93,14 @@ export default class Watchmakers extends Component {
                     <td>{watchmaker.city}</td>
                     <td>{watchmaker.rating}</td>
                     <td>
-                        <button
-                            className="btn btn-warning"
-                            onClick={() => this.handleOnEditClick(watchmaker)}>
+                        <button type="button" className="btn btn-warning"
+                                onClick={() => this.handleOnEditClick(watchmaker)}>
                             <i className="fa fa-pencil"/>
                         </button>
                     </td>
                     <td>
-                        <button
-                            className="btn btn-danger"
-                            onClick={() => this.handleOnDeleteClick(watchmaker.id)}>
+                        <button type="button" className="btn btn-danger"
+                                onClick={() => this.handleOnDeleteClick(watchmaker.id)}>
                             <i className="fa fa-remove"/>
                         </button>
                     </td>
@@ -107,29 +109,43 @@ export default class Watchmakers extends Component {
     }
 
     renderCities() {
-        return this.state.cities.forEach(city => {
+        return this.state.cities.map(city => {
             return <option key={'city' + city.id}>{city.name}</option>
         });
     }
 
+    openModalCreate = () => {
+        this.setState({
+            isModalCreateOpened: true
+        });
+    };
+
+    hideModalCreate = () => {
+        this.setState({
+            isModalCreateOpened: false
+        });
+    };
+
     renderModalCreate() {
-        if (this.state.modalCreate === 'opened') {
-            return (
+        return <Modal visible={this.state.isModalCreateOpened} onClickBackdrop={this.hideModalCreate}>
+            <div className="modal-header">
+                <h4 className="modal-title">Добавить мастера</h4>
+            </div>
+            <div className="modal-body">
                 <form>
-                    <h4>Добавить мастера</h4>
                     <div className="form-group">
-                        <label htmlFor="name">Имя:</label>
-                        <input type="text" className="form-control" id="name" ref="name"/>
+                        <label htmlFor="add-name">Имя:</label>
+                        <input type="text" className="form-control" id="add-name" ref="addName"/>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="city">Город:</label>
-                        <select className="form-control" id="city" ref="city">
+                        <label htmlFor="add-city">Город:</label>
+                        <select className="form-control" id="add-city" ref="addCity">
                             {this.renderCities()}
                         </select>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="rating">Рейтинг:</label>
-                        <select className="form-control" id="rating" ref="rating">
+                        <label htmlFor="add-rating">Рейтинг:</label>
+                        <select className="form-control" id="add-rating" ref="addRating">
                             <option>1</option>
                             <option>2</option>
                             <option>3</option>
@@ -137,37 +153,53 @@ export default class Watchmakers extends Component {
                             <option>5</option>
                         </select>
                     </div>
-                    <button type={'button'} className="btn btn-primary"
-                            onClick={this.handleOnSubmitAdd.bind(this)}>Принять
-                    </button>
-                    <button type={'button'} className="btn float-right"
-                            onClick={() => this.setState({modalCreate: 'closed'})}>Закрыть
-                    </button>
                 </form>
-            );
-        }
+            </div>
+            <div className="modal-footer">
+                <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitAdd.bind(this)}>
+                    Принять
+                    </button>
+                <button type="button" className="btn float-right" onClick={this.hideModalCreate}>
+                    Закрыть
+                    </button>
+            </div>
+        </Modal>
     }
 
+    openModalUpdate = () => {
+        this.setState({
+            isModalUpdateOpened: true
+        });
+    };
+
+    hideModalUpdate = () => {
+        this.setState({
+            isModalUpdateOpened: false
+        });
+    };
+
     renderModalUpdate() {
-        if (this.state.modalUpdate === 'opened') {
-            return (
-                <form className={'form'}>
-                    <h4>Изменить мастера</h4>
+        return <Modal visible={this.state.isModalUpdateOpened} onClickBackdrop={this.hideModalUpdate}>
+            <div className="modal-header">
+                <h4 className="modal-title">Изменить мастера</h4>
+            </div>
+            <div className="modal-body">
+                <form>
                     <div className="form-group">
-                        <label htmlFor="name">Имя:</label>
-                        <input type="text" className="form-control" id="name" ref="name"
-                               defaultValue={this.state.editing.name}/>
+                        <label htmlFor="edit-name">Имя:</label>
+                        <input type="text" className="form-control" id="edit-name" ref="editName"
+                               value={this.state.editing.name}/>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="city">Город:</label>
-                        <select className="form-control" id="city" ref="city" defaultValue={this.state.editing.city}>
+                        <label htmlFor="edit-city">Город:</label>
+                        <select className="form-control" id="edit-city" ref="editCity" value={this.state.editing.city}>
                             {this.renderCities()}
                         </select>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="rating">Рейтинг:</label>
-                        <select className="form-control" id="rating" ref="rating"
-                                defaultValue={this.state.editing.rating}>
+                        <label htmlFor="edit-rating">Рейтинг:</label>
+                        <select className="form-control" id="edit-rating" ref="editRating"
+                                value={this.state.editing.rating}>
                             <option>1</option>
                             <option>2</option>
                             <option>3</option>
@@ -175,12 +207,17 @@ export default class Watchmakers extends Component {
                             <option>5</option>
                         </select>
                     </div>
-                    <button className="btn btn-primary" onClick={this.handleOnSubmitEdit.bind(this)}>Принять</button>
-                    <button className="btn float-right" onClick={() => this.setState({modalUpdate: 'closed'})}>Закрыть
-                    </button>
                 </form>
-            );
-        }
+            </div>
+            <div className="modal-footer">
+                <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitEdit.bind(this)}>
+                    Принять
+                </button>
+                <button type="button" className="btn float-right" onClick={this.hideModalUpdate}>
+                    Закрыть
+                    </button>
+            </div>
+        </Modal>
     }
 
     render() {
@@ -190,8 +227,8 @@ export default class Watchmakers extends Component {
                     <Navigation active="watchmakers"/>
                 </div>
             </div>
-            <div className={'row mt-4'}>
-                <div className={'col-md-4'}>
+            <div className="row mt-4">
+                <div className="col-md-4">
                     <h4 className="row justify-content-md-center">Мастера</h4>
                     <table className="table table-striped">
                         <thead>
@@ -207,7 +244,7 @@ export default class Watchmakers extends Component {
                         {this.renderWatchmakers()}
                         </tbody>
                     </table>
-                    <button className="btn btn-success" onClick={() => this.setState({modalCreate: 'opened'})}>
+                    <button className="btn btn-success" onClick={this.openModalCreate}>
                         <i className="fa fa-plus"/> Добавить
                     </button>
                 </div>
