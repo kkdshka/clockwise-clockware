@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from "axios/index";
+import Modal from 'react-bootstrap4-modal';
 
 const validation = require('../../server/validation');
 
@@ -91,12 +92,12 @@ export default class Order extends React.Component {
             .catch(function (error) {
                 console.log(error);
             });
-        this.setState({reservation: params.params, chooseWatchmakers: 'opened'});
+        this.setState({reservation: params.params});
+        this.openModal();
     };
 
     handleOnSubmitWatchmaker = (event) => {
         event.preventDefault();
-        console.dir(this.state.chosenWatchmaker);
         if (Object.keys(this.state.chosenWatchmaker).length === 0) {
             this.setState({selectWatchmakerError: true});
             return;
@@ -106,6 +107,7 @@ export default class Order extends React.Component {
         }
         axios.post('/admin/reservations/', this.state.reservation)
             .then(res => {
+                this.hideModal();
                 this.setState({chooseWatchmakers: 'closed'});
             })
             .catch(function (error) {
@@ -119,8 +121,7 @@ export default class Order extends React.Component {
         this.setState({confirmation: 'opened'});
     };
 
-    handleOnWatchmakerClick = (watchmaker, event) => () => {
-        event.currentTarget.classList.add("table-active");
+    handleOnWatchmakerClick = (watchmaker) => () => {
         this.setState({
             reservation: {
                 ...this.state.reservation,
@@ -143,9 +144,19 @@ export default class Order extends React.Component {
         }
     }
 
+    isActive(watchmakerId) {
+        if (this.state.chosenWatchmaker.id === watchmakerId) {
+            return 'table-active'
+        }
+        else {
+            return "";
+        }
+    }
+
     renderWatchmakers() {
         return this.state.freeWatchmakers.map(watchmaker => {
-            return <tr key={'watchmaker' + watchmaker.id} onClick={this.handleOnWatchmakerClick(watchmaker)}>
+            return <tr key={'watchmaker' + watchmaker.id} className={this.isActive(watchmaker.id)}
+                       onClick={this.handleOnWatchmakerClick(watchmaker)}>
                 <td>{watchmaker.name}</td>
                 <td>{watchmaker.city}</td>
                 <td>{watchmaker.rating}</td>
@@ -159,16 +170,33 @@ export default class Order extends React.Component {
         });
     }
 
+    openModal = () => {
+        this.setState({
+            isModalOpened: true
+        });
+    };
+
+    hideModal = () => {
+        this.setState({
+            isModalOpened: false
+        });
+    };
+
+    renderIfNoFreeWatchmakers() {
+        if (this.state.freeWatchmakers.length === 0) {
+            return (<h5>Свободных мастеров на ваше время нет</h5>);
+        }
+    }
 
     renderChooseWatchmakers() {
-        if (this.state.chooseWatchmakers === "opened") {
-            if (this.state.freeWatchmakers.length === 0) {
-                return (<h5>Свободных мастеров на ваше время нет</h5>);
-            }
-            return (
-                <div>
-                    {this.renderChooseWatchmakersError()}
-                    <h5>Выберите мастера:</h5>
+        return <Modal visible={this.state.isModalOpened} onClickBackdrop={this.hideModal}>
+            <div className="modal-header">
+                {this.renderChooseWatchmakersError()}
+                <h5 className="modal-title">Выберите мастера:</h5>
+            </div>
+            <div className="modal-body">
+                <form>
+                    {this.renderIfNoFreeWatchmakers()}
                     <table className="table table-striped table-hover">
                         <thead>
                         <tr>
@@ -181,12 +209,15 @@ export default class Order extends React.Component {
                         {this.renderWatchmakers()}
                         </tbody>
                     </table>
-                    <button className="btn btn-primary" onClick={this.handleOnSubmitWatchmaker}>
-                        Принять
-                    </button>
-                </div>
-            );
-        }
+                </form>
+            </div>
+            <div className="modal-footer">
+                <button className="btn btn-primary" onClick={this.handleOnSubmitWatchmaker}>
+                    Принять
+                </button>
+                <button type="button" className="btn float-right" onClick={this.hideModal}>Закрыть</button>
+            </div>
+        </Modal>
     }
 
     minDate() {
