@@ -33,12 +33,6 @@ export default class Order extends React.Component {
             });
     }
 
-    renderCities() {
-        return this.state.cities.map(city => {
-            return <option key={'city' + city.id}>{city.name}</option>
-        });
-    }
-
     validator(fieldName, element, message) {
         function capitalize(string) {
             return string.replace(/(?:^|\s)\S/g, function (l) {
@@ -70,7 +64,7 @@ export default class Order extends React.Component {
         }
     }
 
-    handleOnSubmitForm(event) {
+    handleOnSubmitForm = (event) => {
         event.preventDefault();
         const params = {
             params: {
@@ -98,9 +92,9 @@ export default class Order extends React.Component {
                 console.log(error);
             });
         this.setState({reservation: params.params, chooseWatchmakers: 'opened'});
-    }
+    };
 
-    handleOnSubmitWatchmaker(event) {
+    handleOnSubmitWatchmaker = (event) => {
         event.preventDefault();
         console.dir(this.state.chosenWatchmaker);
         if (Object.keys(this.state.chosenWatchmaker).length === 0) {
@@ -123,9 +117,9 @@ export default class Order extends React.Component {
             city: this.state.reservation.city
         });
         this.setState({confirmation: 'opened'});
-    }
+    };
 
-    handleOnWatchmakerClick(watchmaker, event) {
+    handleOnWatchmakerClick = (watchmaker, event) => () => {
         event.currentTarget.classList.add("table-active");
         this.setState({
             reservation: {
@@ -134,7 +128,7 @@ export default class Order extends React.Component {
             },
             chosenWatchmaker: watchmaker
         });
-    }
+    };
 
     renderConfirmation() {
         if (this.state.confirmation === 'opened') {
@@ -151,14 +145,20 @@ export default class Order extends React.Component {
 
     renderWatchmakers() {
         return this.state.freeWatchmakers.map(watchmaker => {
-            return <tr key={'watchmaker' + watchmaker.id}
-                       onClick={(event) => this.handleOnWatchmakerClick(watchmaker, event)}>
+            return <tr key={'watchmaker' + watchmaker.id} onClick={this.handleOnWatchmakerClick(watchmaker)}>
                 <td>{watchmaker.name}</td>
                 <td>{watchmaker.city}</td>
                 <td>{watchmaker.rating}</td>
             </tr>
         });
     }
+
+    renderCities() {
+        return this.state.cities.map(city => {
+            return <option key={'city' + city.id}>{city.name}</option>
+        });
+    }
+
 
     renderChooseWatchmakers() {
         if (this.state.chooseWatchmakers === "opened") {
@@ -181,8 +181,8 @@ export default class Order extends React.Component {
                         {this.renderWatchmakers()}
                         </tbody>
                     </table>
-                    <button className="btn btn-primary"
-                            onClick={(event) => this.handleOnSubmitWatchmaker(event)}>Принять
+                    <button className="btn btn-primary" onClick={this.handleOnSubmitWatchmaker}>
+                        Принять
                     </button>
                 </div>
             );
@@ -258,7 +258,7 @@ export default class Order extends React.Component {
                             </div>
                         </div>
                         <button className="btn btn-primary"
-                                onClick={(event) => this.handleOnSubmitForm(event)}>Принять
+                                onClick={this.handleOnSubmitForm}>Принять
                         </button>
                     </form>
                 </div>
