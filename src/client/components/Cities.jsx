@@ -10,7 +10,7 @@ export default class Cities extends React.Component {
             cities: [],
             isModalCreateOpened: false,
             isModalUpdateOpened: false,
-            editing: {},
+            editing: {name: ''},
         };
 
     }
@@ -34,6 +34,12 @@ export default class Cities extends React.Component {
     handleOnDeleteClick = (id) => () => {
         axios.delete('/admin/cities/', {data: {id: id}})
             .then(res => {
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        axios.get('/admin/cities/data')
+            .then(res => {
                 const cities = res.data;
                 this.setState({cities});
             })
@@ -47,14 +53,18 @@ export default class Cities extends React.Component {
             name: this.refs.addName.value,
         };
         axios.post('/admin/cities/', data)
+            .catch(function (error) {
+                console.log(error);
+            });
+        axios.get('/admin/cities/data')
             .then(res => {
                 const cities = res.data;
-                this.setState({cities: cities});
-                this.hideModalCreate();
+                this.setState({cities});
             })
             .catch(function (error) {
                 console.log(error);
             });
+        this.hideModalCreate();
     };
 
     handleOnSubmitEdit = () => {
@@ -63,14 +73,18 @@ export default class Cities extends React.Component {
             id: this.state.editing.id
         };
         axios.put('/admin/cities/', data)
+            .catch(function (error) {
+                console.log(error);
+            });
+        axios.get('/admin/cities/data')
             .then(res => {
                 const cities = res.data;
-                this.setState({cities: cities});
-                this.hideModalUpdate();
+                this.setState({cities});
             })
             .catch(function (error) {
                 console.log(error);
             });
+        this.hideModalUpdate();
     };
 
     renderCities() {
@@ -104,25 +118,27 @@ export default class Cities extends React.Component {
     };
 
     renderModalCreate() {
-        return <Modal visible={this.state.isModalCreateOpened} onClickBackdrop={this.hideModalCreate}>
-            <div className="modal-header">
-                <h4 className="modal-title">Добавить город</h4>
-            </div>
-            <div className="modal-body">
-                <form>
-                    <div className="form-group">
-                        <label htmlFor="add-name">Название:</label>
-                        <input type="text" className="form-control" id="add-name" ref="addName"/>
-                    </div>
-                </form>
-            </div>
-            <div className="modal-footer">
-                <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitAdd}>
-                    Принять
-                </button>
-                <button type="button" className="btn float-right" onClick={this.hideModalCreate}>Закрыть</button>
-            </div>
-        </Modal>
+        if (this.state.isModalCreateOpened) {
+            return <Modal visible={true} onClickBackdrop={this.hideModalCreate}>
+                <div className="modal-header">
+                    <h4 className="modal-title">Добавить город</h4>
+                </div>
+                <div className="modal-body">
+                    <form>
+                        <div className="form-group">
+                            <label htmlFor="add-name">Название:</label>
+                            <input type="text" className="form-control" id="add-name" ref="addName"/>
+                        </div>
+                    </form>
+                </div>
+                <div className="modal-footer">
+                    <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitAdd}>
+                        Принять
+                    </button>
+                    <button type="button" className="btn float-right" onClick={this.hideModalCreate}>Закрыть</button>
+                </div>
+            </Modal>
+        }
     }
 
     openModalUpdate = () => {
@@ -138,24 +154,26 @@ export default class Cities extends React.Component {
     };
 
     renderModalUpdate() {
-        return <Modal visible={this.state.isModalUpdateOpened} onClickBackdrop={this.hideModalUpdate}>
-            <div className="modal-header">
-                <h4>Изменить город</h4>
-            </div>
-            <div className="modal-body">
-                <form>
-                    <div className="form-group">
-                        <label htmlFor="edit-name">Название:</label>
-                        <input type="text" className="form-control" id="edit-name" ref="editName"
-                               value={this.state.editing.name}/>
-                    </div>
-                </form>
-            </div>
-            <div className={'modal-footer'}>
-                <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitEdit}>Принять</button>
-                <button type="button" className="btn float-right" onClick={this.hideModalUpdate}>Закрыть</button>
-            </div>
-        </Modal>
+        if (this.state.isModalUpdateOpened) {
+            return <Modal visible={true} onClickBackdrop={this.hideModalUpdate}>
+                <div className="modal-header">
+                    <h4>Изменить город</h4>
+                </div>
+                <div className="modal-body">
+                    <form>
+                        <div className="form-group">
+                            <label htmlFor="edit-name">Название:</label>
+                            <input type="text" className="form-control" id="edit-name" ref="editName"
+                                   defaultValue={this.state.editing.name}/>
+                        </div>
+                    </form>
+                </div>
+                <div className={'modal-footer'}>
+                    <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitEdit}>Принять</button>
+                    <button type="button" className="btn float-right" onClick={this.hideModalUpdate}>Закрыть</button>
+                </div>
+            </Modal>
+        }
     }
 
     render() {

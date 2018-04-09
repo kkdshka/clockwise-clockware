@@ -127,43 +127,45 @@ export default class Watchmakers extends Component {
     };
 
     renderModalCreate() {
-        return <Modal visible={this.state.isModalCreateOpened} onClickBackdrop={this.hideModalCreate}>
-            <div className="modal-header">
-                <h4 className="modal-title">Добавить мастера</h4>
-            </div>
-            <div className="modal-body">
-                <form>
-                    <div className="form-group">
-                        <label htmlFor="add-name">Имя:</label>
-                        <input type="text" className="form-control" id="add-name" ref="addName"/>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="add-city">Город:</label>
-                        <select className="form-control" id="add-city" ref="addCity">
-                            {this.renderCities()}
-                        </select>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="add-rating">Рейтинг:</label>
-                        <select className="form-control" id="add-rating" ref="addRating">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                        </select>
-                    </div>
-                </form>
-            </div>
-            <div className="modal-footer">
-                <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitAdd}>
-                    Принять
+        if (this.state.isModalCreateOpened) {
+            return <Modal visible={true} onClickBackdrop={this.hideModalCreate}>
+                <div className="modal-header">
+                    <h4 className="modal-title">Добавить мастера</h4>
+                </div>
+                <div className="modal-body">
+                    <form>
+                        <div className="form-group">
+                            <label htmlFor="add-name">Имя:</label>
+                            <input type="text" className="form-control" id="add-name" ref="addName"/>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="add-city">Город:</label>
+                            <select className="form-control" id="add-city" ref="addCity">
+                                {this.renderCities()}
+                            </select>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="add-rating">Рейтинг:</label>
+                            <select className="form-control" id="add-rating" ref="addRating">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div className="modal-footer">
+                    <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitAdd}>
+                        Принять
                     </button>
-                <button type="button" className="btn float-right" onClick={this.hideModalCreate}>
-                    Закрыть
+                    <button type="button" className="btn float-right" onClick={this.hideModalCreate}>
+                        Закрыть
                     </button>
-            </div>
-        </Modal>
+                </div>
+            </Modal>
+        }
     }
 
     openModalUpdate = () => {
@@ -179,45 +181,48 @@ export default class Watchmakers extends Component {
     };
 
     renderModalUpdate() {
-        return <Modal visible={this.state.isModalUpdateOpened} onClickBackdrop={this.hideModalUpdate}>
-            <div className="modal-header">
-                <h4 className="modal-title">Изменить мастера</h4>
-            </div>
-            <div className="modal-body">
-                <form>
-                    <div className="form-group">
-                        <label htmlFor="edit-name">Имя:</label>
-                        <input type="text" className="form-control" id="edit-name" ref="editName"
-                               value={this.state.editing.name}/>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="edit-city">Город:</label>
-                        <select className="form-control" id="edit-city" ref="editCity" value={this.state.editing.city}>
-                            {this.renderCities()}
-                        </select>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="edit-rating">Рейтинг:</label>
-                        <select className="form-control" id="edit-rating" ref="editRating"
-                                value={this.state.editing.rating}>
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                        </select>
-                    </div>
-                </form>
-            </div>
-            <div className="modal-footer">
-                <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitEdit}>
-                    Принять
-                </button>
-                <button type="button" className="btn float-right" onClick={this.hideModalUpdate}>
-                    Закрыть
+        if (this.state.isModalUpdateOpened) {
+            return <Modal visible={true} onClickBackdrop={this.hideModalUpdate}>
+                <div className="modal-header">
+                    <h4 className="modal-title">Изменить мастера</h4>
+                </div>
+                <div className="modal-body">
+                    <form>
+                        <div className="form-group">
+                            <label htmlFor="edit-name">Имя:</label>
+                            <input type="text" className="form-control" id="edit-name" ref="editName"
+                                   defaultValue={this.state.editing.name}/>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="edit-city">Город:</label>
+                            <select className="form-control" id="edit-city" ref="editCity"
+                                    defaultValue={this.state.editing.city}>
+                                {this.renderCities()}
+                            </select>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="edit-rating">Рейтинг:</label>
+                            <select className="form-control" id="edit-rating" ref="editRating"
+                                    defaultValue={this.state.editing.rating}>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div className="modal-footer">
+                    <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitEdit}>
+                        Принять
                     </button>
-            </div>
-        </Modal>
+                    <button type="button" className="btn float-right" onClick={this.hideModalUpdate}>
+                        Закрыть
+                    </button>
+                </div>
+            </Modal>
+        }
     }
 
     render() {
