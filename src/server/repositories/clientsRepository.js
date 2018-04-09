@@ -3,28 +3,34 @@ const pool = require('../database');
 
 //client = {name, city, email, id}
 function addClient(client) {
-    pool.query("INSERT INTO clients SET ? ON DUPLICATE KEY UPDATE name = name, city = city", client, function (error, results) {
-        if (error)
-            throw error;
-        console.log('Client added with id ' + results.insertId);
+    return new Promise((resolve, reject) => {
+        pool.query("INSERT INTO clients SET ? ON DUPLICATE KEY UPDATE name = name, city = city", client, function (error, results) {
+            if (error)
+                return reject(error);
+            console.log('Client added with id ' + results.insertId);
+        });
     });
 }
 
 function editClient(client) {
     const sql = "UPDATE clients SET name = ?, city = ?, email = ? WHERE id = ?";
     const data = [client.name, client.city, client.email, client.id];
-    pool.query(sql, data, function (error) {
-        if (error)
-            throw error;
-        console.log('Client edited');
+    return new Promise((resolve, reject) => {
+        pool.query(sql, data, function (error) {
+            if (error)
+                return reject(error);
+            console.log('Client edited');
+        });
     });
 }
 
 function deleteClient(id) {
-    pool.query("DELETE FROM clients WHERE id = ?", id, function (error) {
-        if (error)
-            throw error;
-        console.log('Client deleted');
+    return new Promise((resolve, reject) => {
+        pool.query("DELETE FROM clients WHERE id = ?", id, function (error) {
+            if (error)
+                return reject(error);
+            console.log('Client deleted');
+        });
     });
 }
 

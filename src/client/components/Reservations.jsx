@@ -52,6 +52,10 @@ export default class Reservations extends React.Component {
 
     handleOnDeleteClick = (id) => () => {
         axios.delete('/admin/reservations/', {data: {id: id}})
+            .catch(function (error) {
+                console.log(error);
+            });
+        axios.get('/admin/reservations/data')
             .then(res => {
                 const reservations = res.data;
                 this.setState({reservations: reservations});
@@ -72,14 +76,18 @@ export default class Reservations extends React.Component {
             watchmakerId: this.refs.addWatchmakerId.value
         };
         axios.post('/admin/reservations/', data)
+            .catch(function (error) {
+                console.log(error);
+            });
+        axios.get('/admin/reservations/data')
             .then(res => {
                 const reservations = res.data;
                 this.setState({reservations: reservations});
-                this.hideModalCreate();
             })
             .catch(function (error) {
                 console.log(error);
             });
+        this.hideModalCreate();
     };
 
     handleOnSubmitEdit = () => {
@@ -94,14 +102,18 @@ export default class Reservations extends React.Component {
             id: this.state.editing.id
         };
         axios.put('/admin/reservations/', data)
+            .catch(function (error) {
+                console.log(error);
+            });
+        axios.get('/admin/reservations/data')
             .then(res => {
                 const reservations = res.data;
                 this.setState({reservations: reservations});
-                this.hideModalUpdate();
             })
             .catch(function (error) {
                 console.log(error);
             });
+        this.hideModalUpdate();
     };
 
     dateToString(date) {

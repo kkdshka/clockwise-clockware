@@ -9,50 +9,75 @@ router.get('/', auth, function (req, res) {
     res.sendFile(path.join(__dirname, "../../../index.html"));
 });
 
-router.get('/data', function (req, res) {
-    watchmakersRepository.getAll().then((models) => {
-        res.json(models);
-    });
+router.get('/data', async function (req, res) {
+    try {
+        await watchmakersRepository.getAll().then((models) => {
+            res.status(200).json(models);
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({error: error});
+    }
 });
 
-router.get('/free-watchmakers',  function (req, res) {
+router.get('/free-watchmakers', async function (req, res) {
     const data = (new FreeWatchmakers(req.query)).data;
-    watchmakersRepository.getFreeWatchmakers(data)
-    .then((models) => {
-        res.json(models);
-    });
+    try {
+        await watchmakersRepository.getFreeWatchmakers(data)
+            .then((models) => {
+                res.status(200).json(models);
+            });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({error: error});
+    }
 });
 
-router.post('/', function (req, res) {
+router.post('/', async function (req, res) {
     const watchmakerData = {
         name: req.body.name,
         city: req.body.city,
         rating: req.body.rating
     };
-    watchmakersRepository.add(watchmakerData);
-    watchmakersRepository.getAll().then((models) => {
-        res.json(models);
-    });
+    try {
+        await watchmakersRepository.add(watchmakerData);
+        res.status(201);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({error: error});
+    }
 });
 
-router.put('/', function (req, res) {
+router.put('/', async function (req, res) {
     const watchmakerData = {
         name: req.body.name,
         city: req.body.city,
         rating: req.body.rating,
         id: req.body.id
     };
-    watchmakersRepository.edit(watchmakerData);
-    watchmakersRepository.getAll().then((models) => {
-        res.json(models);
-    });
+    try {
+        await watchmakersRepository.edit(watchmakerData);
+        res.status(204);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({error: error});
+    }
 });
 
-router.delete('/', function (req, res) {
+router.delete('/', async function (req, res) {
     const id = req.body.id;
-    watchmakersRepository.delete(id);
-    watchmakersRepository.getAll().then((models) => {
-        res.json(models);
-    });
+    try {
+        await watchmakersRepository.delete(id);
+        res.status(204);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({error: error});
+    }
 });
+
 module.exports = router;

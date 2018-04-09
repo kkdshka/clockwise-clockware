@@ -10,13 +10,20 @@ router.get('/', auth, function (req, res) {
     res.sendFile(path.join(__dirname, "../../../index.html"));
 });
 
-router.get('/data', function (req, res) {
-    reservationsRepository.getAll().then((models) => {
-        res.json(models);
-    });
+router.get('/data', async function (req, res) {
+    try {
+        await reservationsRepository.getAll().then((models) => {
+            res.json(models);
+        });
+        res.status(200);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({error: error});
+    }
 });
 
-router.post('/', function (req, res) {
+router.post('/', async function (req, res) {
     const reservationData = {
         name: req.body.name,
         city: req.body.city,
@@ -27,15 +34,18 @@ router.post('/', function (req, res) {
         watchmaker_id: req.body.watchmakerId,
         end_time: getFinishTime(req.body.time, req.body.clockSize)
     };
-    console.log(reservationData);
-    sendEmail(reservationData.email, reservationData);
-    reservationsRepository.add(reservationData);
-    reservationsRepository.getAll().then((models) => {
-        res.json(models);
-    });
+    try {
+        await reservationsRepository.add(reservationData);
+        sendEmail(reservationData.email, reservationData);
+        res.send(201);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({error: error});
+    }
 });
 
-router.put('/', function (req, res) {
+router.put('/', async function (req, res) {
     const reservationData = {
         name: req.body.name,
         city: req.body.city,
@@ -47,17 +57,26 @@ router.put('/', function (req, res) {
         end_time: getFinishTime(req.body.time, req.body.clockSize),
         id: req.body.id
     };
-    reservationsRepository.edit(reservationData);
-    reservationsRepository.getAll().then((models) => {
-        res.json(models);
-    });
+    try {
+        await reservationsRepository.edit(reservationData);
+        res.status(204);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({error: error});
+    }
 });
 
-router.delete('/', function (req, res) {
+router.delete('/', async function (req, res) {
     const id = req.body.id;
-    reservationsRepository.delete(id);
-    reservationsRepository.getAll().then((models) => {
-        res.json(models);
-    });
+    try {
+        await reservationsRepository.delete(id);
+        res.status(204);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({error: error});
+    }
 });
+
 module.exports = router;

@@ -42,6 +42,10 @@ export default class Clients extends React.Component {
 
     handleOnDeleteClick = (id) => () => {
         axios.delete('/admin/clients/', {data: {id: id}})
+            .catch(function (error) {
+                console.log(error);
+            });
+        axios.get('/admin/clients/data')
             .then(res => {
                 const clients = res.data;
                 this.setState({clients: clients});
@@ -58,14 +62,18 @@ export default class Clients extends React.Component {
             email: this.refs.addEmail.value
         };
         axios.post('/admin/clients/', data)
+            .catch(function (error) {
+                console.log(error);
+            });
+        axios.get('/admin/clients/data')
             .then(res => {
                 const clients = res.data;
                 this.setState({clients: clients});
-                this.hideModalCreate();
             })
             .catch(function (error) {
                 console.log(error);
             });
+        this.hideModalCreate();
     };
 
     handleOnSubmitEdit = () => {
@@ -76,14 +84,18 @@ export default class Clients extends React.Component {
             id: this.state.editing.id
         };
         axios.put('/admin/clients/', data)
+            .catch(function (error) {
+                console.log(error);
+            });
+        axios.get('/admin/clients/data')
             .then(res => {
                 const clients = res.data;
                 this.setState({clients: clients});
-                this.hideModalUpdate();
             })
             .catch(function (error) {
                 console.log(error);
             });
+        this.hideModalUpdate();
     };
 
     renderClients() {

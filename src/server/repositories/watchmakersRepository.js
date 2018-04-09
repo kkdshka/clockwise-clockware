@@ -3,28 +3,34 @@ const pool = require('../database');
 
 //watchmaker = {name, city, rate, id}
 function addWatchmaker(watchmaker) {
-    pool.query("INSERT INTO watchmakers SET ?", watchmaker, function (error, results) {
-        if (error)
-            throw error;
-        console.log('Watchmaker added with id ' + results.insertId);
+    return new Promise((resolve, reject) => {
+        pool.query("INSERT INTO watchmakers SET ?", watchmaker, function (error, results) {
+            if (error)
+                return reject(error);
+            console.log('Watchmaker added with id ' + results.insertId);
+        });
     });
 }
 
 function editWatchmaker(watchmaker) {
     const sql = "UPDATE watchmakers SET name = ?, city = ?, rating = ? WHERE id = ?";
     const data = [watchmaker.name, watchmaker.city, watchmaker.rating, watchmaker.id];
-    pool.query(sql, data, function (error) {
-        if (error)
-            throw error;
-        console.log('Watchmaker edited');
+    return new Promise((resolve, reject) => {
+        pool.query(sql, data, function (error) {
+            if (error)
+                return reject(error);
+            console.log('Watchmaker edited');
+        });
     });
 }
 
 function deleteWatchmaker(id) {
-    pool.query("DELETE FROM watchmakers WHERE id = ?", id, function (error) {
-        if (error)
-            throw error;
-        console.log('Watchmaker deleted');
+    return new Promise((resolve, reject) => {
+        pool.query("DELETE FROM watchmakers WHERE id = ?", id, function (error) {
+            if (error)
+                return reject(error);
+            console.log('Watchmaker deleted');
+        });
     });
 }
 

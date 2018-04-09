@@ -2,7 +2,7 @@ import React from 'react';
 import axios from "axios/index";
 import Modal from 'react-bootstrap4-modal';
 
-const validation = require('../../server/validation');
+const validation = require('../validation');
 
 export default class Order extends React.Component {
     constructor(props) {

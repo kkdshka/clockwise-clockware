@@ -8,42 +8,61 @@ router.get('/', auth, function (req, res) {
     res.sendFile(path.join(__dirname, "../../../index.html"));
 });
 
-router.get('/data', function (req, res) {
-    clientsRepository.getAll().then((models) => {
-        res.json(models);
-    });
+router.get('/data', async function (req, res) {
+    try {
+        await clientsRepository.getAll().then((models) => {
+            res.status(200).json(models);
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({error: error});
+    }
 });
 
-router.post('/', function (req, res) {
+router.post('/', async function (req, res) {
     const clientsData = {
         name: req.body.name,
         city: req.body.city,
         email: req.body.email
     };
-    clientsRepository.add(clientsData);
-    clientsRepository.getAll().then((models) => {
-        res.json(models);
-    });
+    try {
+        await clientsRepository.add(clientsData);
+        res.status(201);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({error: error});
+    }
 });
 
-router.put('/', function (req, res) {
+router.put('/', async function (req, res) {
     const clientData = {
         name: req.body.name,
         city: req.body.city,
         email: req.body.email,
         id: req.body.id
     };
-    clientsRepository.edit(clientData);
-    clientsRepository.getAll().then((models) => {
-        res.json(models);
-    });
+    try {
+        await clientsRepository.edit(clientData);
+        res.status(204);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({error: error});
+    }
 });
 
-router.delete('/', function (req, res) {
+router.delete('/', async function (req, res) {
     const id = req.body.id;
-    clientsRepository.delete(id);
-    clientsRepository.getAll().then((models) => {
-        res.json(models);
-    });
+    try {
+        await clientsRepository.delete(id);
+        res.status(204);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({error: error});
+    }
 });
+
 module.exports = router;

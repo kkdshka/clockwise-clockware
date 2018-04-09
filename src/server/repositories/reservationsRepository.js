@@ -4,10 +4,12 @@ const pool = require('../database');
 
 //reservation = {name, city, email, clockSize, date, id}
 function addReservation(reservation) {
-    pool.query("INSERT INTO reservations SET ?", reservation, function (error, results) {
-        if (error)
-            throw error;
-        console.log('Reservation added with id ' + results.insertId);
+    return new Promise((resolve, reject) => {
+        pool.query("INSERT INTO reservations SET ?", reservation, function (error, results) {
+            if (error)
+                return reject(error);
+            console.log('Reservation added with id ' + results.insertId);
+        });
     });
 }
 
@@ -23,18 +25,22 @@ function editReservation(reservation) {
         reservation.id
     ];
     const sql = "UPDATE reservations SET name = ?, city = ?, email = ?, clock_size = ?, date = ?, time = ?, watchmaker_id = ? WHERE id = ?";
-    pool.query(sql, data, function (error) {
-        if (error)
-            throw error;
-        console.log('Reservation edited');
+    return new Promise((resolve, reject) => {
+        pool.query(sql, data, function (error) {
+            if (error)
+                return reject(error);
+            console.log('Reservation edited');
+        });
     });
 }
 
 function deleteReservation(id) {
-    pool.query("DELETE FROM reservations WHERE id = ?", id, function (error) {
-        if (error)
-            throw error;
-        console.log('Reservation deleted');
+    return new Promise((resolve, reject) => {
+        pool.query("DELETE FROM reservations WHERE id = ?", id, function (error) {
+            if (error)
+                return reject(error);
+            console.log('Reservation deleted');
+        });
     });
 }
 

@@ -8,38 +8,57 @@ router.get('/', auth, function (req, res) {
     res.sendFile(path.join(__dirname, "../../../index.html"));
 });
 
-router.get('/data', function (req, res) {
-    citiesRepository.getAll().then((models) => {
-        res.json(models);
-    });
+router.get('/data', async function (req, res) {
+    try {
+        await citiesRepository.getAll().then((models) => {
+            res.status(200).json(models);
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({error: error});
+    }
 });
 
-router.post('/', function (req, res) {
+router.post('/', async function (req, res) {
     const cityData = {
         name: req.body.name
     };
-    citiesRepository.add(cityData);
-    citiesRepository.getAll().then((models) => {
-        res.json(models);
-    });
+    try {
+        await citiesRepository.add(cityData);
+        res.status(201);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({error: error});
+    }
 });
 
-router.put('/', function (req, res) {
+router.put('/', async function (req, res) {
     const cityData = {
         name: req.body.name,
         id: req.body.id
     };
-    citiesRepository.edit(cityData);
-    citiesRepository.getAll().then((models) => {
-        res.json(models);
-    });
+    try {
+        await citiesRepository.edit(cityData);
+        res.status(204);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({error: error});
+    }
 });
 
-router.delete('/', function (req, res) {
+router.delete('/', async function (req, res) {
     const id = req.body.id;
-    citiesRepository.delete(id);
-    citiesRepository.getAll().then((models) => {
-        res.json(models);
-    });
+    try {
+        await citiesRepository.delete(id);
+        res.status(204);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({error: error});
+    }
 });
+
 module.exports = router;

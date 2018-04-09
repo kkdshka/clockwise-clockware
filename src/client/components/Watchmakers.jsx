@@ -42,6 +42,10 @@ export default class Watchmakers extends Component {
 
     handleOnDeleteClick = (id) => () => {
         axios.delete('/admin/watchmakers/', {data: {id: id}})
+            .catch(function (error) {
+                console.log(error);
+            });
+        axios.get('/admin/watchmakers/data')
             .then(res => {
                 const watchmakers = res.data;
                 this.setState({watchmakers});
@@ -58,14 +62,18 @@ export default class Watchmakers extends Component {
             rating: this.refs.addRating.value
         };
         axios.post('/admin/watchmakers/', data)
+            .catch(function (error) {
+                console.log(error);
+            });
+        axios.get('/admin/watchmakers/data')
             .then(res => {
                 const watchmakers = res.data;
-                this.setState({watchmakers: watchmakers});
-                this.hideModalCreate();
+                this.setState({watchmakers});
             })
             .catch(function (error) {
                 console.log(error);
             });
+        this.hideModalCreate();
     };
 
     handleOnSubmitEdit = () => {
@@ -76,34 +84,38 @@ export default class Watchmakers extends Component {
             id: this.state.editing.id
         };
         axios.put('/admin/watchmakers/', data)
+            .catch(function (error) {
+                console.log(error);
+            });
+        axios.get('/admin/watchmakers/data')
             .then(res => {
                 const watchmakers = res.data;
-                this.setState({watchmakers: watchmakers});
-                this.hideModalUpdate();
+                this.setState({watchmakers});
             })
             .catch(function (error) {
                 console.log(error);
             });
+        this.hideModalUpdate();
     };
 
     renderWatchmakers() {
         return this.state.watchmakers.map(watchmaker => {
             return <tr key={'watchmaker' + watchmaker.id}>
-                    <td>{watchmaker.name}</td>
-                    <td>{watchmaker.city}</td>
-                    <td>{watchmaker.rating}</td>
-                    <td>
-                        <button type="button" className="btn btn-warning"
-                                onClick={this.handleOnEditClick(watchmaker)}>
-                            <i className="fa fa-pencil"/>
-                        </button>
-                    </td>
-                    <td>
-                        <button type="button" className="btn btn-danger"
-                                onClick={this.handleOnDeleteClick(watchmaker.id)}>
-                            <i className="fa fa-remove"/>
-                        </button>
-                    </td>
+                <td>{watchmaker.name}</td>
+                <td>{watchmaker.city}</td>
+                <td>{watchmaker.rating}</td>
+                <td>
+                    <button type="button" className="btn btn-warning"
+                            onClick={this.handleOnEditClick(watchmaker)}>
+                        <i className="fa fa-pencil"/>
+                    </button>
+                </td>
+                <td>
+                    <button type="button" className="btn btn-danger"
+                            onClick={this.handleOnDeleteClick(watchmaker.id)}>
+                        <i className="fa fa-remove"/>
+                    </button>
+                </td>
             </tr>
         });
     }
