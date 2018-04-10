@@ -5,6 +5,7 @@ const reservationsRepository = require('../repositories/reservationsRepository')
 const sendEmail = require('../sender');
 const auth = require('../authenticationMiddleware');
 const getFinishTime = require('../models/timeHelper').getFinishTime;
+const validation = require('../validation');
 
 router.get('/', auth, function (req, res) {
     res.sendFile(path.join(__dirname, "../../../index.html"));
@@ -34,6 +35,13 @@ router.post('/', async function (req, res) {
         watchmaker_id: req.body.watchmakerId,
         end_time: getFinishTime(req.body.time, req.body.clockSize)
     };
+
+    const errors = check(reservationData);
+    if (errors.length > 0) {
+        errors.forEach(err => res.status(422).json({error: err}));
+        return;
+    }
+
     try {
         await reservationsRepository.add(reservationData);
         sendEmail(reservationData.email, reservationData);
@@ -57,6 +65,13 @@ router.put('/', async function (req, res) {
         end_time: getFinishTime(req.body.time, req.body.clockSize),
         id: req.body.id
     };
+
+    const errors = check(reservationData);
+    if (errors.length > 0) {
+        errors.forEach(err => res.status(422).json({error: err}));
+        return;
+    }
+
     try {
         await reservationsRepository.edit(reservationData);
         res.status(204);
@@ -78,5 +93,22 @@ router.delete('/', async function (req, res) {
         res.status(500).json({error: error});
     }
 });
+
+function check(reservationData) {
+    const errors = [];
+    if (!validation.isValidName(reservationData.name)) {
+        errors.push('Invalid name');
+    }
+    if (!validation.isValidEmail(reservationData.email)) {
+        errors.push('Invalid email');
+    }
+    if (!validation.isValidTime(reservationData.time)) {
+        errors.push('Invalid time');
+    }
+    if (!validation.isValidDate(reservationData.date)) {
+        errors.push('Invalid date');
+    }
+    return errors;
+}
 
 module.exports = router;

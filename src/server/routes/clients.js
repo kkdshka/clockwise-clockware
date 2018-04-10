@@ -3,6 +3,7 @@ const router = express.Router();
 const path = require('path');
 const clientsRepository = require('../repositories/clientsRepository');
 const auth = require('../authenticationMiddleware');
+const validation = require('../validation');
 
 router.get('/', auth, function (req, res) {
     res.sendFile(path.join(__dirname, "../../../index.html"));
@@ -21,13 +22,20 @@ router.get('/data', async function (req, res) {
 });
 
 router.post('/', async function (req, res) {
-    const clientsData = {
+    const clientData = {
         name: req.body.name,
         city: req.body.city,
         email: req.body.email
     };
+
+    const errors = check(clientData);
+    if (errors.length > 0) {
+        errors.forEach(err => res.status(422).json({error: err}));
+        return;
+    }
+
     try {
-        await clientsRepository.add(clientsData);
+        await clientsRepository.add(clientData);
         res.status(201);
     }
     catch (error) {
@@ -43,6 +51,13 @@ router.put('/', async function (req, res) {
         email: req.body.email,
         id: req.body.id
     };
+
+    const errors = check(clientData);
+    if (errors.length > 0) {
+        errors.forEach(err => res.status(422).json({error: err}));
+        return;
+    }
+
     try {
         await clientsRepository.edit(clientData);
         res.status(204);
@@ -64,5 +79,16 @@ router.delete('/', async function (req, res) {
         res.status(500).json({error: error});
     }
 });
+
+function check(clientData) {
+    const errors = [];
+    if (!validation.isValidName(clientData.name)) {
+        errors.push('Invalid name');
+    }
+    if (!validation.isValidEmail(clientData.email)) {
+        errors.push('Invalid email');
+    }
+    return errors;
+}
 
 module.exports = router;
