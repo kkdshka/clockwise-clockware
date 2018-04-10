@@ -1,6 +1,6 @@
 import React from 'react';
 import Navigation from './AdminNavigation.jsx';
-import axios from "axios/index";
+import restApiClient from '../restApiClient';
 import Modal from 'react-bootstrap4-modal';
 
 export default class Reservations extends React.Component {
@@ -17,32 +17,14 @@ export default class Reservations extends React.Component {
     }
 
     componentDidMount() {
-        axios.get('/admin/reservations/data')
-            .then(res => {
-                const reservations = res.data;
-                this.setState({reservations: reservations});
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+        restApiClient.getReservations()
+            .then(reservations => this.setState({reservations: reservations}));
 
-        axios.get('/admin/cities/data')
-            .then(res => {
-                const cities = res.data;
-                this.setState({cities});
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+        restApiClient.getCities()
+            .then(cities => this.setState({cities}));
 
-        axios.get('/admin/watchmakers/data')
-            .then(res => {
-                const watchmakers = res.data;
-                this.setState({watchmakers});
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+        restApiClient.getWatchmakers()
+            .then(watchmakers => this.setState({watchmakers}));
     }
 
     handleOnEditClick = (reservations) => () => {
@@ -51,18 +33,10 @@ export default class Reservations extends React.Component {
     };
 
     handleOnDeleteClick = (id) => () => {
-        axios.delete('/admin/reservations/', {data: {id: id}})
-            .catch(function (error) {
-                console.log(error);
-            });
-        axios.get('/admin/reservations/data')
-            .then(res => {
-                const reservations = res.data;
-                this.setState({reservations: reservations});
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+        restApiClient.deleteReservation(id);
+
+        restApiClient.getReservations()
+            .then(reservations => this.setState({reservations: reservations}));
     };
 
     handleOnSubmitAdd = () => {
@@ -75,18 +49,12 @@ export default class Reservations extends React.Component {
             time: this.refs.addTime.value,
             watchmakerId: this.refs.addWatchmakerId.value
         };
-        axios.post('/admin/reservations/', data)
-            .catch(function (error) {
-                console.log(error);
-            });
-        axios.get('/admin/reservations/data')
-            .then(res => {
-                const reservations = res.data;
-                this.setState({reservations: reservations});
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+
+        restApiClient.addReservation(data);
+
+        restApiClient.getReservations()
+            .then(reservations => this.setState({reservations: reservations}));
+
         this.hideModalCreate();
     };
 
@@ -101,18 +69,12 @@ export default class Reservations extends React.Component {
             watchmakerId: this.refs.editWatchmakerId.value,
             id: this.state.editing.id
         };
-        axios.put('/admin/reservations/', data)
-            .catch(function (error) {
-                console.log(error);
-            });
-        axios.get('/admin/reservations/data')
-            .then(res => {
-                const reservations = res.data;
-                this.setState({reservations: reservations});
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+
+        restApiClient.editReservation(data);
+
+        restApiClient.getReservations()
+            .then(reservations => this.setState({reservations: reservations}));
+
         this.hideModalUpdate();
     };
 

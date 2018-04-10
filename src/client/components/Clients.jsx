@@ -1,6 +1,6 @@
 import React from 'react';
 import Navigation from './AdminNavigation.jsx';
-import axios from "axios/index";
+import restApiClient from '../restApiClient';
 import Modal from 'react-bootstrap4-modal';
 
 export default class Clients extends React.Component {
@@ -16,23 +16,11 @@ export default class Clients extends React.Component {
     }
 
     componentDidMount() {
-        axios.get('/admin/clients/data')
-            .then(res => {
-                const clients = res.data;
-                this.setState({clients: clients});
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+        restApiClient.getClients()
+            .then(clients => this.setState({clients: clients}));
 
-        axios.get('/admin/cities/data')
-            .then(res => {
-                const cities = res.data;
-                this.setState({cities});
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+        restApiClient.getCities()
+            .then(cities => this.setState({cities: cities}));
     }
 
     handleOnEditClick = (client) => () => {
@@ -41,18 +29,10 @@ export default class Clients extends React.Component {
     };
 
     handleOnDeleteClick = (id) => () => {
-        axios.delete('/admin/clients/', {data: {id: id}})
-            .catch(function (error) {
-                console.log(error);
-            });
-        axios.get('/admin/clients/data')
-            .then(res => {
-                const clients = res.data;
-                this.setState({clients: clients});
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+        restApiClient.deleteClient(id);
+
+        restApiClient.getClients()
+            .then(clients => this.setState({clients: clients}));
     };
 
     handleOnSubmitAdd = () => {
@@ -61,18 +41,12 @@ export default class Clients extends React.Component {
             city: this.refs.addCity.value,
             email: this.refs.addEmail.value
         };
-        axios.post('/admin/clients/', data)
-            .catch(function (error) {
-                console.log(error);
-            });
-        axios.get('/admin/clients/data')
-            .then(res => {
-                const clients = res.data;
-                this.setState({clients: clients});
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+
+        restApiClient.addClient(data);
+
+        restApiClient.getClients()
+            .then(clients => this.setState({clients: clients}));
+
         this.hideModalCreate();
     };
 
@@ -83,18 +57,12 @@ export default class Clients extends React.Component {
             email: this.refs.editEmail.value,
             id: this.state.editing.id
         };
-        axios.put('/admin/clients/', data)
-            .catch(function (error) {
-                console.log(error);
-            });
-        axios.get('/admin/clients/data')
-            .then(res => {
-                const clients = res.data;
-                this.setState({clients: clients});
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+
+        restApiClient.editClient(data);
+
+        restApiClient.getClients()
+            .then(clients => this.setState({clients: clients}));
+
         this.hideModalUpdate();
     };
 

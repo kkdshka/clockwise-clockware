@@ -1,5 +1,5 @@
 import React from 'react';
-import axios from "axios/index";
+import restApiClient from '../restApiClient';
 import Modal from 'react-bootstrap4-modal';
 
 const validation = require('../validation');
@@ -10,7 +10,6 @@ export default class Order extends React.Component {
         this.state = {
             cities: [],
             freeWatchmakers: [],
-            chooseWatchmakers: 'closed',
             chosenWatchmaker: {},
             reservation: {},
             confirmation: 'closed',
@@ -19,19 +18,14 @@ export default class Order extends React.Component {
             date: {isValid: false, message: ''},
             time: {isValid: false, message: ''},
             formError: false,
-            selectWatchmakerError: false
+            selectWatchmakerError: false,
+            isModalOpened: false
         };
     }
 
     componentDidMount() {
-        axios.get('/admin/cities/data')
-            .then(res => {
-                const cities = res.data;
-                this.setState({cities});
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+        restApiClient.getCities()
+            .then(cities => this.setState({cities: cities}));
     }
 
     validator(fieldName, element, message) {
@@ -84,20 +78,17 @@ export default class Order extends React.Component {
         else {
             this.setState({formError: false});
         }
-        axios.get('/admin/watchmakers/free-watchmakers', params)
-            .then(res => {
-                const freeWatchmakers = res.data;
-                this.setState({freeWatchmakers: freeWatchmakers});
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+
+        restApiClient.getFreeWatchmakers(params)
+            .then(freeWatchmakers => this.setState({freeWatchmakers: freeWatchmakers}));
+
         this.setState({reservation: params.params});
         this.openModal();
     };
 
     handleOnSubmitWatchmaker = (event) => {
         event.preventDefault();
+
         if (Object.keys(this.state.chosenWatchmaker).length === 0) {
             this.setState({selectWatchmakerError: true});
             return;
@@ -105,19 +96,15 @@ export default class Order extends React.Component {
         else {
             this.setState({selectWatchmakerError: false});
         }
-        axios.post('/admin/reservations/', this.state.reservation)
-            .then(res => {
-                this.hideModal();
-                this.setState({chooseWatchmakers: 'closed'});
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-        axios.post('/admin/clients', {
+
+        restApiClient.addReservation(this.state.reservation);
+        restApiClient.addClient({
             name: this.state.reservation.name,
             email: this.state.reservation.email,
             city: this.state.reservation.city
         });
+
+        this.hideModal();
         this.setState({confirmation: 'opened'});
     };
 

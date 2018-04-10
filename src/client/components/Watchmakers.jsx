@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Navigation from './AdminNavigation.jsx';
-import axios from 'axios';
+import restApiClient from '../restApiClient';
 import Modal from 'react-bootstrap4-modal';
 
 export default class Watchmakers extends Component {
@@ -16,23 +16,11 @@ export default class Watchmakers extends Component {
     }
 
     componentDidMount() {
-        axios.get('/admin/watchmakers/data')
-            .then(res => {
-                const watchmakers = res.data;
-                this.setState({watchmakers});
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+        restApiClient.getWatchmakers()
+            .then(watchmakers => this.setState({watchmakers: watchmakers}));
 
-        axios.get('/admin/cities/data')
-            .then(res => {
-                const cities = res.data;
-                this.setState({cities});
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+        restApiClient.getCities()
+            .then(cities => this.setState({cities}));
     }
 
     handleOnEditClick = (watchmaker) => () => {
@@ -41,18 +29,10 @@ export default class Watchmakers extends Component {
     };
 
     handleOnDeleteClick = (id) => () => {
-        axios.delete('/admin/watchmakers/', {data: {id: id}})
-            .catch(function (error) {
-                console.log(error);
-            });
-        axios.get('/admin/watchmakers/data')
-            .then(res => {
-                const watchmakers = res.data;
-                this.setState({watchmakers});
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+        restApiClient.deleteWatchmaker(id);
+
+        restApiClient.getWatchmakers()
+            .then(watchmakers => this.setState({watchmakers: watchmakers}));
     };
 
     handleOnSubmitAdd = () => {
@@ -61,18 +41,12 @@ export default class Watchmakers extends Component {
             city: this.refs.addCity.value,
             rating: this.refs.addRating.value
         };
-        axios.post('/admin/watchmakers/', data)
-            .catch(function (error) {
-                console.log(error);
-            });
-        axios.get('/admin/watchmakers/data')
-            .then(res => {
-                const watchmakers = res.data;
-                this.setState({watchmakers});
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+
+        restApiClient.addWatchmaker(data);
+
+        restApiClient.getWatchmakers()
+            .then(watchmakers => this.setState({watchmakers: watchmakers}));
+
         this.hideModalCreate();
     };
 
@@ -83,18 +57,12 @@ export default class Watchmakers extends Component {
             rating: this.refs.editRating.value,
             id: this.state.editing.id
         };
-        axios.put('/admin/watchmakers/', data)
-            .catch(function (error) {
-                console.log(error);
-            });
-        axios.get('/admin/watchmakers/data')
-            .then(res => {
-                const watchmakers = res.data;
-                this.setState({watchmakers});
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+
+        restApiClient.editWatchmaker(data);
+
+        restApiClient.getWatchmakers()
+            .then(watchmakers => this.setState({watchmakers: watchmakers}));
+
         this.hideModalUpdate();
     };
 

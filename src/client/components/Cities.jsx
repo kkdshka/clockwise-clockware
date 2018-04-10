@@ -1,7 +1,7 @@
 import React from 'react';
 import Navigation from './AdminNavigation.jsx';
-import axios from "axios/index";
 import Modal from 'react-bootstrap4-modal';
+import restApiClient from '../restApiClient';
 
 export default class Cities extends React.Component {
     constructor(props) {
@@ -10,20 +10,13 @@ export default class Cities extends React.Component {
             cities: [],
             isModalCreateOpened: false,
             isModalUpdateOpened: false,
-            editing: {name: ''},
+            editing: {},
         };
-
     }
 
     componentDidMount() {
-        axios.get('/admin/cities/data')
-            .then(res => {
-                const cities = res.data;
-                this.setState({cities});
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+        restApiClient.getCities()
+            .then(cities => this.setState({cities: cities}));
     }
 
     handleOnEditClick = (city) => () => {
@@ -32,38 +25,22 @@ export default class Cities extends React.Component {
     };
 
     handleOnDeleteClick = (id) => () => {
-        axios.delete('/admin/cities/', {data: {id: id}})
-            .then(res => {
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-        axios.get('/admin/cities/data')
-            .then(res => {
-                const cities = res.data;
-                this.setState({cities});
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+        restApiClient.deleteCity(id);
+
+        restApiClient.getCities()
+            .then(cities => this.setState({cities: cities}));
     };
 
     handleOnSubmitAdd = () => {
         const data = {
             name: this.refs.addName.value,
         };
-        axios.post('/admin/cities/', data)
-            .catch(function (error) {
-                console.log(error);
-            });
-        axios.get('/admin/cities/data')
-            .then(res => {
-                const cities = res.data;
-                this.setState({cities});
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+
+        restApiClient.addCity(data);
+
+        restApiClient.getCities()
+            .then(cities => this.setState({cities: cities}));
+
         this.hideModalCreate();
     };
 
@@ -72,18 +49,14 @@ export default class Cities extends React.Component {
             name: this.refs.editName.value,
             id: this.state.editing.id
         };
-        axios.put('/admin/cities/', data)
-            .catch(function (error) {
-                console.log(error);
-            });
-        axios.get('/admin/cities/data')
-            .then(res => {
-                const cities = res.data;
-                this.setState({cities});
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+
+        restApiClient.editCity(data)
+            .catch(error => console.log(error));
+
+        restApiClient.getCities()
+            .then(cities => this.setState({cities: cities}))
+            .catch(error => console.log(error));
+
         this.hideModalUpdate();
     };
 
