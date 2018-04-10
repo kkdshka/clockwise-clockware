@@ -25,7 +25,7 @@ describe('FreeWatchmakers', () => {
         });
 
         it('returns repairing data', () => {
-            freeWatchmakers.data.should.to.deep.equal(['Днепр', 'Днепр', '2018-03-16', '09:00', '11:00']);
+            freeWatchmakers.data.should.to.deep.equal(['Днепр', 'Днепр', '2018-03-16', '09:00', '11:00', '11:00', '09:00', '09:00', '11:00']);
         });
     });
 });
