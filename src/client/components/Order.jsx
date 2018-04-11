@@ -26,6 +26,7 @@ export default class Order extends React.Component {
     componentDidMount() {
         restApiClient.getCities()
             .then(cities => this.setState({cities: cities}));
+
     }
 
     validator(fieldName, element, message) {
@@ -121,7 +122,7 @@ export default class Order extends React.Component {
     renderConfirmation() {
         if (this.state.confirmation === 'opened') {
             return (
-                <div>
+                <div className="alert alert-success">
                     <h5>
                         Ваш заказ принят.
                         Подтверждение отправлено на почту: {this.state.reservation.email}
@@ -169,10 +170,22 @@ export default class Order extends React.Component {
         });
     };
 
-    renderIfNoFreeWatchmakers() {
+    renderFreeWatchmakers() {
         if (this.state.freeWatchmakers.length === 0) {
             return (<h5>Свободных мастеров на ваше время нет</h5>);
         }
+        return <table className="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th>Имя</th>
+                <th>Город</th>
+                <th>Рейтинг</th>
+            </tr>
+            </thead>
+            <tbody>
+            {this.renderWatchmakers()}
+            </tbody>
+        </table>
     }
 
     renderChooseWatchmakers() {
@@ -183,19 +196,7 @@ export default class Order extends React.Component {
             </div>
             <div className="modal-body">
                 <form>
-                    {this.renderIfNoFreeWatchmakers()}
-                    <table className="table table-striped table-hover">
-                        <thead>
-                        <tr>
-                            <th>Имя</th>
-                            <th>Город</th>
-                            <th>Рейтинг</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {this.renderWatchmakers()}
-                        </tbody>
-                    </table>
+                    {this.renderFreeWatchmakers()}
                 </form>
             </div>
             <div className="modal-footer">
@@ -220,11 +221,13 @@ export default class Order extends React.Component {
     }
 
     render() {
-        return <div>
+        return <div className="container">
             <div className="row mt-4">
-                <div className="col-sm-5">
+                <div className="col col-sm-5 offset-sm-1">
                     {this.renderFormError()}
-                    <form className={'form'}>
+                    {this.renderConfirmation()}
+                    {this.renderChooseWatchmakers()}
+                    <form className="custom-form">
                         <div className="form-group row">
                             <label className="col-4 col-form-label" htmlFor="name">Имя:</label>
                             <div className="col-sm-8">
@@ -280,8 +283,6 @@ export default class Order extends React.Component {
                         </button>
                     </form>
                 </div>
-                <div className={'col'}>{this.renderChooseWatchmakers()}</div>
-                <div className={'col'}>{this.renderConfirmation()}</div>
             </div>
         </div>
     }

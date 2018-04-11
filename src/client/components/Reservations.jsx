@@ -279,7 +279,7 @@ export default class Reservations extends React.Component {
     }
 
     render() {
-        return <div>
+        return <div className="container">
             <div className="row">
                 <div className="col">
                     <Navigation active="reservations"/>

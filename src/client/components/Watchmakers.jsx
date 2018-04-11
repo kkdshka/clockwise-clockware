@@ -206,7 +206,7 @@ export default class Watchmakers extends Component {
     }
 
     render() {
-        return <div>
+        return <div className="container">
             <div className="row">
                 <div className="col">
                     <Navigation active="watchmakers"/>
