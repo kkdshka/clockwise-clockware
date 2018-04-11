@@ -8,6 +8,7 @@ function addClient(client) {
             if (error)
                 return reject(error);
             console.log('Client added with id ' + results.insertId);
+            resolve();
         });
     });
 }
@@ -20,6 +21,7 @@ function editClient(client) {
             if (error)
                 return reject(error);
             console.log('Client edited');
+            resolve();
         });
     });
 }
@@ -30,6 +32,7 @@ function deleteClient(id) {
             if (error)
                 return reject(error);
             console.log('Client deleted');
+            resolve();
         });
     });
 }

@@ -8,6 +8,7 @@ function addWatchmaker(watchmaker) {
             if (error)
                 return reject(error);
             console.log('Watchmaker added with id ' + results.insertId);
+            resolve();
         });
     });
 }
@@ -20,6 +21,7 @@ function editWatchmaker(watchmaker) {
             if (error)
                 return reject(error);
             console.log('Watchmaker edited');
+            resolve();
         });
     });
 }
@@ -30,6 +32,7 @@ function deleteWatchmaker(id) {
             if (error)
                 return reject(error);
             console.log('Watchmaker deleted');
+            resolve();
         });
     });
 }

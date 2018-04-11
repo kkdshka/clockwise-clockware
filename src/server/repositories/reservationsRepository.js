@@ -9,6 +9,7 @@ function addReservation(reservation) {
             if (error)
                 return reject(error);
             console.log('Reservation added with id ' + results.insertId);
+            resolve();
         });
     });
 }
@@ -30,6 +31,7 @@ function editReservation(reservation) {
             if (error)
                 return reject(error);
             console.log('Reservation edited');
+            resolve();
         });
     });
 }
@@ -40,6 +42,7 @@ function deleteReservation(id) {
             if (error)
                 return reject(error);
             console.log('Reservation deleted');
+            resolve();
         });
     });
 }
