@@ -1,6 +1,7 @@
 import React from 'react';
 import Navigation from './AdminNavigation.jsx';
 import restApiClient from '../restApiClient';
+import validation from '../validation.js';
 import Modal from 'react-bootstrap4-modal';
 
 export default class Reservations extends React.Component {
@@ -12,6 +13,11 @@ export default class Reservations extends React.Component {
             watchmakers: [],
             isModalCreateOpened: false,
             isModalUpdateOpened: false,
+            name: {isValid: false, message: ''},
+            email: {isValid: false, message: ''},
+            date: {isValid: false, message: ''},
+            time: {isValid: false, message: ''},
+            formError: false,
             editing: {},
         };
     }
@@ -26,6 +32,27 @@ export default class Reservations extends React.Component {
         restApiClient.getWatchmakers()
             .then(watchmakers => this.setState({watchmakers}));
     }
+
+    validator(fieldName, element, message) {
+        function capitalize(string) {
+            return string.replace(/(?:^|\s)\S/g, function (l) {
+                return l.toUpperCase();
+            });
+        }
+
+        const modalName = this.state.isModalCreateOpened ? 'add' : 'edit';
+
+        if (validation['isValid' + capitalize(fieldName)](this.refs[modalName + capitalize(fieldName)].value)) {
+            this.setState({[fieldName]: {isValid: true, message: ''}});
+            element.className = 'form-control form-control-sm is-valid';
+        }
+        else {
+            this.setState({[fieldName]: {isValid: false, message: message}});
+            element.className = 'form-control form-control-sm is-invalid';
+        }
+    }
+
+    handleValidation = (type, message) => event => this.validator(type, event.currentTarget, message);
 
     handleOnEditClick = (reservations) => () => {
         this.setState({editing: reservations});
@@ -49,6 +76,14 @@ export default class Reservations extends React.Component {
             time: this.refs.addTime.value,
             watchmakerId: this.refs.addWatchmakerId.value
         };
+
+        if (!validation.isValidReservation(data)) {
+            this.setState({formError: true});
+            return;
+        }
+        else {
+            this.setState({formError: false});
+        }
 
         restApiClient.addReservation(data);
 
@@ -91,6 +126,12 @@ export default class Reservations extends React.Component {
         return newDate.getUTCFullYear() +
             '-' + pad(newDate.getUTCMonth() + 1) +
             '-' + pad(newDate.getUTCDate() + 1);
+    }
+
+    renderFormError() {
+        if (this.state.formError) {
+            return <div className="alert alert-danger">Заполните поля</div>
+        }
     }
 
     renderReservations() {
@@ -151,13 +192,18 @@ export default class Reservations extends React.Component {
                 </div>
                 <div className="modal-body">
                     <form>
+                        {this.renderFormError()}
                         <div className="form-group">
                             <label htmlFor="add-name">Имя:</label>
-                            <input type="text" className="form-control" id="add-name" ref="addName"/>
+                            <input type="text" className="form-control" id="add-name" ref="addName"
+                                   onBlur={this.handleValidation('name', 'Имя не может быть короче трех букв')}/>
+                            <div className="invalid-feedback">{this.state.name.message}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="add-email">Email:</label>
-                            <input type="text" className="form-control" id="add-email" ref="addEmail"/>
+                            <input type="text" className="form-control" id="add-email" ref="addEmail"
+                                   onBlur={this.handleValidation('email', 'Введите правильный почтовый адрес')}/>
+                            <div className="invalid-feedback">{this.state.email.message}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="add-city">Город:</label>
@@ -175,13 +221,16 @@ export default class Reservations extends React.Component {
                         </div>
                         <div className="form-group">
                             <label htmlFor="add-date">Дата:</label>
-                            <input type="date" className="form-control" id="add-date" ref="addDate"/>
+                            <input type="date" className="form-control" id="add-date" ref="addDate"
+                                   onBlur={this.handleValidation('date', 'Введите дату с сегодняшней')}/>
+                            <div className="invalid-feedback">{this.state.date.message}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="add-time">Время:</label>
                             <input type="time" min="09:00" max="18:00" step={60 * 60} className="form-control"
-                                   id="add-time"
-                                   ref="addTime"/>
+                                   id="add-time" ref="addTime"
+                                   onBlur={this.handleValidation('time', 'Выберите время с 9:00 до 18:00')}/>
+                            <div className="invalid-feedback">{this.state.time.message}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="add-watchmaker">Мастер:</label>
@@ -223,15 +272,20 @@ export default class Reservations extends React.Component {
                 </div>
                 <div className="modal-body">
                     <form>
+                        {this.renderFormError()}
                         <div className="form-group">
                             <label htmlFor="edit-name">Имя:</label>
                             <input type="text" className="form-control" id="edit-name" ref="editName"
-                                   defaultValue={this.state.editing.name}/>
+                                   defaultValue={this.state.editing.name}
+                                   onBlur={this.handleValidation('name', 'Имя не может быть короче трех букв')}/>
+                            <div className="invalid-feedback">{this.state.name.message}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="edit-name">Email:</label>
                             <input type="text" className="form-control" id="edit-email" ref="editEmail"
-                                   defaultValue={this.state.editing.email}/>
+                                   defaultValue={this.state.editing.email}
+                                   onBlur={this.handleValidation('email', 'Введите правильный почтовый адрес')}/>
+                            <div className="invalid-feedback">{this.state.email.message}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="edit-city">Город:</label>
@@ -252,13 +306,17 @@ export default class Reservations extends React.Component {
                         <div className="form-group">
                             <label htmlFor="edit-date">Дата:</label>
                             <input type="date" className="form-control" id="edit-date" ref="editDate"
-                                   defaultValue={this.dateToString(this.state.editing.date)}/>
+                                   defaultValue={this.dateToString(this.state.editing.date)}
+                                   onBlur={this.handleValidation('date', 'Введите дату с сегодняшней')}/>
+                            <div className="invalid-feedback">{this.state.date.message}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="edit-time">Время:</label>
                             <input type="time" min="09:00" max="18:00" step={60 * 60} className="form-control"
                                    id="edit-time"
-                                   ref="editTime" defaultValue={this.state.editing.time}/>
+                                   ref="editTime" defaultValue={this.state.editing.time}
+                                   onBlur={this.handleValidation('time', 'Выберите время с 9:00 до 18:00')}/>
+                            <div className="invalid-feedback">{this.state.time.message}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="edit-watchmaker">Мастер:</label>
