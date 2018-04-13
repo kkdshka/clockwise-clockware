@@ -3,6 +3,7 @@ const router = express.Router();
 const path = require('path');
 const citiesRepository = require('../repositories/citiesRepository');
 const auth = require('../authenticationMiddleware');
+const validation = require('../validation');
 
 router.get('/', auth, function (req, res) {
     res.sendFile(path.join(__dirname, "../../../index.html"));
@@ -24,6 +25,12 @@ router.post('/', async function (req, res) {
     const cityData = {
         name: req.body.name
     };
+
+    if (!validation.isValidCityName(cityData.name)) {
+        res.sendStatus(400).json({error: "Имя не может быть пустым"});
+        return;
+    }
+
     try {
         await citiesRepository.add(cityData);
         res.status(201);
@@ -39,6 +46,12 @@ router.put('/', async function (req, res) {
         name: req.body.name,
         id: req.body.id
     };
+
+    if (!validation.isValidCityName(cityData.name)) {
+        res.sendStatus(400).json({error: "Имя не может быть пустым"});
+        return;
+    }
+
     try {
         await citiesRepository.edit(cityData);
         res.status(204);

@@ -4,6 +4,7 @@ const path = require('path');
 const watchmakersRepository = require('../repositories/watchmakersRepository');
 const FreeWatchmakers = require('../models/freeWatchmakersService');
 const auth = require('../authenticationMiddleware');
+const validation = require('../validation');
 
 router.get('/', auth, function (req, res) {
     res.sendFile(path.join(__dirname, "../../../index.html"));
@@ -41,6 +42,12 @@ router.post('/', async function (req, res) {
         city: req.body.city,
         rating: req.body.rating
     };
+
+    if (!validation.isValidWatchmakerName(watchmakerData.name)) {
+        res.sendStatus(400).json({error: 'Название города не может быть пустым'});
+        return;
+    }
+
     try {
         await watchmakersRepository.add(watchmakerData);
         res.status(201);
@@ -58,6 +65,12 @@ router.put('/', async function (req, res) {
         rating: req.body.rating,
         id: req.body.id
     };
+
+    if (!validation.isValidWatchmakerName(watchmakerData.name)) {
+        res.sendStatus(400).json({error: 'Название города не может быть пустым'});
+        return;
+    }
+
     try {
         await watchmakersRepository.edit(watchmakerData);
         res.status(204);
