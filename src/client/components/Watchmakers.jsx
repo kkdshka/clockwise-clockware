@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Navigation from './AdminNavigation.jsx';
 import restApiClient from '../restApiClient';
 import Modal from 'react-bootstrap4-modal';
+import validation from '../validation';
 
 export default class Watchmakers extends Component {
     constructor(props) {
@@ -11,9 +12,24 @@ export default class Watchmakers extends Component {
             cities: [],
             isModalCreateOpened: false,
             isModalUpdateOpened: false,
+            name: {isValid: false, message: ''},
+            formError: false,
             editing: {},
         };
     }
+
+    handleValidation = event => {
+        const modalName = this.state.isModalCreateOpened ? 'add' : 'edit';
+
+        if (validation.isValidWatchmakerName(this.refs[modalName + "Name"].value)) {
+            this.setState({name: {isValid: true, message: ''}});
+            event.currentTarget.className = 'form-control form-control-sm is-valid';
+        }
+        else {
+            this.setState({name: {isValid: false, message: "Имя не может быть пустым"}});
+            event.currentTarget.className = 'form-control form-control-sm is-invalid';
+        }
+    };
 
     componentDidMount() {
         restApiClient.getWatchmakers()
@@ -36,6 +52,12 @@ export default class Watchmakers extends Component {
     };
 
     handleOnSubmitAdd = () => {
+        if (!this.state.name.isValid) {
+            this.setState({formError: true});
+            return;
+        }
+        this.setState({formError: false});
+
         const data = {
             name: this.refs.addName.value,
             city: this.refs.addCity.value,
@@ -94,6 +116,12 @@ export default class Watchmakers extends Component {
         });
     }
 
+    renderFormError() {
+        if (this.state.formError) {
+            return <div className="alert alert-danger">Заполните поля</div>
+        }
+    }
+
     openModalCreate = () => {
         this.setState({
             isModalCreateOpened: true
@@ -114,9 +142,12 @@ export default class Watchmakers extends Component {
                 </div>
                 <div className="modal-body">
                     <form>
+                        {this.renderFormError()}
                         <div className="form-group">
                             <label htmlFor="add-name">Имя:</label>
-                            <input type="text" className="form-control" id="add-name" ref="addName"/>
+                            <input type="text" className="form-control" id="add-name" ref="addName"
+                                   onBlur={this.handleValidation}/>
+                            <div className="invalid-feedback">{this.state.name.message}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="add-city">Город:</label>
@@ -168,10 +199,13 @@ export default class Watchmakers extends Component {
                 </div>
                 <div className="modal-body">
                     <form>
+                        {this.renderFormError()}
                         <div className="form-group">
                             <label htmlFor="edit-name">Имя:</label>
                             <input type="text" className="form-control" id="edit-name" ref="editName"
-                                   defaultValue={this.state.editing.name}/>
+                                   defaultValue={this.state.editing.name}
+                                   onBlur={this.handleValidation}/>
+                            <div className="invalid-feedback">{this.state.name.message}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="edit-city">Город:</label>

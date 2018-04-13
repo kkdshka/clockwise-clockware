@@ -2,6 +2,7 @@ import React from 'react';
 import Navigation from './AdminNavigation.jsx';
 import Modal from 'react-bootstrap4-modal';
 import restApiClient from '../restApiClient';
+import validation from '../validation';
 
 export default class Cities extends React.Component {
     constructor(props) {
@@ -10,6 +11,8 @@ export default class Cities extends React.Component {
             cities: [],
             isModalCreateOpened: false,
             isModalUpdateOpened: false,
+            name: {isValid: false, message: ''},
+            formError: false,
             editing: {},
         };
     }
@@ -18,6 +21,19 @@ export default class Cities extends React.Component {
         restApiClient.getCities()
             .then(cities => this.setState({cities: cities}));
     }
+
+    handleValidation = event => {
+        const modalName = this.state.isModalCreateOpened ? 'add' : 'edit';
+
+        if (validation.isValidWatchmakerName(this.refs[modalName + "Name"].value)) {
+            this.setState({name: {isValid: true, message: ''}});
+            event.currentTarget.className = 'form-control form-control-sm is-valid';
+        }
+        else {
+            this.setState({name: {isValid: false, message: "Название не может быть пустым"}});
+            event.currentTarget.className = 'form-control form-control-sm is-invalid';
+        }
+    };
 
     handleOnEditClick = (city) => () => {
         this.openModalUpdate();
@@ -32,6 +48,12 @@ export default class Cities extends React.Component {
     };
 
     handleOnSubmitAdd = () => {
+        if (!this.state.name.isValid) {
+            this.setState({formError: true});
+            return;
+        }
+        this.setState({formError: false});
+
         const data = {
             name: this.refs.addName.value,
         };
@@ -78,6 +100,12 @@ export default class Cities extends React.Component {
         });
     }
 
+    renderFormError() {
+        if (this.state.formError) {
+            return <div className="alert alert-danger">Заполните поля</div>
+        }
+    }
+
     openModalCreate = () => {
         this.setState({
             isModalCreateOpened: true
@@ -98,9 +126,12 @@ export default class Cities extends React.Component {
                 </div>
                 <div className="modal-body">
                     <form>
+                        {this.renderFormError()}
                         <div className="form-group">
                             <label htmlFor="add-name">Название:</label>
-                            <input type="text" className="form-control" id="add-name" ref="addName"/>
+                            <input type="text" className="form-control" id="add-name" ref="addName"
+                                   onBlur={this.handleValidation}/>
+                            <div className="invalid-feedback">{this.state.name.message}</div>
                         </div>
                     </form>
                 </div>
@@ -134,10 +165,13 @@ export default class Cities extends React.Component {
                 </div>
                 <div className="modal-body">
                     <form>
+                        {this.renderFormError()}
                         <div className="form-group">
                             <label htmlFor="edit-name">Название:</label>
                             <input type="text" className="form-control" id="edit-name" ref="editName"
-                                   defaultValue={this.state.editing.name}/>
+                                   defaultValue={this.state.editing.name}
+                                   onBlur={this.handleValidation}/>
+                            <div className="invalid-feedback">{this.state.name.message}</div>
                         </div>
                     </form>
                 </div>

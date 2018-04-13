@@ -22,10 +22,20 @@ function isValidReservation(params) {
     return isValidTime(params.time) && isValidName(params.name) && isValidEmail(params.email) && isValidDate(params.date);
 }
 
+function isValidWatchmakerName(name) {
+    return name.length > 0;
+}
+
+function isValidCityName(name) {
+    return name.length > 0;
+}
+
 module.exports = {
     isValidName: isValidName,
     isValidEmail: isValidEmail,
     isValidDate: isValidDate,
     isValidTime: isValidTime,
-    isValidReservation: isValidReservation
+    isValidReservation: isValidReservation,
+    isValidWatchmakerName: isValidWatchmakerName,
+    isValidCityName: isValidCityName
 };
