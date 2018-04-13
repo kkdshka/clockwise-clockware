@@ -38,7 +38,7 @@ router.post('/', async function (req, res) {
 
     const errors = check(reservationData);
     if (errors.length > 0) {
-        res.status(422).json({errors: errors});
+        res.status(400).json({errors: errors});
         return;
     }
 
@@ -68,7 +68,7 @@ router.put('/', async function (req, res) {
 
     const errors = check(reservationData);
     if (errors.length > 0) {
-        res.status(422).json({errors: errors});
+        res.status(400).json({errors: errors});
         return;
     }
 
