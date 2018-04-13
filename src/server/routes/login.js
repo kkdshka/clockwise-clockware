@@ -1,9 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const users = require('../users');
 
 router.post('/', function (req, res) {
-    if (req.body.login === "admin@example.com" && req.body.password === "passwordsecret") {
-        req.session.user = "admin@example.com";
+    const authorizedUser = users.filter(user => req.body.login === user.login && req.body.password === user.password);
+
+    if (authorizedUser.length > 0) {
+        req.session.user = authorizedUser[0].name;
         req.session.admin = true;
         console.log("login success!");
         res.sendStatus(200);
