@@ -114,18 +114,8 @@ export default class Reservations extends React.Component {
     };
 
     dateToString(date) {
-        const newDate = new Date(date);
-
-        function pad(number) {
-            if (number < 10) {
-                return '0' + number;
-            }
-            return number;
-        }
-
-        return newDate.getUTCFullYear() +
-            '-' + pad(newDate.getUTCMonth() + 1) +
-            '-' + pad(newDate.getUTCDate() + 1);
+        const newDate = new Date(date.split('T')[0]);
+        return newDate.toLocaleDateString();
     }
 
     renderFormError() {
