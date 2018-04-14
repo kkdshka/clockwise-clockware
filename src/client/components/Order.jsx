@@ -204,7 +204,8 @@ export default class Order extends React.Component {
                 </form>
             </div>
             <div className="modal-footer">
-                <button className="btn btn-primary" onClick={this.handleOnSubmitWatchmaker}>
+                <button id="submit-watchmaker" className="btn btn-primary" onClick={this.handleOnSubmitWatchmaker}
+                        disabled={this.state.freeWatchmakers.length === 0}>
                     Принять
                 </button>
                 <button type="button" className="btn float-right" onClick={this.hideModal}>Закрыть</button>
