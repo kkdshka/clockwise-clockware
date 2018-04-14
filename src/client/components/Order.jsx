@@ -98,7 +98,12 @@ export default class Order extends React.Component {
             this.setState({selectWatchmakerError: false});
         }
 
-        restApiClient.addReservation(this.state.reservation);
+        restApiClient.addReservation(this.state.reservation)
+            .then(res => {
+                if (res.status === 201) {
+                    this.setState({confirmation: 'opened'});
+                }
+            });
         restApiClient.addClient({
             name: this.state.reservation.name,
             email: this.state.reservation.email,
@@ -106,7 +111,6 @@ export default class Order extends React.Component {
         });
 
         this.hideModal();
-        this.setState({confirmation: 'opened'});
     };
 
     handleOnWatchmakerClick = (watchmaker) => () => {

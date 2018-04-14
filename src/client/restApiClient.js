@@ -50,6 +50,7 @@ function getReservations() {
 
 function addReservation(data) {
     return axios.post('/admin/reservations/', data)
+        .then(res => res)
         .catch(error => console.log(error));
 }
 
