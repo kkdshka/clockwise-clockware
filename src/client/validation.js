@@ -30,6 +30,10 @@ function isValidCityName(name) {
     return name.length > 0;
 }
 
+function isValidClient(clientData) {
+    return isValidName(clientData.name) && isValidEmail(clientData.email);
+}
+
 module.exports = {
     isValidName: isValidName,
     isValidEmail: isValidEmail,
@@ -37,5 +41,6 @@ module.exports = {
     isValidTime: isValidTime,
     isValidReservation: isValidReservation,
     isValidWatchmakerName: isValidWatchmakerName,
-    isValidCityName: isValidCityName
+    isValidCityName: isValidCityName,
+    isValidClient: isValidClient
 };

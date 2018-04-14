@@ -2,6 +2,7 @@ import React from 'react';
 import Navigation from './AdminNavigation.jsx';
 import restApiClient from '../restApiClient';
 import Modal from 'react-bootstrap4-modal';
+import validation from "../validation";
 
 export default class Clients extends React.Component {
     constructor(props) {
@@ -11,6 +12,9 @@ export default class Clients extends React.Component {
             cities: [],
             isModalCreateOpened: false,
             isModalUpdateOpened: false,
+            name: {isValid: false, message: ''},
+            email: {isValid: false, message: ''},
+            formError: false,
             editing: {},
         };
     }
@@ -22,6 +26,27 @@ export default class Clients extends React.Component {
         restApiClient.getCities()
             .then(cities => this.setState({cities: cities}));
     }
+
+    validator(fieldName, element, message) {
+        function capitalize(string) {
+            return string.replace(/(?:^|\s)\S/g, function (l) {
+                return l.toUpperCase();
+            });
+        }
+
+        const modalName = this.state.isModalCreateOpened ? 'add' : 'edit';
+
+        if (validation['isValid' + capitalize(fieldName)](this.refs[modalName + capitalize(fieldName)].value)) {
+            this.setState({[fieldName]: {isValid: true, message: ''}});
+            element.className = 'form-control form-control-sm is-valid';
+        }
+        else {
+            this.setState({[fieldName]: {isValid: false, message: message}});
+            element.className = 'form-control form-control-sm is-invalid';
+        }
+    }
+
+    handleValidation = (type, message) => event => this.validator(type, event.currentTarget, message);
 
     handleOnEditClick = (client) => () => {
         this.setState({editing: client});
@@ -41,6 +66,14 @@ export default class Clients extends React.Component {
             city: this.refs.addCity.value,
             email: this.refs.addEmail.value
         };
+
+        if (!validation.isValidClient(data)) {
+            this.setState({formError: true});
+            return;
+        }
+        else {
+            this.setState({formError: false});
+        }
 
         restApiClient.addClient(data);
 
@@ -65,6 +98,12 @@ export default class Clients extends React.Component {
 
         this.hideModalUpdate();
     };
+
+    renderFormError() {
+        if (this.state.formError) {
+            return <div className="alert alert-danger">Заполните поля</div>
+        }
+    }
 
     renderClients() {
         return this.state.clients.map(client => {
@@ -113,13 +152,18 @@ export default class Clients extends React.Component {
                 </div>
                 <div className="modal-body">
                     <form>
+                        {this.renderFormError()}
                         <div className="form-group">
                             <label htmlFor="add-name">Имя:</label>
-                            <input type="text" className="form-control" id="add-name" ref="addName"/>
+                            <input type="text" className="form-control" id="add-name" ref="addName"
+                                   onBlur={this.handleValidation('name', 'Имя не может быть короче трех букв')}/>
+                            <div className="invalid-feedback">{this.state.name.message}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="add-email">Email:</label>
-                            <input type="text" className="form-control" id="add-email" ref="addEmail"/>
+                            <input type="text" className="form-control" id="add-email" ref="addEmail"
+                                   onBlur={this.handleValidation('email', 'Введите правильный почтовый адрес')}/>
+                            <div className="invalid-feedback">{this.state.email.message}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="add-city">Город:</label>
@@ -161,15 +205,20 @@ export default class Clients extends React.Component {
                 </div>
                 <div className="modal-body">
                     <form>
+                        {this.renderFormError()}
                         <div className="form-group">
                             <label htmlFor="edit-name">Имя:</label>
                             <input type="text" className="form-control" id="edit-name" ref="editName"
-                                   defaultValue={this.state.editing.name}/>
+                                   defaultValue={this.state.editing.name}
+                                   onBlur={this.handleValidation('name', 'Имя не может быть короче трех букв')}/>
+                            <div className="invalid-feedback">{this.state.name.message}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="edit-email">Email:</label>
                             <input type="text" className="form-control" id="edit-email" ref="editEmail"
-                                   defaultValue={this.state.editing.email}/>
+                                   defaultValue={this.state.editing.email}
+                                   onBlur={this.handleValidation('email', 'Введите правильный почтовый адрес')}/>
+                            <div className="invalid-feedback">{this.state.email.message}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="edit-city">Город:</label>
