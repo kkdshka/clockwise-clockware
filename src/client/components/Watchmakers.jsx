@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Navigation from './AdminNavigation.jsx';
-import restApiClient from '../restApiClient';
+import restApiClient from '../restApiClient/index';
 import Modal from 'react-bootstrap4-modal';
 import validation from '../validation';
 

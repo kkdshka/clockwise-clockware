@@ -1,5 +1,5 @@
 import React from 'react';
-import restApiClient from '../restApiClient';
+import restApiClient from '../restApiClient/index';
 import Modal from 'react-bootstrap4-modal';
 
 const validation = require('../validation');

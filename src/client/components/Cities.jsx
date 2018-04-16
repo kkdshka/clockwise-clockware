@@ -1,7 +1,7 @@
 import React from 'react';
 import Navigation from './AdminNavigation.jsx';
 import Modal from 'react-bootstrap4-modal';
-import restApiClient from '../restApiClient';
+import restApiClient from '../restApiClient/index';
 import validation from '../validation';
 
 export default class Cities extends React.Component {
