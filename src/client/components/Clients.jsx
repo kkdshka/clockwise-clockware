@@ -12,8 +12,10 @@ export default class Clients extends React.Component {
             cities: [],
             isModalCreateOpened: false,
             isModalUpdateOpened: false,
-            name: {isValid: false, message: ''},
-            email: {isValid: false, message: ''},
+            validationResult: {
+                name: {isValid: false, message: ''},
+                email: {isValid: false, message: ''},
+            },
             formError: false,
             editing: {},
         };
@@ -28,20 +30,22 @@ export default class Clients extends React.Component {
     }
 
     validator(fieldName, element, message) {
+        const {isModalCreateOpened, validationResult} = this.state;
+
         function capitalize(string) {
             return string.replace(/(?:^|\s)\S/g, function (l) {
                 return l.toUpperCase();
             });
         }
 
-        const modalName = this.state.isModalCreateOpened ? 'add' : 'edit';
+        const modalName = isModalCreateOpened ? 'add' : 'edit';
 
         if (validation['isValid' + capitalize(fieldName)](this.refs[modalName + capitalize(fieldName)].value)) {
-            this.setState({[fieldName]: {isValid: true, message: ''}});
+            this.setState({validationResult: {...validationResult, [fieldName]: {isValid: true, message: ''}}});
             element.className = 'form-control form-control-sm is-valid';
         }
         else {
-            this.setState({[fieldName]: {isValid: false, message: message}});
+            this.setState({validationResult: {...validationResult, [fieldName]: {isValid: false, message: message}}});
             element.className = 'form-control form-control-sm is-invalid';
         }
     }
@@ -61,10 +65,12 @@ export default class Clients extends React.Component {
     };
 
     handleOnSubmitAdd = () => {
+        const {addName, addCity, addEmail} = this.refs;
+
         const data = {
-            name: this.refs.addName.value,
-            city: this.refs.addCity.value,
-            email: this.refs.addEmail.value
+            name: addName.value,
+            city: addCity.value,
+            email: addEmail.value
         };
 
         if (!validation.isValidClient(data)) {
@@ -84,11 +90,14 @@ export default class Clients extends React.Component {
     };
 
     handleOnSubmitEdit = () => {
+        const {editing: {id}} = this.state;
+        const {editName, editCity, editEmail} = this.refs;
+
         const data = {
-            name: this.refs.editName.value,
-            city: this.refs.editCity.value,
-            email: this.refs.editEmail.value,
-            id: this.state.editing.id
+            name: editName.value,
+            city: editCity.value,
+            email: editEmail.value,
+            id: id
         };
 
         restApiClient.editClient(data);
@@ -100,13 +109,17 @@ export default class Clients extends React.Component {
     };
 
     renderFormError() {
-        if (this.state.formError) {
+        const {formError} = this.state;
+
+        if (formError) {
             return <div className="alert alert-danger">Заполните поля</div>
         }
     }
 
     renderClients() {
-        return this.state.clients.map(client => {
+        const {clients} = this.state;
+
+        return clients.map(client => {
             return <tr key={'client' + client.id}>
                 <td>{client.name}</td>
                 <td>{client.city}</td>
@@ -127,7 +140,9 @@ export default class Clients extends React.Component {
     }
 
     renderCities() {
-        return this.state.cities.map(city => {
+        const {cities} = this.state;
+
+        return cities.map(city => {
             return <option key={'city' + city.id}>{city.name}</option>
         });
     }
@@ -145,7 +160,9 @@ export default class Clients extends React.Component {
     };
 
     renderModalCreate() {
-        if (this.state.isModalCreateOpened) {
+        const {isModalCreateOpened, validationResult} = this.state;
+
+        if (isModalCreateOpened) {
             return <Modal visible={true} onClickBackdrop={this.hideModalCreate}>
                 <div className="modal-header">
                     <h4 className="modal-title">Добавить клиента</h4>
@@ -157,13 +174,13 @@ export default class Clients extends React.Component {
                             <label htmlFor="add-name">Имя:</label>
                             <input type="text" className="form-control" id="add-name" ref="addName"
                                    onBlur={this.handleValidation('name', 'Имя не может быть короче трех букв')}/>
-                            <div className="invalid-feedback">{this.state.name.message}</div>
+                            <div className="invalid-feedback">{validationResult.name.message}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="add-email">Email:</label>
                             <input type="text" className="form-control" id="add-email" ref="addEmail"
                                    onBlur={this.handleValidation('email', 'Введите правильный почтовый адрес')}/>
-                            <div className="invalid-feedback">{this.state.email.message}</div>
+                            <div className="invalid-feedback">{validationResult.email.message}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="add-city">Город:</label>
@@ -198,7 +215,9 @@ export default class Clients extends React.Component {
     };
 
     renderModalUpdate() {
-        if (this.state.isModalUpdateOpened) {
+        const {isModalUpdateOpened, editing: {name, email, city}, validationResult} = this.state;
+
+        if (isModalUpdateOpened) {
             return <Modal visible={true} onClickBackdrop={this.hideModalUpdate}>
                 <div className="modal-header">
                     <h4 className="modal-title">Изменить клиента</h4>
@@ -209,21 +228,21 @@ export default class Clients extends React.Component {
                         <div className="form-group">
                             <label htmlFor="edit-name">Имя:</label>
                             <input type="text" className="form-control" id="edit-name" ref="editName"
-                                   defaultValue={this.state.editing.name}
+                                   defaultValue={name}
                                    onBlur={this.handleValidation('name', 'Имя не может быть короче трех букв')}/>
-                            <div className="invalid-feedback">{this.state.name.message}</div>
+                            <div className="invalid-feedback">{validationResult.name.message}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="edit-email">Email:</label>
                             <input type="text" className="form-control" id="edit-email" ref="editEmail"
-                                   defaultValue={this.state.editing.email}
+                                   defaultValue={email}
                                    onBlur={this.handleValidation('email', 'Введите правильный почтовый адрес')}/>
-                            <div className="invalid-feedback">{this.state.email.message}</div>
+                            <div className="invalid-feedback">{validationResult.email.message}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="edit-city">Город:</label>
                             <select className="form-control" id="edit-city" ref="editCity"
-                                    defaultValue={this.state.editing.city}>
+                                    defaultValue={city}>
                                 {this.renderCities()}
                             </select>
                         </div>

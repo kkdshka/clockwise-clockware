@@ -35,6 +35,8 @@ export default class Login extends React.Component {
     }
 
     render() {
+        const {error} = this.state;
+
         return <div className="container">
             <div className="row">
                 <div className="col">
@@ -44,7 +46,7 @@ export default class Login extends React.Component {
             <div className="row justify-content-md-center">
                 <div className="col-sm-5">
                     <form className={'form mt-4'}>
-                        {this.state.error && <div className="alert alert-danger">Неправильные логин или пароль</div>}
+                        {error && <div className="alert alert-danger">Неправильные логин или пароль</div>}
                         <div className="form-group">
                             <label htmlFor="login">Логин:</label>
                             <input type="text" className="form-control" id="login" ref="login"/>

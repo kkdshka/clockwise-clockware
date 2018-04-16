@@ -19,7 +19,9 @@ export default class Watchmakers extends Component {
     }
 
     handleValidation = event => {
-        const modalName = this.state.isModalCreateOpened ? 'add' : 'edit';
+        const {isModalCreateOpened} = this.state;
+
+        const modalName = isModalCreateOpened ? 'add' : 'edit';
 
         if (validation.isValidWatchmakerName(this.refs[modalName + "Name"].value)) {
             this.setState({name: {isValid: true, message: ''}});
@@ -52,16 +54,19 @@ export default class Watchmakers extends Component {
     };
 
     handleOnSubmitAdd = () => {
-        if (!this.state.name.isValid) {
+        const {name: {isValid}} = this.state;
+        const {addName, addCity, addRating} = this.refs;
+
+        if (!isValid) {
             this.setState({formError: true});
             return;
         }
         this.setState({formError: false});
 
         const data = {
-            name: this.refs.addName.value,
-            city: this.refs.addCity.value,
-            rating: this.refs.addRating.value
+            name: addName.value,
+            city: addCity.value,
+            rating: addRating.value
         };
 
         restApiClient.addWatchmaker(data);
@@ -73,11 +78,13 @@ export default class Watchmakers extends Component {
     };
 
     handleOnSubmitEdit = () => {
+        const {editing: {id}} = this.state;
+        const {editName, editCity, editRating} = this.refs;
         const data = {
-            name: this.refs.editName.value,
-            city: this.refs.editCity.value,
-            rating: this.refs.editRating.value,
-            id: this.state.editing.id
+            name: editName.value,
+            city: editCity.value,
+            rating: editRating.value,
+            id: id
         };
 
         restApiClient.editWatchmaker(data);
@@ -89,7 +96,9 @@ export default class Watchmakers extends Component {
     };
 
     renderWatchmakers() {
-        return this.state.watchmakers.map(watchmaker => {
+        const {watchmakers} = this.state;
+
+        return watchmakers.map(watchmaker => {
             return <tr key={'watchmaker' + watchmaker.id}>
                 <td>{watchmaker.name}</td>
                 <td>{watchmaker.city}</td>
@@ -111,13 +120,17 @@ export default class Watchmakers extends Component {
     }
 
     renderCities() {
-        return this.state.cities.map(city => {
+        const {cities} = this.state;
+
+        return cities.map(city => {
             return <option key={'city' + city.id}>{city.name}</option>
         });
     }
 
     renderFormError() {
-        if (this.state.formError) {
+        const {formError} = this.state;
+
+        if (formError) {
             return <div className="alert alert-danger">Заполните поля</div>
         }
     }
@@ -135,7 +148,9 @@ export default class Watchmakers extends Component {
     };
 
     renderModalCreate() {
-        if (this.state.isModalCreateOpened) {
+        const {isModalCreateOpened, name: {message}} = this.state;
+
+        if (isModalCreateOpened) {
             return <Modal visible={true} onClickBackdrop={this.hideModalCreate}>
                 <div className="modal-header">
                     <h4 className="modal-title">Добавить мастера</h4>
@@ -147,7 +162,7 @@ export default class Watchmakers extends Component {
                             <label htmlFor="add-name">Имя:</label>
                             <input type="text" className="form-control" id="add-name" ref="addName"
                                    onBlur={this.handleValidation}/>
-                            <div className="invalid-feedback">{this.state.name.message}</div>
+                            <div className="invalid-feedback">{message}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="add-city">Город:</label>
@@ -192,7 +207,9 @@ export default class Watchmakers extends Component {
     };
 
     renderModalUpdate() {
-        if (this.state.isModalUpdateOpened) {
+        const {isModalUpdateOpened, editing: {name, city, rating}, name: {message}} = this.state;
+
+        if (isModalUpdateOpened) {
             return <Modal visible={true} onClickBackdrop={this.hideModalUpdate}>
                 <div className="modal-header">
                     <h4 className="modal-title">Изменить мастера</h4>
@@ -203,21 +220,21 @@ export default class Watchmakers extends Component {
                         <div className="form-group">
                             <label htmlFor="edit-name">Имя:</label>
                             <input type="text" className="form-control" id="edit-name" ref="editName"
-                                   defaultValue={this.state.editing.name}
+                                   defaultValue={name}
                                    onBlur={this.handleValidation}/>
-                            <div className="invalid-feedback">{this.state.name.message}</div>
+                            <div className="invalid-feedback">{message}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="edit-city">Город:</label>
                             <select className="form-control" id="edit-city" ref="editCity"
-                                    defaultValue={this.state.editing.city}>
+                                    defaultValue={city}>
                                 {this.renderCities()}
                             </select>
                         </div>
                         <div className="form-group">
                             <label htmlFor="edit-rating">Рейтинг:</label>
                             <select className="form-control" id="edit-rating" ref="editRating"
-                                    defaultValue={this.state.editing.rating}>
+                                    defaultValue={rating}>
                                 <option>1</option>
                                 <option>2</option>
                                 <option>3</option>

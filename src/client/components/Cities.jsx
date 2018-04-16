@@ -23,7 +23,9 @@ export default class Cities extends React.Component {
     }
 
     handleValidation = event => {
-        const modalName = this.state.isModalCreateOpened ? 'add' : 'edit';
+        const {isModalCreateOpened} = this.state;
+
+        const modalName = isModalCreateOpened ? 'add' : 'edit';
 
         if (validation.isValidWatchmakerName(this.refs[modalName + "Name"].value)) {
             this.setState({name: {isValid: true, message: ''}});
@@ -48,7 +50,9 @@ export default class Cities extends React.Component {
     };
 
     handleOnSubmitAdd = () => {
-        if (!this.state.name.isValid) {
+        const {name} = this.state;
+
+        if (!name.isValid) {
             this.setState({formError: true});
             return;
         }
@@ -67,9 +71,11 @@ export default class Cities extends React.Component {
     };
 
     handleOnSubmitEdit = () => {
+        const {editing: {id}} = this.state;
+
         const data = {
             name: this.refs.editName.value,
-            id: this.state.editing.id
+            id: id
         };
 
         restApiClient.editCity(data)
@@ -83,7 +89,9 @@ export default class Cities extends React.Component {
     };
 
     renderCities() {
-        return this.state.cities.map(city => {
+        const {cities} = this.state;
+
+        return cities.map(city => {
             return <tr key={'city' + city.id}>
                 <td>{city.name}</td>
                 <td>
@@ -101,7 +109,9 @@ export default class Cities extends React.Component {
     }
 
     renderFormError() {
-        if (this.state.formError) {
+        const {formError} = this.state;
+
+        if (formError) {
             return <div className="alert alert-danger">Заполните поля</div>
         }
     }
@@ -119,7 +129,9 @@ export default class Cities extends React.Component {
     };
 
     renderModalCreate() {
-        if (this.state.isModalCreateOpened) {
+        const {isModalCreateOpened, name: {message}} = this.state;
+
+        if (isModalCreateOpened) {
             return <Modal visible={true} onClickBackdrop={this.hideModalCreate}>
                 <div className="modal-header">
                     <h4 className="modal-title">Добавить город</h4>
@@ -131,7 +143,7 @@ export default class Cities extends React.Component {
                             <label htmlFor="add-name">Название:</label>
                             <input type="text" className="form-control" id="add-name" ref="addName"
                                    onBlur={this.handleValidation}/>
-                            <div className="invalid-feedback">{this.state.name.message}</div>
+                            <div className="invalid-feedback">{message}</div>
                         </div>
                     </form>
                 </div>
@@ -158,7 +170,9 @@ export default class Cities extends React.Component {
     };
 
     renderModalUpdate() {
-        if (this.state.isModalUpdateOpened) {
+        const {isModalUpdateOpened, editing: {name}, name: {message}} = this.state;
+
+        if (isModalUpdateOpened) {
             return <Modal visible={true} onClickBackdrop={this.hideModalUpdate}>
                 <div className="modal-header">
                     <h4>Изменить город</h4>
@@ -169,9 +183,9 @@ export default class Cities extends React.Component {
                         <div className="form-group">
                             <label htmlFor="edit-name">Название:</label>
                             <input type="text" className="form-control" id="edit-name" ref="editName"
-                                   defaultValue={this.state.editing.name}
+                                   defaultValue={name}
                                    onBlur={this.handleValidation}/>
-                            <div className="invalid-feedback">{this.state.name.message}</div>
+                            <div className="invalid-feedback">{message}</div>
                         </div>
                     </form>
                 </div>
