@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const users = require('../users');
+const usersRepository = require('../repositories/usersRepository');
 
-router.post('/', function (req, res) {
+router.post('/', async function (req, res) {
+    const users = await usersRepository.getAllUsers();
     const authorizedUser = users.filter(user => req.body.login === user.login && req.body.password === user.password);
 
     if (authorizedUser.length > 0) {

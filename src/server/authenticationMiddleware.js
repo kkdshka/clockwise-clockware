@@ -1,7 +1,8 @@
-const users = require('./users');
+const usersRepository = require('./repositories/usersRepository');
 
-function auth(req, res, next) {
+async function auth(req, res, next) {
     // return next();
+    const users = await usersRepository.getAllUsers();
     users.forEach((user) => {
         if (req.session && req.session.user === user.name && req.session.admin) {
             return next();
