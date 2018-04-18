@@ -34,6 +34,18 @@ export default class Order extends React.Component {
     validator(fieldName, element, message) {
         const {validationResult} = this.state;
 
+        if (fieldName === 'time') {
+            if (validation.isValidTime(this.refs.time.value, this.refs.date.value)) {
+                this.setState({validationResult: {...validationResult, time: {isValid: true, message: ''}}});
+                element.className = 'form-control form-control-sm is-valid';
+            }
+            else {
+                this.setState({validationResult: {...validationResult, time: {isValid: false, message: message}}});
+                element.className = 'form-control form-control-sm is-invalid';
+            }
+            return;
+        }
+
         function capitalize(string) {
             return string.replace(/(?:^|\s)\S/g, function (l) {
                 return l.toUpperCase();
@@ -303,7 +315,7 @@ export default class Order extends React.Component {
                             <div className="col-sm-8">
                                 <input type="time" min="09:00" max="18:00" step={60 * 60} //one hour
                                        className="form-control" id="time" ref="time"
-                                       onBlur={this.handleValidation('time', 'Выберите время с 9:00 до 18:00')}/>
+                                       onBlur={this.handleValidation('time', 'Выберите время с 9:00 до 18:00 или если выбрана сегодняшняя дата - позже текущего времени')}/>
                                 <div className="invalid-feedback">{time.message}</div>
                             </div>
                         </div>

@@ -14,8 +14,17 @@ function isValidDate(date) {
     return new Date(date) > today;
 }
 
-function isValidTime(time) {
-    return new Date('1970-01-01T' + time) > new Date('1970-01-01T08:59') && new Date('1970-01-01T' + time) < new Date('1970-01-01T18:01');
+function isValidTime(time, date) {
+    const reservationDate = new Date(date);
+    const today = new Date();
+    if (reservationDate.getDate() === today.getDate() && reservationDate.getMonth() === today.getMonth() && reservationDate.getFullYear() === today.getFullYear()) {
+        const currentHours = today.getHours();
+        const reservationHours = (new Date('1970-01-01T' + time)).getHours();
+        return reservationHours > 8 && reservationHours > currentHours && reservationHours < 18;
+    }
+    else {
+        return new Date('1970-01-01T' + time) > new Date('1970-01-01T08:59') && new Date('1970-01-01T' + time) < new Date('1970-01-01T18:01');
+    }
 }
 
 function isValidReservation(params) {

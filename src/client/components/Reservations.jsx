@@ -46,6 +46,18 @@ export default class Reservations extends React.Component {
 
         const modalName = isModalCreateOpened ? 'add' : 'edit';
 
+        if (fieldName === 'time') {
+            if (validation.isValidTime(this.refs[modalName + 'Time'].value, this.refs[modalName + 'Date'].value)) {
+                this.setState({validationResult: {...validationResult, time: {isValid: true, message: ''}}});
+                element.className = 'form-control form-control-sm is-valid';
+            }
+            else {
+                this.setState({validationResult: {...validationResult, time: {isValid: false, message: message}}});
+                element.className = 'form-control form-control-sm is-invalid';
+            }
+            return;
+        }
+
         if (validation['isValid' + capitalize(fieldName)](this.refs[modalName + capitalize(fieldName)].value)) {
             this.setState({validationResult: {...validationResult, [fieldName]: {isValid: true, message: ''}}});
             element.className = 'form-control form-control-sm is-valid';
@@ -237,7 +249,7 @@ export default class Reservations extends React.Component {
                             <label htmlFor="add-time">Время:</label>
                             <input type="time" min="09:00" max="18:00" step={60 * 60} className="form-control"
                                    id="add-time" ref="addTime"
-                                   onBlur={this.handleValidation('time', 'Выберите время с 9:00 до 18:00')}/>
+                                   onBlur={this.handleValidation('time', 'Выберите время с 9:00 до 18:00 или если выбрана сегодняшняя дата - позже текущего времени')}/>
                             <div className="invalid-feedback">{time.message}</div>
                         </div>
                         <div className="form-group">
@@ -325,7 +337,7 @@ export default class Reservations extends React.Component {
                             <input type="time" min="09:00" max="18:00" step={60 * 60} className="form-control"
                                    id="edit-time"
                                    ref="editTime" defaultValue={time}
-                                   onBlur={this.handleValidation('time', 'Выберите время с 9:00 до 18:00')}/>
+                                   onBlur={this.handleValidation('time', 'Выберите время с 9:00 до 18:00 или если выбрана сегодняшняя дата - позже текущего времени')}/>
                             <div className="invalid-feedback">{validationResult.time.message}</div>
                         </div>
                         <div className="form-group">
