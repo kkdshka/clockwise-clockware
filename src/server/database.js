@@ -1,13 +1,6 @@
 const mysql = require('mysql');
+const config = require('./config').db;
 
-const pool = mysql.createPool({
-    connectionLimit: 10,
-    host: 'localhost',
-    acquireTimeout: 30000,
-    port: 3306,
-    user: 'admin',
-    password: 'passwordsecret',
-    database: 'test'
-});
+const pool = mysql.createPool(config);
 
 module.exports = pool;

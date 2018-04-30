@@ -1,17 +1,12 @@
 'use strict';
 const nodemailer = require('nodemailer');
+const config = require('./config').sender;
 
 function sendEmail(receiverEmail, reservationData) {
     const text = 'Ваш заказ на ремонт часов принят. Ожидайте мастера ' + reservationData.date
         + ' в ' + reservationData.time + '.';
     nodemailer.createTestAccount((err, account) => {
-        let transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: 'cklockware@gmail.com',
-                pass: 'passwordsecret'
-            }
-        });
+        let transporter = nodemailer.createTransport(config);
 
         // setup email data with unicode symbols
         let mailOptions = {
