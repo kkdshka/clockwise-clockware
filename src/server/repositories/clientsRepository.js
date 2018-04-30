@@ -4,7 +4,7 @@ const pool = require('../database');
 //client = {name, city, email, id}
 function addClient(client) {
     return new Promise((resolve, reject) => {
-        pool.query("INSERT INTO clients SET ? ON DUPLICATE KEY UPDATE name = VALUES(name), city = VALUES(city)", client, function (error, results) {
+        pool.query("INSERT INTO clients SET ? ON DUPLICATE KEY UPDATE name = VALUES(name)", client, function (error, results) {
             if (error)
                 return reject(error);
             console.log('Client added with id ' + results.insertId);
@@ -14,7 +14,7 @@ function addClient(client) {
 }
 
 function editClient(client) {
-    const sql = "UPDATE clients SET name = ?, city = ?, email = ? WHERE id = ?";
+    const sql = "UPDATE clients SET name = ?, email = ? WHERE id = ?";
     const data = [client.name, client.city, client.email, client.id];
     return new Promise((resolve, reject) => {
         pool.query(sql, data, function (error) {
@@ -44,7 +44,7 @@ function getAllClients() {
                 return reject(err);
             }
             const models = results.map((result) => {
-                return new Client(result.name, result.city, result.email, result.id);
+                return new Client(result.name, result.email, result.id);
             });
             resolve(models);
         });

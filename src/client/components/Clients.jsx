@@ -24,9 +24,6 @@ export default class Clients extends React.Component {
     componentDidMount() {
         restApiClient.getClients()
             .then(clients => this.setState({clients: clients}));
-
-        restApiClient.getCities()
-            .then(cities => this.setState({cities: cities}));
     }
 
     validator(fieldName, element, message) {
@@ -65,11 +62,10 @@ export default class Clients extends React.Component {
     };
 
     handleOnSubmitAdd = () => {
-        const {addName, addCity, addEmail} = this.refs;
+        const {addName, addEmail} = this.refs;
 
         const data = {
             name: addName.value,
-            city: addCity.value,
             email: addEmail.value
         };
 
@@ -91,11 +87,10 @@ export default class Clients extends React.Component {
 
     handleOnSubmitEdit = () => {
         const {editing: {id}} = this.state;
-        const {editName, editCity, editEmail} = this.refs;
+        const {editName, editEmail} = this.refs;
 
         const data = {
             name: editName.value,
-            city: editCity.value,
             email: editEmail.value,
             id: id
         };
@@ -122,7 +117,6 @@ export default class Clients extends React.Component {
         return clients.map(client => {
             return <tr key={'client' + client.id}>
                 <td>{client.name}</td>
-                <td>{client.city}</td>
                 <td>{client.email}</td>
                 <td>
                     <button type="button" className="btn btn-warning" onClick={this.handleOnEditClick(client)}>
@@ -136,14 +130,6 @@ export default class Clients extends React.Component {
                     </button>
                 </td>
             </tr>
-        });
-    }
-
-    renderCities() {
-        const {cities} = this.state;
-
-        return cities.map(city => {
-            return <option key={'city' + city.id}>{city.name}</option>
         });
     }
 
@@ -182,12 +168,6 @@ export default class Clients extends React.Component {
                                    onBlur={this.handleValidation('email', 'Введите правильный почтовый адрес')}/>
                             <div className="invalid-feedback">{validationResult.email.message}</div>
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="add-city">Город:</label>
-                            <select className="form-control" id="add-city" ref="addCity">
-                                {this.renderCities()}
-                            </select>
-                        </div>
                     </form>
                 </div>
                 <div className="modal-footer">
@@ -215,7 +195,7 @@ export default class Clients extends React.Component {
     };
 
     renderModalUpdate() {
-        const {isModalUpdateOpened, editing: {name, email, city}, validationResult} = this.state;
+        const {isModalUpdateOpened, editing: {name, email}, validationResult} = this.state;
 
         if (isModalUpdateOpened) {
             return <Modal visible={true} onClickBackdrop={this.hideModalUpdate}>
@@ -238,13 +218,6 @@ export default class Clients extends React.Component {
                                    defaultValue={email}
                                    onBlur={this.handleValidation('email', 'Введите правильный почтовый адрес')}/>
                             <div className="invalid-feedback">{validationResult.email.message}</div>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="edit-city">Город:</label>
-                            <select className="form-control" id="edit-city" ref="editCity"
-                                    defaultValue={city}>
-                                {this.renderCities()}
-                            </select>
                         </div>
                     </form>
                 </div>
@@ -272,7 +245,6 @@ export default class Clients extends React.Component {
                         <thead>
                         <tr>
                             <th>Имя</th>
-                            <th>Город</th>
                             <th>Email</th>
                             <th/>
                             <th/>

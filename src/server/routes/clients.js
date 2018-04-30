@@ -24,7 +24,6 @@ router.get('/data', async function (req, res) {
 router.post('/', async function (req, res) {
     const clientData = {
         name: req.body.name,
-        city: req.body.city,
         email: req.body.email
     };
 
@@ -47,7 +46,6 @@ router.post('/', async function (req, res) {
 router.put('/', async function (req, res) {
     const clientData = {
         name: req.body.name,
-        city: req.body.city,
         email: req.body.email,
         id: req.body.id
     };
