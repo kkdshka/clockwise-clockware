@@ -4,7 +4,7 @@ const pool = require('../database');
 //client = {name, city, email, id}
 function addClient(client) {
     return new Promise((resolve, reject) => {
-        pool.query("INSERT INTO clients SET ? ON DUPLICATE KEY UPDATE name = name, city = city", client, function (error, results) {
+        pool.query("INSERT INTO clients SET ? ON DUPLICATE KEY UPDATE name = VALUES(name), city = VALUES(city)", client, function (error, results) {
             if (error)
                 return reject(error);
             console.log('Client added with id ' + results.insertId);
