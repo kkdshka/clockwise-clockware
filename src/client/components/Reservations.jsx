@@ -135,7 +135,8 @@ export default class Reservations extends React.Component {
     };
 
     dateToString(date) {
-        const newDate = new Date(date.split('T')[0]);
+        // console.log(date);
+        const newDate = new Date(date);
         return newDate.toLocaleDateString();
     }
 
@@ -146,11 +147,16 @@ export default class Reservations extends React.Component {
         }
     }
 
+    isToday(date) {
+        return new Date().toLocaleDateString() === new Date(date).toLocaleDateString();
+    }
+
     renderReservations() {
         const {reservations} = this.state;
 
         return reservations.map(reservation => {
-            return <tr key={'reservation' + reservation.id}>
+            return <tr className={this.isToday(reservation.date) ? 'table-info' : ''}
+                       key={'reservation' + reservation.id}>
                 <td>{reservation.name}</td>
                 <td>{reservation.city}</td>
                 <td>{reservation.email}</td>

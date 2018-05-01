@@ -49,7 +49,7 @@ function deleteReservation(id) {
 
 function getAllReservations() {
     const query = "SELECT reservations.*, watchmakers.name AS w_name, watchmakers.city AS w_city, watchmakers.rating as w_rating" +
-        " FROM reservations LEFT JOIN watchmakers ON reservations.watchmaker_id = watchmakers.id";
+        " FROM reservations LEFT JOIN watchmakers ON reservations.watchmaker_id = watchmakers.id ORDER BY date DESC";
     return new Promise((resolve, reject) => {
         pool.query(query, (err, results) => {
             if (err) {
