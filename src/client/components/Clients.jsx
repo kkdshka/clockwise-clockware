@@ -3,6 +3,7 @@ import Navigation from './AdminNavigation.jsx';
 import restApiClient from '../restApiClient/index';
 import Modal from 'react-bootstrap4-modal';
 import validation from "../validation";
+import strings from '../localization.js';
 
 export default class Clients extends React.Component {
     constructor(props) {
@@ -19,6 +20,10 @@ export default class Clients extends React.Component {
             formError: false,
             editing: {},
         };
+    }
+
+    componentWillMount() {
+        strings.setLanguage(this.props.language);
     }
 
     componentDidMount() {
@@ -107,7 +112,7 @@ export default class Clients extends React.Component {
         const {formError} = this.state;
 
         if (formError) {
-            return <div className="alert alert-danger">Заполните поля</div>
+            return <div className="alert alert-danger">{strings.fillFields}</div>
         }
     }
 
@@ -151,31 +156,31 @@ export default class Clients extends React.Component {
         if (isModalCreateOpened) {
             return <Modal visible={true} onClickBackdrop={this.hideModalCreate}>
                 <div className="modal-header">
-                    <h4 className="modal-title">Добавить клиента</h4>
+                    <h4 className="modal-title">{strings.addClient}</h4>
                 </div>
                 <div className="modal-body">
                     <form>
                         {this.renderFormError()}
                         <div className="form-group">
-                            <label htmlFor="add-name">Имя:</label>
+                            <label htmlFor="add-name">{strings.name + ":"}</label>
                             <input type="text" className="form-control" id="add-name" ref="addName"
-                                   onBlur={this.handleValidation('name', 'Имя не может быть короче трех букв')}/>
+                                   onBlur={this.handleValidation('name', strings.nameWarning)}/>
                             <div className="invalid-feedback">{validationResult.name.message}</div>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="add-email">Email:</label>
+                            <label htmlFor="add-email">{strings.email + ":"}</label>
                             <input type="text" className="form-control" id="add-email" ref="addEmail"
-                                   onBlur={this.handleValidation('email', 'Введите правильный почтовый адрес')}/>
+                                   onBlur={this.handleValidation('email', strings.emailWarning)}/>
                             <div className="invalid-feedback">{validationResult.email.message}</div>
                         </div>
                     </form>
                 </div>
                 <div className="modal-footer">
                     <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitAdd}>
-                        Принять
+                        {strings.confirm}
                     </button>
                     <button type="button" className="btn float-right" onClick={this.hideModalCreate}>
-                        Закрыть
+                        {strings.close}
                     </button>
                 </div>
             </Modal>
@@ -200,51 +205,56 @@ export default class Clients extends React.Component {
         if (isModalUpdateOpened) {
             return <Modal visible={true} onClickBackdrop={this.hideModalUpdate}>
                 <div className="modal-header">
-                    <h4 className="modal-title">Изменить клиента</h4>
+                    <h4 className="modal-title">{strings.editClient}</h4>
                 </div>
                 <div className="modal-body">
                     <form>
                         {this.renderFormError()}
                         <div className="form-group">
-                            <label htmlFor="edit-name">Имя:</label>
+                            <label htmlFor="edit-name">{strings.name + ":"}</label>
                             <input type="text" className="form-control" id="edit-name" ref="editName"
                                    defaultValue={name}
-                                   onBlur={this.handleValidation('name', 'Имя не может быть короче трех букв')}/>
+                                   onBlur={this.handleValidation('name', strings.nameWarning)}/>
                             <div className="invalid-feedback">{validationResult.name.message}</div>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="edit-email">Email:</label>
+                            <label htmlFor="edit-email">{strings.email + ":"}</label>
                             <input type="text" className="form-control" id="edit-email" ref="editEmail"
                                    defaultValue={email}
-                                   onBlur={this.handleValidation('email', 'Введите правильный почтовый адрес')}/>
+                                   onBlur={this.handleValidation('email', strings.emailWarning)}/>
                             <div className="invalid-feedback">{validationResult.email.message}</div>
                         </div>
                     </form>
                 </div>
                 <div className="modal-footer">
                     <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitEdit}>
-                        Принять
+                        {strings.confirm}
                     </button>
-                    <button type="button" className="btn float-right" onClick={this.hideModalUpdate}>Закрыть</button>
+                    <button type="button" className="btn float-right"
+                            onClick={this.hideModalUpdate}>{strings.close}</button>
                 </div>
             </Modal>
         }
     }
 
+    update = () => {
+        this.forceUpdate();
+    };
+
     render() {
         return <div className="container">
             <div className="row">
                 <div className="col-sm">
-                    <Navigation active="clients"/>
+                    <Navigation active="clients" update={this.update} language={this.props.language}/>
                 </div>
             </div>
             <div className="row mt-4">
                 <div className="col-md-6">
-                    <h4 className="row justify-content-md-center">Клиенты</h4>
+                    <h4 className="row justify-content-md-center">{strings.clients}</h4>
                     <table className="table table-striped">
                         <thead>
                         <tr>
-                            <th>Имя</th>
+                            <th>{strings.name}</th>
                             <th>Email</th>
                             <th/>
                             <th/>
@@ -255,7 +265,7 @@ export default class Clients extends React.Component {
                         </tbody>
                     </table>
                     <button className="btn btn-success" onClick={this.openModalCreate}>
-                        <i className="fa fa-plus"/> Добавить
+                        <i className="fa fa-plus"/> {strings.add}
                     </button>
                 </div>
                 <div className="col-md-6">

@@ -9,13 +9,13 @@ class FreeWatchmakers {
     }
 
     get repairingTime() {
-        if (this.size === 'Маленькие') {
+        if (this.size === 'small') {
             return new Date("1970-01-01T01:00");
         }
-        else if (this.size === 'Средние') {
+        else if (this.size === 'medium') {
             return new Date("1970-01-01T02:00");
         }
-        else if (this.size === 'Большие') {
+        else if (this.size === 'large') {
             return new Date("1970-01-01T03:00");
         }
     }

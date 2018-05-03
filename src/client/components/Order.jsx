@@ -1,6 +1,7 @@
 import React from 'react';
 import restApiClient from '../restApiClient/index';
 import Modal from 'react-bootstrap4-modal';
+import strings from '../localization.js';
 
 const validation = require('../validation');
 
@@ -68,14 +69,14 @@ export default class Order extends React.Component {
         const {formError} = this.state;
 
         if (formError) {
-            return <div className="alert alert-danger">Заполните поля</div>
+            return <div className="alert alert-danger">{strings.fillFields}</div>
         }
     }
 
     renderChooseWatchmakersError() {
         const {selectWatchmakerError} = this.state;
         if (selectWatchmakerError) {
-            return <div className="alert alert-danger">Выберите мастера</div>
+            return <div className="alert alert-danger">{strings.chooseWatchmaker}</div>
         }
     }
 
@@ -152,10 +153,7 @@ export default class Order extends React.Component {
         if (confirmation === 'opened') {
             return (
                 <div className="alert alert-success">
-                    <h5>
-                        Ваш заказ принят.
-                        Подтверждение отправлено на почту: {email}
-                    </h5>
+                    <h5>{strings.confirmationMessage + ": " + email}</h5>
                 </div>
             )
         }
@@ -209,14 +207,14 @@ export default class Order extends React.Component {
         const {freeWatchmakers} = this.state;
 
         if (freeWatchmakers.length === 0) {
-            return (<h5>Свободных мастеров на ваше время нет</h5>);
+            return (<h5>{strings.noWatchmakersMessage}</h5>);
         }
         return <table className="table table-striped table-hover">
             <thead>
             <tr>
-                <th>Имя</th>
-                <th>Город</th>
-                <th>Рейтинг</th>
+                <th>{strings.name}</th>
+                <th>{strings.city}</th>
+                <th>{strings.rating}</th>
             </tr>
             </thead>
             <tbody>
@@ -231,7 +229,7 @@ export default class Order extends React.Component {
         return <Modal visible={isModalOpened} onClickBackdrop={this.hideModal}>
             <div className="modal-header">
                 {this.renderChooseWatchmakersError()}
-                <h5 className="modal-title">Выберите мастера:</h5>
+                <h5 className="modal-title">{strings.chooseWatchmaker + ":"}</h5>
             </div>
             <div className="modal-body">
                 <form>
@@ -241,9 +239,9 @@ export default class Order extends React.Component {
             <div className="modal-footer">
                 <button id="submit-watchmaker" className="btn btn-primary" onClick={this.handleOnSubmitWatchmaker}
                         disabled={freeWatchmakers.length === 0}>
-                    Принять
+                    {strings.confirm}
                 </button>
-                <button type="button" className="btn float-right" onClick={this.hideModal}>Закрыть</button>
+                <button type="button" className="btn float-right" onClick={this.hideModal}>{strings.close}</button>
             </div>
         </Modal>
     }
@@ -270,57 +268,58 @@ export default class Order extends React.Component {
                     {this.renderChooseWatchmakers()}
                     <form className="custom-form">
                         <div className="form-group row">
-                            <label className="col-4 col-form-label" htmlFor="name">Имя:</label>
+                            <label className="col-4 col-form-label" htmlFor="name">{strings.name + ":"}</label>
                             <div className="col-sm-8">
                                 <input type="text" className="form-control " id="name" ref="name"
-                                       onBlur={this.handleValidation('name', 'Имя не может быть короче трех букв')}/>
+                                       onBlur={this.handleValidation('name', strings.nameWarning)}/>
                                 <div className="invalid-feedback">{name.message}</div>
                             </div>
                         </div>
                         <div className="form-group row">
-                            <label className="col-4 col-form-label" htmlFor="name">Email:</label>
+                            <label className="col-4 col-form-label" htmlFor="name">{strings.email + ":"}</label>
                             <div className="col-sm-8">
                                 <input type="text" className="form-control" id="email" ref="email"
-                                       onBlur={this.handleValidation('email', 'Введите правильный почтовый адрес')}/>
+                                       onBlur={this.handleValidation('email', strings.emailWarning)}/>
                                 <div className="invalid-feedback">{email.message}</div>
                             </div>
                         </div>
                         <div className="form-group row">
-                            <label className="col-4 col-form-label" htmlFor="city">Город:</label>
+                            <label className="col-4 col-form-label" htmlFor="city">{strings.city + ":"}</label>
                             <div className="col-sm-8">
                                 <select className="form-control" id="city"
                                         ref="city">{this.renderCities()}</select>
                             </div>
                         </div>
                         <div className="form-group row">
-                            <label className="col-4 col-form-label" htmlFor="clock-size">Размер часов:</label>
+                            <label className="col-4 col-form-label"
+                                   htmlFor="clock-size">{strings.clockSize + ":"}</label>
                             <div className="col-sm-8">
                                 <select className="form-control" id="clock-size" ref="clockSize">
-                                    <option>Маленькие</option>
-                                    <option>Средние</option>
-                                    <option>Большие</option>
+                                    <option value="small">{strings.small}</option>
+                                    <option value="medium">{strings.medium}</option>
+                                    <option value="large">{strings.large}</option>
                                 </select>
                             </div>
                         </div>
                         <div className="form-group row">
-                            <label className="col-4 col-form-label" htmlFor="date">Дата:</label>
+                            <label className="col-4 col-form-label" htmlFor="date">{strings.date + ":"}</label>
                             <div className="col-sm-8">
                                 <input type="date" min={this.minDate()} className="form-control" id="date" ref="date"
-                                       onBlur={this.handleValidation('date', 'Введите дату с сегодняшней')}/>
+                                       onBlur={this.handleValidation('date', strings.dateWarning)}/>
                                 <div className="invalid-feedback">{date.message}</div>
                             </div>
                         </div>
                         <div className="form-group row">
-                            <label className="col-4 col-form-label" htmlFor="time">Время:</label>
+                            <label className="col-4 col-form-label" htmlFor="time">{strings.time + ":"}</label>
                             <div className="col-sm-8">
                                 <input type="time" min="09:00" max="18:00" step={60 * 60} //one hour
                                        className="form-control" id="time" ref="time"
-                                       onBlur={this.handleValidation('time', 'Выберите время с 9:00 до 18:00 или если выбрана сегодняшняя дата - позже текущего времени')}/>
+                                       onBlur={this.handleValidation('time', strings.timeWarning)}/>
                                 <div className="invalid-feedback">{time.message}</div>
                             </div>
                         </div>
                         <button className="btn btn-primary"
-                                onClick={this.handleOnSubmitForm}>Принять
+                                onClick={this.handleOnSubmitForm}>{strings.confirm}
                         </button>
                     </form>
                 </div>

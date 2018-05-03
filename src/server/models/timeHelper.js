@@ -6,13 +6,14 @@ function pad(number) {
 }
 
 function getRepairingTime(clock_size) {
-    if (clock_size === 'Маленькие') {
+    console.log(clock_size);
+    if (clock_size === 'small') {
         return new Date("1970-01-01T01:00");
     }
-    else if (clock_size === 'Средние') {
+    else if (clock_size === 'medium') {
         return new Date("1970-01-01T02:00");
     }
-    else if (clock_size === 'Большие') {
+    else if (clock_size === 'large') {
         return new Date("1970-01-01T03:00");
     }
 }

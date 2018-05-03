@@ -3,6 +3,7 @@ import Navigation from './AdminNavigation.jsx';
 import restApiClient from '../restApiClient/index';
 import validation from '../validation.js';
 import Modal from 'react-bootstrap4-modal';
+import strings from '../localization.js';
 
 export default class Reservations extends React.Component {
     constructor(props) {
@@ -22,6 +23,10 @@ export default class Reservations extends React.Component {
             formError: false,
             editing: {},
         };
+    }
+
+    componentWillMount() {
+        strings.setLanguage(this.props.language);
     }
 
     componentDidMount() {
@@ -135,7 +140,6 @@ export default class Reservations extends React.Component {
     };
 
     dateToString(date) {
-        // console.log(date);
         const newDate = new Date(date);
         return newDate.toLocaleDateString();
     }
@@ -143,7 +147,7 @@ export default class Reservations extends React.Component {
     renderFormError() {
         const {formError} = this.state;
         if (formError) {
-            return <div className="alert alert-danger">Заполните поля</div>
+            return <div className="alert alert-danger">{strings.fillFields}</div>
         }
     }
 
@@ -160,7 +164,7 @@ export default class Reservations extends React.Component {
                 <td>{reservation.name}</td>
                 <td>{reservation.city}</td>
                 <td>{reservation.email}</td>
-                <td>{reservation.clockSize}</td>
+                <td>{strings[reservation.clockSize]}</td>
                 <td>{this.dateToString(reservation.date)}</td>
                 <td>{reservation.time}</td>
                 <td>{reservation.watchmaker.name}</td>
@@ -214,52 +218,52 @@ export default class Reservations extends React.Component {
         if (isModalCreateOpened) {
             return <Modal visible={true} onClickBackdrop={this.hideModalCreate}>
                 <div className="modal-header">
-                    <h4 className="modal-title">Добавить заказ</h4>
+                    <h4 className="modal-title">{strings.addReservation}</h4>
                 </div>
                 <div className="modal-body">
                     <form>
                         {this.renderFormError()}
                         <div className="form-group">
-                            <label htmlFor="add-name">Имя:</label>
+                            <label htmlFor="add-name">{strings.name + ":"}</label>
                             <input type="text" className="form-control" id="add-name" ref="addName"
-                                   onBlur={this.handleValidation('name', 'Имя не может быть короче трех букв')}/>
+                                   onBlur={this.handleValidation('name', strings.nameWarning)}/>
                             <div className="invalid-feedback">{name.message}</div>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="add-email">Email:</label>
+                            <label htmlFor="add-email">{strings.email}</label>
                             <input type="text" className="form-control" id="add-email" ref="addEmail"
-                                   onBlur={this.handleValidation('email', 'Введите правильный почтовый адрес')}/>
+                                   onBlur={this.handleValidation('email', strings.emailWarning)}/>
                             <div className="invalid-feedback">{email.message}</div>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="add-city">Город:</label>
+                            <label htmlFor="add-city">{strings.city + ":"}</label>
                             <select className="form-control" id="add-city" ref="addCity">
                                 {this.renderCities()}
                             </select>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="add-clock-size">Размер часов:</label>
+                            <label htmlFor="add-clock-size">{strings.clockSize + ":"}</label>
                             <select className="form-control" id="add-clock-size" ref="addClockSize">
-                                <option>Маленькие</option>
-                                <option>Средние</option>
-                                <option>Большие</option>
+                                <option value="small">{strings.small}</option>
+                                <option value="medium">{strings.medium}</option>
+                                <option value="large">{strings.large}</option>
                             </select>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="add-date">Дата:</label>
+                            <label htmlFor="add-date">{strings.date}</label>
                             <input type="date" className="form-control" id="add-date" ref="addDate"
-                                   onBlur={this.handleValidation('date', 'Введите дату с сегодняшней')}/>
+                                   onBlur={this.handleValidation('date', strings.dateWarning)}/>
                             <div className="invalid-feedback">{date.message}</div>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="add-time">Время:</label>
+                            <label htmlFor="add-time">{strings.time}</label>
                             <input type="time" min="09:00" max="18:00" step={60 * 60} className="form-control"
                                    id="add-time" ref="addTime"
-                                   onBlur={this.handleValidation('time', 'Выберите время с 9:00 до 18:00 или если выбрана сегодняшняя дата - позже текущего времени')}/>
+                                   onBlur={this.handleValidation('time', strings.timeWarning)}/>
                             <div className="invalid-feedback">{time.message}</div>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="add-watchmaker">Мастер:</label>
+                            <label htmlFor="add-watchmaker">{strings.watchmaker}</label>
                             <select className="form-control" id="add-watchmaker" ref="addWatchmakerId">
                                 {this.renderWatchmakers()}
                             </select>
@@ -268,10 +272,10 @@ export default class Reservations extends React.Component {
                 </div>
                 <div className="modal-footer">
                     <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitAdd}>
-                        Принять
+                        {strings.confirm}
                     </button>
                     <button type="button" className="btn float-right" onClick={this.hideModalCreate}>
-                        Закрыть
+                        {strings.close}
                     </button>
                 </div>
             </Modal>
@@ -296,58 +300,58 @@ export default class Reservations extends React.Component {
         if (isModalUpdateOpened) {
             return <Modal visible={true} onClickBackdrop={this.hideModalUpdate}>
                 <div className="modal-header">
-                    <h4 className="modal-title">Изменить заказ</h4>
+                    <h4 className="modal-title">{strings.editReservation}</h4>
                 </div>
                 <div className="modal-body">
                     <form>
                         {this.renderFormError()}
                         <div className="form-group">
-                            <label htmlFor="edit-name">Имя:</label>
+                            <label htmlFor="edit-name">{strings.name + ":"}</label>
                             <input type="text" className="form-control" id="edit-name" ref="editName"
                                    defaultValue={name}
-                                   onBlur={this.handleValidation('name', 'Имя не может быть короче трех букв')}/>
+                                   onBlur={this.handleValidation('name', strings.nameWarning)}/>
                             <div className="invalid-feedback">{validationResult.name.message}</div>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="edit-name">Email:</label>
+                            <label htmlFor="edit-name">{strings.email + ":"}</label>
                             <input type="text" className="form-control" id="edit-email" ref="editEmail"
                                    defaultValue={email}
-                                   onBlur={this.handleValidation('email', 'Введите правильный почтовый адрес')}/>
+                                   onBlur={this.handleValidation('email', strings.emailWarning)}/>
                             <div className="invalid-feedback">{validationResult.email.message}</div>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="edit-city">Город:</label>
+                            <label htmlFor="edit-city">{strings.city}</label>
                             <select className="form-control" id="edit-city" ref="editCity"
                                     defaultValue={city}>
                                 {this.renderCities()}
                             </select>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="edit-clock-size">Размер часов:</label>
+                            <label htmlFor="edit-clock-size">{strings.clockSize + ":"}</label>
                             <select className="form-control" id="edit-clock-size" ref="editClockSize"
                                     defaultValue={clockSize}>
-                                <option>Маленькие</option>
-                                <option>Средние</option>
-                                <option>Большие</option>
+                                <option value="small">{strings.small}</option>
+                                <option value="medium">{strings.medium}</option>
+                                <option value="large">{strings.large}</option>
                             </select>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="edit-date">Дата:</label>
+                            <label htmlFor="edit-date">{strings.date + ":"}</label>
                             <input type="date" className="form-control" id="edit-date" ref="editDate"
                                    defaultValue={this.dateToString(date)}
-                                   onBlur={this.handleValidation('date', 'Введите дату с сегодняшней')}/>
+                                   onBlur={this.handleValidation('date', strings.dateWarning)}/>
                             <div className="invalid-feedback">{validationResult.date.message}</div>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="edit-time">Время:</label>
+                            <label htmlFor="edit-time">{strings.time + ":"}</label>
                             <input type="time" min="09:00" max="18:00" step={60 * 60} className="form-control"
                                    id="edit-time"
                                    ref="editTime" defaultValue={time}
-                                   onBlur={this.handleValidation('time', 'Выберите время с 9:00 до 18:00 или если выбрана сегодняшняя дата - позже текущего времени')}/>
+                                   onBlur={this.handleValidation('time', strings.timeWarning)}/>
                             <div className="invalid-feedback">{validationResult.time.message}</div>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="edit-watchmaker">Мастер:</label>
+                            <label htmlFor="edit-watchmaker">{strings.watchmaker + ":"}</label>
                             <select className="form-control" id="edit-watchmaker" ref="editWatchmakerId">
                                 {this.renderWatchmakers()}
                             </select>
@@ -356,34 +360,39 @@ export default class Reservations extends React.Component {
                 </div>
                 <div className="modal-footer">
                     <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitEdit}>
-                        Принять
+                        {strings.confirm}
                     </button>
-                    <button type="button" className="btn float-right" onClick={this.hideModalUpdate}>Закрыть</button>
+                    <button type="button" className="btn float-right"
+                            onClick={this.hideModalUpdate}>{strings.close}</button>
                 </div>
             </Modal>
         }
     }
 
+    update = () => {
+        this.forceUpdate();
+    };
+
     render() {
         return <div className="container">
             <div className="row">
                 <div className="col">
-                    <Navigation active="reservations"/>
+                    <Navigation active="reservations" update={this.update} language={this.props.language}/>
                 </div>
             </div>
             <div className="row mt-4">
                 <div className="col">
-                    <h4 className="row justify-content-md-center">Бронирования</h4>
+                    <h4 className="row justify-content-md-center">{strings.reservations}</h4>
                     <table className="table table-striped">
                         <thead>
                         <tr>
-                            <th>Имя</th>
-                            <th>Город</th>
-                            <th>Email</th>
-                            <th>Размер часов</th>
-                            <th>Дата</th>
-                            <th>Время</th>
-                            <th>Мастер</th>
+                            <th>{strings.name}</th>
+                            <th>{strings.city}</th>
+                            <th>{strings.email}</th>
+                            <th>{strings.clockSize}</th>
+                            <th>{strings.date}</th>
+                            <th>{strings.time}</th>
+                            <th>{strings.watchmaker}</th>
                             <th/>
                             <th/>
                         </tr>
@@ -393,7 +402,7 @@ export default class Reservations extends React.Component {
                         </tbody>
                     </table>
                     <button className="btn btn-success" onClick={this.openModalCreate}>
-                        <i className="fa fa-plus"/> Добавить
+                        <i className="fa fa-plus"/> {strings.add}
                     </button>
                 </div>
             </div>

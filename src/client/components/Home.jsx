@@ -1,27 +1,33 @@
 import React from 'react';
 import Order from './Order.jsx';
-import Navigation from './Navigation.jsx';
+import Localization from './Localization.jsx';
+import strings from '../localization.js';
 
 export default class Home extends React.Component {
     componentWillMount() {
         document.body.classList.add("customer-form");
+        strings.setLanguage(this.props.language);
     }
 
     componentWillUnmount() {
         document.body.classList.remove("customer-form");
     }
 
+    update = () => {
+        this.forceUpdate();
+    };
+
     render() {
         return <div>
             <div className="custom-header">
                 <div className="container">
                     <div className="row">
-                        <div className="col-12">
-                            <h6>
-                                <p className="h5 text-center"><em>Clockwise Clockware</em></p>
-                                <p>Мы занимается ремонтом напольных часов с выездом на дом к клиентам.</p>
-                                Оставьте заявку на ремонт и ожидайте мастера на выбранное время.
-                            </h6>
+                        <div className="col-10">
+                            <h4 className="text-center"><em>Clockwise Clockware</em></h4>
+                            <h5>{strings.header}</h5>
+                        </div>
+                        <div className="col-1 align-self-center">
+                            <Localization update={this.update} color="outline-secondary"/>
                         </div>
                     </div>
                 </div>
@@ -30,9 +36,9 @@ export default class Home extends React.Component {
             <footer className="footer">
                 <div className="container">
                     <div className="row">
-                        <div className="col-12">
+                        <div className="col-10">
                             <div className="text-center">
-                                Свяжитесь с нами: <i className="fa fa-envelope-o"/> cklockware@gmail.com
+                                {strings.contactUs + ": "}<i className="fa fa-envelope-o"/> cklockware@gmail.com
                             </div>
                         </div>
                     </div>

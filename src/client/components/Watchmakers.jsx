@@ -3,6 +3,7 @@ import Navigation from './AdminNavigation.jsx';
 import restApiClient from '../restApiClient/index';
 import Modal from 'react-bootstrap4-modal';
 import validation from '../validation';
+import strings from '../localization.js';
 
 export default class Watchmakers extends Component {
     constructor(props) {
@@ -28,10 +29,14 @@ export default class Watchmakers extends Component {
             event.currentTarget.className = 'form-control form-control-sm is-valid';
         }
         else {
-            this.setState({name: {isValid: false, message: "Имя не может быть пустым"}});
+            this.setState({name: {isValid: false, message: strings.notEmptyNameWarning}});
             event.currentTarget.className = 'form-control form-control-sm is-invalid';
         }
     };
+
+    componentWillMount() {
+        strings.setLanguage(this.props.language);
+    }
 
     componentDidMount() {
         restApiClient.getWatchmakers()
@@ -131,7 +136,7 @@ export default class Watchmakers extends Component {
         const {formError} = this.state;
 
         if (formError) {
-            return <div className="alert alert-danger">Заполните поля</div>
+            return <div className="alert alert-danger">}{strings.fillFields}</div>
         }
     }
 
@@ -153,25 +158,25 @@ export default class Watchmakers extends Component {
         if (isModalCreateOpened) {
             return <Modal visible={true} onClickBackdrop={this.hideModalCreate}>
                 <div className="modal-header">
-                    <h4 className="modal-title">Добавить мастера</h4>
+                    <h4 className="modal-title">{strings.addWatchmaker}</h4>
                 </div>
                 <div className="modal-body">
                     <form>
                         {this.renderFormError()}
                         <div className="form-group">
-                            <label htmlFor="add-name">Имя:</label>
+                            <label htmlFor="add-name">{strings.name + ":"}</label>
                             <input type="text" className="form-control" id="add-name" ref="addName"
                                    onBlur={this.handleValidation}/>
                             <div className="invalid-feedback">{message}</div>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="add-city">Город:</label>
+                            <label htmlFor="add-city">{strings.city + ":"}</label>
                             <select className="form-control" id="add-city" ref="addCity">
                                 {this.renderCities()}
                             </select>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="add-rating">Рейтинг:</label>
+                            <label htmlFor="add-rating">{strings.rating + ":"}</label>
                             <select className="form-control" id="add-rating" ref="addRating">
                                 <option>1</option>
                                 <option>2</option>
@@ -184,10 +189,10 @@ export default class Watchmakers extends Component {
                 </div>
                 <div className="modal-footer">
                     <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitAdd}>
-                        Принять
+                        {strings.confirm}
                     </button>
                     <button type="button" className="btn float-right" onClick={this.hideModalCreate}>
-                        Закрыть
+                        {strings.close}
                     </button>
                 </div>
             </Modal>
@@ -212,27 +217,27 @@ export default class Watchmakers extends Component {
         if (isModalUpdateOpened) {
             return <Modal visible={true} onClickBackdrop={this.hideModalUpdate}>
                 <div className="modal-header">
-                    <h4 className="modal-title">Изменить мастера</h4>
+                    <h4 className="modal-title">{strings.editWatchmaker}</h4>
                 </div>
                 <div className="modal-body">
                     <form>
                         {this.renderFormError()}
                         <div className="form-group">
-                            <label htmlFor="edit-name">Имя:</label>
+                            <label htmlFor="edit-name">{strings.name + ":"}</label>
                             <input type="text" className="form-control" id="edit-name" ref="editName"
                                    defaultValue={name}
                                    onBlur={this.handleValidation}/>
                             <div className="invalid-feedback">{message}</div>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="edit-city">Город:</label>
+                            <label htmlFor="edit-city">{strings.city + ":"}</label>
                             <select className="form-control" id="edit-city" ref="editCity"
                                     defaultValue={city}>
                                 {this.renderCities()}
                             </select>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="edit-rating">Рейтинг:</label>
+                            <label htmlFor="edit-rating">{strings.rating + ":"}</label>
                             <select className="form-control" id="edit-rating" ref="editRating"
                                     defaultValue={rating}>
                                 <option>1</option>
@@ -246,32 +251,36 @@ export default class Watchmakers extends Component {
                 </div>
                 <div className="modal-footer">
                     <button type="button" className="btn btn-primary" onClick={this.handleOnSubmitEdit}>
-                        Принять
+                        {strings.confirm}
                     </button>
                     <button type="button" className="btn float-right" onClick={this.hideModalUpdate}>
-                        Закрыть
+                        {strings.close}
                     </button>
                 </div>
             </Modal>
         }
     }
 
+    update = () => {
+        this.forceUpdate();
+    };
+
     render() {
         return <div className="container">
             <div className="row">
                 <div className="col">
-                    <Navigation active="watchmakers"/>
+                    <Navigation active="watchmakers" update={this.update} language={this.props.language}/>
                 </div>
             </div>
             <div className="row mt-4">
                 <div className="col-md-4">
-                    <h4 className="row justify-content-md-center">Мастера</h4>
+                    <h4 className="row justify-content-md-center">{strings.watchmakers}</h4>
                     <table className="table table-striped">
                         <thead>
                         <tr>
-                            <th>Имя</th>
-                            <th>Город</th>
-                            <th>Рейтинг</th>
+                            <th>{strings.name}</th>
+                            <th>{strings.city}</th>
+                            <th>{strings.rating}</th>
                             <th/>
                             <th/>
                         </tr>
@@ -281,7 +290,7 @@ export default class Watchmakers extends Component {
                         </tbody>
                     </table>
                     <button className="btn btn-success" onClick={this.openModalCreate}>
-                        <i className="fa fa-plus"/> Добавить
+                        <i className="fa fa-plus"/> {strings.add}
                     </button>
                 </div>
                 <div className="col-md-4 ml-4">
