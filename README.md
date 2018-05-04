@@ -13,6 +13,8 @@ Also you will need MySQL CLI. Open it and create database _test_ and give permis
 create database test;
 grant all on test.* to 'admin'@'localhost' identified by 'passwordsecret';
 ```
+Open project folder and find the file example.env rename it to .env and enter all required parameters.
+
 Then run your CLI, _cd_ to your projects folder and use commands:
  
 ```sh
