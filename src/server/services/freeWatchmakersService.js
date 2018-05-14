@@ -5,7 +5,7 @@ class FreeWatchmakers {
         this.size = params.clockSize;
         this.date = params.date;
         this.startTime = params.time;
-        this.city = params.city;
+        this.city_id = params.cityId;
     }
 
     get repairingTime() {
@@ -32,7 +32,13 @@ class FreeWatchmakers {
     }
 
     get data() {
-        return [this.city, this.city, this.date, this.startTime, this.finishTime, this.finishTime, this.startTime, this.startTime, this.finishTime];
+        return {
+            city_id: this.city_id,
+            date: this.date,
+            start_time: this.startTime,
+            finish_time: this.finishTime
+        };
+        // return [this.city, this.city, this.date, this.startTime, this.finishTime, this.finishTime, this.startTime, this.startTime, this.finishTime];
     }
 }
 

@@ -4,7 +4,7 @@ const path = require('path');
 const reservationsRepository = require('../repositories/reservationsRepository');
 const sendEmail = require('../sender');
 const auth = require('../authenticationMiddleware');
-const getFinishTime = require('../models/timeHelper').getFinishTime;
+const getFinishTime = require('../services/timeHelper').getFinishTime;
 const validation = require('../validation');
 
 router.get('/', auth, function (req, res) {
@@ -15,6 +15,7 @@ router.get('/data', async function (req, res) {
     try {
         await reservationsRepository.getAll().then((models) => {
             res.json(models);
+            console.log(models);
         });
         res.status(200);
     }
@@ -27,13 +28,13 @@ router.get('/data', async function (req, res) {
 router.post('/', async function (req, res) {
     const reservationData = {
         name: req.body.name,
-        city: req.body.city,
+        city_id: req.body.cityId,
         email: req.body.email,
         clock_size: req.body.clockSize,
         date: req.body.date,
-        time: req.body.time,
+        start_time: req.body.time,
         watchmaker_id: req.body.watchmakerId,
-        end_time: getFinishTime(req.body.time, req.body.clockSize)
+        finish_time: getFinishTime(req.body.time, req.body.clockSize)
     };
 
     const errors = check(reservationData);
@@ -56,13 +57,13 @@ router.post('/', async function (req, res) {
 router.put('/', async function (req, res) {
     const reservationData = {
         name: req.body.name,
-        city: req.body.city,
+        city_id: req.body.cityId,
         email: req.body.email,
         clock_size: req.body.clockSize,
         date: req.body.date,
-        time: req.body.time,
+        start_time: req.body.time,
         watchmaker_id: req.body.watchmakerId,
-        end_time: getFinishTime(req.body.time, req.body.clockSize),
+        finish_time: getFinishTime(req.body.time, req.body.clockSize),
         id: req.body.id
     };
 
@@ -102,7 +103,7 @@ function check(reservationData) {
     if (!validation.isValidEmail(reservationData.email)) {
         errors.push('Invalid email');
     }
-    if (!validation.isValidTime(reservationData.time)) {
+    if (!validation.isValidTime(reservationData.start_time)) {
         errors.push('Invalid time');
     }
     if (!validation.isValidDate(reservationData.date)) {

@@ -87,7 +87,7 @@ export default class Order extends React.Component {
         const params = {
             params: {
                 name: name.value,
-                city: city.value,
+                cityId: city.value,
                 email: email.value,
                 clockSize: clockSize.value,
                 date: date.value,
@@ -130,7 +130,6 @@ export default class Order extends React.Component {
         restApiClient.addClient({
             name: name,
             email: email,
-            city: city
         });
 
         this.hideModal();
@@ -177,7 +176,6 @@ export default class Order extends React.Component {
             return <tr key={'watchmaker' + watchmaker.id} className={this.isActive(watchmaker.id)}
                        onClick={this.handleOnWatchmakerClick(watchmaker)}>
                 <td>{watchmaker.name}</td>
-                <td>{watchmaker.city}</td>
                 <td>{watchmaker.rating}</td>
             </tr>
         });
@@ -187,7 +185,7 @@ export default class Order extends React.Component {
         const {cities} = this.state;
 
         return cities.map(city => {
-            return <option key={'city' + city.id}>{city.name}</option>
+            return <option key={'city' + city.id} value={city.id}>{city.name}</option>
         });
     }
 
@@ -213,7 +211,6 @@ export default class Order extends React.Component {
             <thead>
             <tr>
                 <th>{strings.name}</th>
-                <th>{strings.city}</th>
                 <th>{strings.rating}</th>
             </tr>
             </thead>

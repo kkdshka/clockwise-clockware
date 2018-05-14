@@ -1,7 +1,7 @@
 const chai = require('chai');
 chai.should();
 
-const FreeWatchmakers = require('../src/server/models/freeWatchmakersService');
+const FreeWatchmakers = require('../src/server/services/freeWatchmakersService');
 
 describe('FreeWatchmakers', () => {
     describe('repairing time', () => {

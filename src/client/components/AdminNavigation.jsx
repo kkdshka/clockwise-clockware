@@ -20,7 +20,7 @@ export default class AdminNavigation extends React.Component {
         axios.get('/logout')
             .then(res => {
                 if (res.status === 200) {
-                    window.location.href = '/admin';
+                    window.location.href = '/login';
                 }
             });
     }

@@ -92,7 +92,7 @@ export default class Reservations extends React.Component {
 
         const data = {
             name: addName.value,
-            city: addCity.value,
+            cityId: addCity.value,
             email: addEmail.value,
             clockSize: addClockSize.value,
             date: addDate.value,
@@ -122,7 +122,7 @@ export default class Reservations extends React.Component {
 
         const data = {
             name: editName.value,
-            city: editCity.value,
+            cityId: editCity.value,
             email: editEmail.value,
             clockSize: editClockSize.value,
             date: editDate.value,
@@ -162,11 +162,11 @@ export default class Reservations extends React.Component {
             return <tr className={this.isToday(reservation.date) ? 'table-info' : ''}
                        key={'reservation' + reservation.id}>
                 <td>{reservation.name}</td>
-                <td>{reservation.city}</td>
+                <td>{reservation.city.name}</td>
                 <td>{reservation.email}</td>
-                <td>{strings[reservation.clockSize]}</td>
+                <td>{strings[reservation.clock_size]}</td>
                 <td>{this.dateToString(reservation.date)}</td>
-                <td>{reservation.time}</td>
+                <td>{reservation.start_time}</td>
                 <td>{reservation.watchmaker.name}</td>
                 <td>
                     <button type="button" className="btn btn-warning"
@@ -188,7 +188,7 @@ export default class Reservations extends React.Component {
         const {cities} = this.state;
 
         return cities.map(city => {
-            return <option key={'city' + city.id}>{city.name}</option>
+            return <option key={'city' + city.id} value={city.id}>{city.name}</option>
         });
     }
 

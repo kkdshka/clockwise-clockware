@@ -1,54 +1,25 @@
-const City = require('../models/cityModel');
-const pool = require('../database');
+const db = require('../models');
+const City = db.city;
 
 //city = {name, id}
 function addCity(city) {
-    return new Promise((resolve, reject) => {
-        pool.query("INSERT INTO cities SET ? ON DUPLICATE KEY UPDATE name = name", city, function (error, results) {
-            if (error)
-                return reject(error);
-            console.log('City added with id ' + results.insertId);
-            resolve();
-        });
-    });
+    return City.create(city);
 }
 
 function editCity(city) {
-    const sql = "UPDATE cities SET name = ? WHERE id = ?";
-    return new Promise((resolve, reject) => {
-        const data = [city.name, city.id];
-        pool.query(sql, data, function (error) {
-            if (error)
-                return reject(error);
-            console.log('City edited');
-            resolve();
-        });
-    });
+    return City.update(city);
 }
 
 function deleteCity(id) {
-    return new Promise((resolve, reject) => {
-        pool.query("DELETE FROM cities WHERE id = ?", id, function (error) {
-            if (error)
-                return reject(error);
-            console.log('City deleted');
-            resolve();
-        });
+    return City.destroy({
+        where: {
+            id: id
+        }
     });
 }
 
 function getAllCities() {
-    return new Promise((resolve, reject) => {
-        pool.query("SELECT * FROM cities", (error, results) => {
-            if (error) {
-                return reject(error);
-            }
-            const models = results.map((result) => {
-                return new City(result.name, result.id);
-            });
-            resolve(models);
-        });
-    });
+    return City.findAll();
 }
 
 module.exports = {

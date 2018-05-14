@@ -34,11 +34,9 @@ export default class Watchmakers extends Component {
         }
     };
 
-    componentWillMount() {
-        strings.setLanguage(this.props.language);
-    }
-
     componentDidMount() {
+        strings.setLanguage(this.props.language);
+
         restApiClient.getWatchmakers()
             .then(watchmakers => this.setState({watchmakers: watchmakers}));
 
@@ -70,7 +68,7 @@ export default class Watchmakers extends Component {
 
         const data = {
             name: addName.value,
-            city: addCity.value,
+            city_id: addCity.value,
             rating: addRating.value
         };
 
@@ -87,7 +85,7 @@ export default class Watchmakers extends Component {
         const {editName, editCity, editRating} = this.refs;
         const data = {
             name: editName.value,
-            city: editCity.value,
+            city_id: editCity.value,
             rating: editRating.value,
             id: id
         };
@@ -106,7 +104,7 @@ export default class Watchmakers extends Component {
         return watchmakers.map(watchmaker => {
             return <tr key={'watchmaker' + watchmaker.id}>
                 <td>{watchmaker.name}</td>
-                <td>{watchmaker.city}</td>
+                <td>{watchmaker.city.name}</td>
                 <td>{watchmaker.rating}</td>
                 <td>
                     <button type="button" className="btn btn-warning"
@@ -128,7 +126,7 @@ export default class Watchmakers extends Component {
         const {cities} = this.state;
 
         return cities.map(city => {
-            return <option key={'city' + city.id}>{city.name}</option>
+            return <option key={'city' + city.id} value={city.id}>{city.name}</option>
         });
     }
 

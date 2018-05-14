@@ -21,7 +21,8 @@ Then run your CLI, _cd_ to your projects folder and use commands:
 $ git clone git@github.com:kkdshka/clockwise-clockware.git
 $ cd clockwise-clockware/
 $ npm install
-$ node migration.js up
+$ npm run migration_up
+$ npm run seeds_up
 $ npm start
 ```
 Run another CLI, _cd_ to project folder and use commands:
