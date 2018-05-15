@@ -15,7 +15,6 @@ router.get('/data', async function (req, res) {
     try {
         await reservationsRepository.getAll().then((models) => {
             res.json(models);
-            console.log(models);
         });
         res.status(200);
     }

@@ -8,7 +8,11 @@ function addWatchmaker(watchmaker) {
 }
 
 function editWatchmaker(watchmaker) {
-    return Watchmaker.update(watchmaker);
+    return Watchmaker.update(watchmaker, {
+        where: {
+            id: watchmaker.id
+        }
+    });
 }
 
 function deleteWatchmaker(id) {

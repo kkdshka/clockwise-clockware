@@ -9,7 +9,11 @@ function addReservation(reservation) {
 }
 
 function editReservation(reservation) {
-    return Reservation.update(reservation);
+    return Reservation.update(reservation, {
+        where: {
+            id: reservation.id
+        }
+    });
 }
 
 function deleteReservation(id) {

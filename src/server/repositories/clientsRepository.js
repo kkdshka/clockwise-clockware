@@ -7,7 +7,11 @@ function addClient(client) {
 }
 
 function editClient(client) {
-    return Client.update(client);
+    return Client.update(client, {
+        where: {
+            id: client.id
+        }
+    });
 }
 
 function deleteClient(id) {

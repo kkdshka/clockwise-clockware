@@ -24,6 +24,6 @@ function deleteCity(id) {
 module.exports = {
     getCities: getCities,
     addCity: addCity,
-    edit: editCity,
+    editCity: editCity,
     deleteCity: deleteCity
 };

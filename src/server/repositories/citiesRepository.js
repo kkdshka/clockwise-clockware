@@ -7,7 +7,11 @@ function addCity(city) {
 }
 
 function editCity(city) {
-    return City.update(city);
+    return City.update(city, {
+        where: {
+            id: city.id
+        }
+    });
 }
 
 function deleteCity(id) {

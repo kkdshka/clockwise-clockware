@@ -38,7 +38,6 @@ class FreeWatchmakers {
             start_time: this.startTime,
             finish_time: this.finishTime
         };
-        // return [this.city, this.city, this.date, this.startTime, this.finishTime, this.finishTime, this.startTime, this.startTime, this.finishTime];
     }
 }
 

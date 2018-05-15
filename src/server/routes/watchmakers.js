@@ -13,7 +13,6 @@ router.get('/', auth, function (req, res) {
 router.get('/data', async function (req, res) {
     try {
         await watchmakersRepository.getAll().then((models) => {
-            console.log(models);
             res.status(200).json(models);
         });
     }
@@ -28,7 +27,6 @@ router.get('/free-watchmakers', async function (req, res) {
     try {
         await watchmakersRepository.getFreeWatchmakers(data)
             .then((models) => {
-                console.log(models);
                 res.status(200).json(models);
             });
     }

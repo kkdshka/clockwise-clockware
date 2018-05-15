@@ -27,7 +27,7 @@ export default class Login extends React.Component {
         })
             .then(res => {
                 if (res.status === 200) {
-                    window.location.href = "/";
+                    window.location.href = "/admin";
                 }
                 else if (res.status === 401) {
                     console.log('error');
