@@ -25,11 +25,11 @@ export default class Reservations extends React.Component {
         };
     }
 
-    componentWillMount() {
-        strings.setLanguage(this.props.language);
-    }
-
     componentDidMount() {
+        const {language} = this.props;
+
+        strings.setLanguage(language);
+
         restApiClient.getReservations()
             .then(reservations => this.setState({reservations: reservations}));
 
@@ -157,12 +157,13 @@ export default class Reservations extends React.Component {
 
     renderReservations() {
         const {reservations} = this.state;
+        const {cityTranslations} = this.props;
 
         return reservations.map(reservation => {
             return <tr className={this.isToday(reservation.date) ? 'table-info' : ''}
                        key={'reservation' + reservation.id}>
                 <td>{reservation.name}</td>
-                <td>{reservation.city.name}</td>
+                <td>{cityTranslations.getName(reservation.city_id)}</td>
                 <td>{reservation.email}</td>
                 <td>{strings[reservation.clock_size]}</td>
                 <td>{this.dateToString(reservation.date)}</td>
@@ -186,9 +187,10 @@ export default class Reservations extends React.Component {
 
     renderCities() {
         const {cities} = this.state;
+        const {cityTranslations} = this.props;
 
         return cities.map(city => {
-            return <option key={'city' + city.id} value={city.id}>{city.name}</option>
+            return <option key={'city' + city.id} value={city.id}>{cityTranslations.getName(city.id)}</option>
         });
     }
 
@@ -370,14 +372,19 @@ export default class Reservations extends React.Component {
     }
 
     update = () => {
+        restApiClient.getCities()
+            .then(cities => this.setState({cities}));
         this.forceUpdate();
     };
 
     render() {
+        const {cityTranslations, language} = this.props;
+
         return <div className="container">
             <div className="row">
                 <div className="col">
-                    <Navigation active="reservations" update={this.update} language={this.props.language}/>
+                    <Navigation active="reservations" update={this.update} language={language}
+                                cityTranslations={cityTranslations}/>
                 </div>
             </div>
             <div className="row mt-4">

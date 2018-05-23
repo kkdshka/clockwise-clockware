@@ -19,17 +19,16 @@ export default class Cities extends React.Component {
     }
 
     componentDidMount() {
-        strings.setLanguage(this.props.language);
         restApiClient.getCities()
             .then(cities => this.setState({cities: cities}));
+        strings.setLanguage(this.props.language);
     }
 
-    handleValidation = event => {
+    handleValidation = (fieldName) => event => {
         const {isModalCreateOpened} = this.state;
-
         const modalName = isModalCreateOpened ? 'add' : 'edit';
 
-        if (validation.isValidWatchmakerName(this.refs[modalName + "Name"].value)) {
+        if (validation.isValidName(this.refs[modalName + fieldName].value)) {
             this.setState({name: {isValid: true, message: ''}});
             event.currentTarget.className = 'form-control form-control-sm is-valid';
         }
@@ -53,6 +52,7 @@ export default class Cities extends React.Component {
 
     handleOnSubmitAdd = () => {
         const {name} = this.state;
+        const {cityTranslations} = this.props;
 
         if (!name.isValid) {
             this.setState({formError: true});
@@ -61,41 +61,54 @@ export default class Cities extends React.Component {
         this.setState({formError: false});
 
         const data = {
-            name: this.refs.addName.value,
+            name: this.refs.addEnName.value,
+            translations: [
+                {language: 'ru', name: this.refs.addRuName.value},
+                {language: 'en', name: this.refs.addEnName.value}
+            ]
         };
 
-        restApiClient.addCity(data);
+        restApiClient.addCity(data).then(() => {
+            cityTranslations.onCitiesChange();
+            restApiClient.getCities()
+                .then(cities => this.setState({cities: cities}));
+        }).catch(error => console.log(error));
 
-        restApiClient.getCities()
-            .then(cities => this.setState({cities: cities}));
 
         this.hideModalCreate();
     };
 
     handleOnSubmitEdit = () => {
         const {editing: {id}} = this.state;
+        const {cityTranslations} = this.props;
 
         const data = {
-            name: this.refs.editName.value,
-            id: id
+            name: this.refs.editEnName.value,
+            id: id,
+            translations: [
+                {id: cityTranslations.getId(id, 'ru'), language: 'ru', name: this.refs.editRuName.value, city_id: id},
+                {id: cityTranslations.getId(id, 'en'), language: 'en', name: this.refs.editEnName.value, city_id: id}
+            ]
         };
 
-        restApiClient.editCity(data)
-            .catch(error => console.log(error));
+        restApiClient.editCity(data).then(() => {
+            cityTranslations.onCitiesChange();
+            restApiClient.getCities()
+                .then(cities => this.setState({cities: cities}))
+                .catch(error => console.log(error));
+        }).catch(error => console.log(error));
 
-        restApiClient.getCities()
-            .then(cities => this.setState({cities: cities}))
-            .catch(error => console.log(error));
 
         this.hideModalUpdate();
     };
 
     renderCities() {
         const {cities} = this.state;
+        const {cityTranslations} = this.props;
 
         return cities.map(city => {
             return <tr key={'city' + city.id}>
-                <td>{city.name}</td>
+                <td>{cityTranslations.getName(city.id)}</td>
                 <td>
                     <button type="button" className="btn btn-warning" onClick={this.handleOnEditClick(city)}>
                         <i className="fa fa-pencil"/>
@@ -142,9 +155,15 @@ export default class Cities extends React.Component {
                     <form>
                         {this.renderFormError()}
                         <div className="form-group">
-                            <label htmlFor="add-name">{strings.name + ":"}</label>
-                            <input type="text" className="form-control" id="add-name" ref="addName"
-                                   onBlur={this.handleValidation}/>
+                            <label htmlFor="add-en-name">{strings.enName + ":"}</label>
+                            <input type="text" className="form-control" id="add-en-name" ref="addEnName"
+                                   onBlur={this.handleValidation('EnName')}/>
+                            <div className="invalid-feedback">{message}</div>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="add-ru-name">{strings.ruName + ":"}</label>
+                            <input type="text" className="form-control" id="add-ru-name" ref="addRuName"
+                                   onBlur={this.handleValidation('RuName')}/>
                             <div className="invalid-feedback">{message}</div>
                         </div>
                     </form>
@@ -173,7 +192,8 @@ export default class Cities extends React.Component {
     };
 
     renderModalUpdate() {
-        const {isModalUpdateOpened, editing: {name}, name: {message}} = this.state;
+        const {isModalUpdateOpened, editing, name: {message}} = this.state;
+        const {cityTranslations} = this.props;
 
         if (isModalUpdateOpened) {
             return <Modal visible={true} onClickBackdrop={this.hideModalUpdate}>
@@ -184,10 +204,17 @@ export default class Cities extends React.Component {
                     <form>
                         {this.renderFormError()}
                         <div className="form-group">
-                            <label htmlFor="edit-name">{strings.name + ":"}</label>
-                            <input type="text" className="form-control" id="edit-name" ref="editName"
-                                   defaultValue={name}
-                                   onBlur={this.handleValidation}/>
+                            <label htmlFor="edit-en-name">{strings.enName + ":"}</label>
+                            <input type="text" className="form-control" id="edit-en-name" ref="editEnName"
+                                   defaultValue={cityTranslations.getTranslation(editing.id, 'en')}
+                                   onBlur={this.handleValidation('EnName')}/>
+                            <div className="invalid-feedback">{message}</div>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="edit-ru-name">{strings.ruName + ":"}</label>
+                            <input type="text" className="form-control" id="edit-ru-name" ref="editRuName"
+                                   defaultValue={cityTranslations.getTranslation(editing.id, 'ru')}
+                                   onBlur={this.handleValidation('RuName')}/>
                             <div className="invalid-feedback">{message}</div>
                         </div>
                     </form>
@@ -203,14 +230,21 @@ export default class Cities extends React.Component {
     }
 
     update = () => {
+        restApiClient.getCities(strings.getLanguage())
+            .then(cities => {
+                this.setState({cities: cities})
+            });
         this.forceUpdate();
     };
 
     render() {
+        const {cityTranslations, language} = this.props;
+
         return <div className="container">
             <div className="row">
                 <div className="col">
-                    <Navigation active="cities" update={this.update} language={this.props.language}/>
+                    <Navigation active="cities" update={this.update} language={language}
+                                cityTranslations={cityTranslations}/>
                 </div>
             </div>
             <div className="row mt-4">

@@ -35,7 +35,8 @@ export default class Watchmakers extends Component {
     };
 
     componentDidMount() {
-        strings.setLanguage(this.props.language);
+        const {language} = this.props;
+        strings.setLanguage(language);
 
         restApiClient.getWatchmakers()
             .then(watchmakers => this.setState({watchmakers: watchmakers}));
@@ -100,11 +101,12 @@ export default class Watchmakers extends Component {
 
     renderWatchmakers() {
         const {watchmakers} = this.state;
+        const {cityTranslations} = this.props;
 
         return watchmakers.map(watchmaker => {
             return <tr key={'watchmaker' + watchmaker.id}>
                 <td>{watchmaker.name}</td>
-                <td>{watchmaker.city.name}</td>
+                <td>{cityTranslations.getName(watchmaker.city_id)}</td>
                 <td>{watchmaker.rating}</td>
                 <td>
                     <button type="button" className="btn btn-warning"
@@ -124,9 +126,10 @@ export default class Watchmakers extends Component {
 
     renderCities() {
         const {cities} = this.state;
+        const {cityTranslations} = this.props;
 
         return cities.map(city => {
-            return <option key={'city' + city.id} value={city.id}>{city.name}</option>
+            return <option key={'city' + city.id} value={city.id}>{cityTranslations.getName(city.id)}</option>
         });
     }
 
@@ -260,14 +263,19 @@ export default class Watchmakers extends Component {
     }
 
     update = () => {
+        restApiClient.getCities(strings.getLanguage())
+            .then(cities => this.setState({cities}));
         this.forceUpdate();
     };
 
     render() {
+        const {cityTranslations, language} = this.props;
+
         return <div className="container">
             <div className="row">
                 <div className="col">
-                    <Navigation active="watchmakers" update={this.update} language={this.props.language}/>
+                    <Navigation active="watchmakers" update={this.update} language={language}
+                                cityTranslations={cityTranslations}/>
                 </div>
             </div>
             <div className="row mt-4">

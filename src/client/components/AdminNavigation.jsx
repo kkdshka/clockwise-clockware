@@ -5,7 +5,7 @@ import Localization from './Localization.jsx';
 import strings from '../localization.js';
 
 export default class AdminNavigation extends React.Component {
-    componentWillMount() {
+    componentDidMount() {
         strings.setLanguage(this.props.language);
     }
 
@@ -26,6 +26,8 @@ export default class AdminNavigation extends React.Component {
     }
 
     render() {
+        const {update, cityTranslations} = this.props;
+
         return (
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
                 <ul className="navbar-nav">
@@ -52,7 +54,7 @@ export default class AdminNavigation extends React.Component {
                 </ul>
                 <ul className="navbar-nav ml-auto">
                     <li className={"nav-item"}>
-                        <Localization update={this.props.update} color="secondary"/>
+                        <Localization update={update} cityTranslations={cityTranslations} color="secondary"/>
                     </li>
                 </ul>
             </nav>

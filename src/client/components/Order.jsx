@@ -29,7 +29,6 @@ export default class Order extends React.Component {
     componentDidMount() {
         restApiClient.getCities()
             .then(cities => this.setState({cities: cities}));
-
     }
 
     validator(fieldName, element, message) {
@@ -110,7 +109,7 @@ export default class Order extends React.Component {
     };
 
     handleOnSubmitWatchmaker = (event) => {
-        const {chosenWatchmaker, reservation, reservation: {name, email, city}} = this.state;
+        const {chosenWatchmaker, reservation, reservation: {name, email}} = this.state;
         event.preventDefault();
 
         if (Object.keys(chosenWatchmaker).length === 0) {
@@ -183,9 +182,10 @@ export default class Order extends React.Component {
 
     renderCities() {
         const {cities} = this.state;
+        const {cityTranslations} = this.props;
 
         return cities.map(city => {
-            return <option key={'city' + city.id} value={city.id}>{city.name}</option>
+            return <option key={'city' + city.id} value={city.id}>{cityTranslations.getName(city.id)}</option>
         });
     }
 

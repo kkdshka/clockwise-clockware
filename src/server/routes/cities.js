@@ -11,7 +11,7 @@ router.get('/', auth, function (req, res) {
 
 router.get('/data', async function (req, res) {
     try {
-        await citiesRepository.getAll().then((models) => {
+        await citiesRepository.getCities().then((models) => {
             res.status(200).json(models);
         });
     }
@@ -21,10 +21,19 @@ router.get('/data', async function (req, res) {
     }
 });
 
+router.get('/translations', async function (req, res) {
+    try {
+        const models = await citiesRepository.getTranslations();
+        res.status(200).json(models);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({error: error});
+    }
+});
+
 router.post('/', async function (req, res) {
-    const cityData = {
-        name: req.body.name
-    };
+    const cityData = req.body;
 
     if (!validation.isValidCityName(cityData.name)) {
         res.sendStatus(400).json({error: "Имя не может быть пустым"});
@@ -32,8 +41,12 @@ router.post('/', async function (req, res) {
     }
 
     try {
-        await citiesRepository.add(cityData);
-        res.status(201);
+        const cityId = await citiesRepository.addCity(cityData);
+        cityData.translations.forEach((translation) => {
+            translation.city_id = cityId;
+        });
+        await citiesRepository.addTranslations(cityData.translations);
+        res.status(201).end();
     }
     catch (error) {
         console.log(error);
@@ -42,10 +55,7 @@ router.post('/', async function (req, res) {
 });
 
 router.put('/', async function (req, res) {
-    const cityData = {
-        name: req.body.name,
-        id: req.body.id
-    };
+    const cityData = req.body;
 
     if (!validation.isValidCityName(cityData.name)) {
         res.sendStatus(400).json({error: "Имя не может быть пустым"});
@@ -53,8 +63,9 @@ router.put('/', async function (req, res) {
     }
 
     try {
-        await citiesRepository.edit(cityData);
-        res.status(204);
+        await citiesRepository.editTranslations(cityData.translations);
+        await citiesRepository.editCity(cityData);
+        res.status(204).end();
     }
     catch (error) {
         console.log(error);
@@ -65,8 +76,9 @@ router.put('/', async function (req, res) {
 router.delete('/', async function (req, res) {
     const id = req.body.id;
     try {
-        await citiesRepository.delete(id);
-        res.status(204);
+        await citiesRepository.deleteTranslations(id);
+        await citiesRepository.deleteCity(id);
+        res.status(204).end();
     }
     catch (error) {
         console.log(error);

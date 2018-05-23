@@ -5,7 +5,9 @@ import strings from '../localization.js';
 
 export default class Home extends React.Component {
     componentWillMount() {
-        strings.setLanguage(this.props.language);
+        const {language} = this.props;
+
+        strings.setLanguage(language);
     }
 
     update = () => {
@@ -13,11 +15,14 @@ export default class Home extends React.Component {
     };
 
     render() {
+        const {cityTranslations, language} = this.props;
+
         return <div className="container">
             <div className="row">
                 <div className="col">
-                    <Navigation active="home" update={this.update} language={this.props.language}/>
-                    <Order/>
+                    <Navigation active="home" update={this.update} language={language}
+                                cityTranslations={cityTranslations}/>
+                    <Order cityTranslations={cityTranslations}/>
                 </div>
             </div>
         </div>

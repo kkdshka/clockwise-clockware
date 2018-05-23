@@ -44,7 +44,9 @@ const strings = new LocalizedStrings({
         notFound: "Page not found",
         watchmaker: "Watchmaker",
         contactUs: "Contact us",
-        header: "We are repairing grandfather clocks at client's house.\n Fill the form and wait for our watchmaker."
+        header: "We are repairing grandfather clocks at client's house.\n Fill the form and wait for our watchmaker.",
+        enName: "Enter name in english",
+        ruName: "Enter name in russian"
     },
     ru: {
         main: "Главная",
@@ -89,7 +91,9 @@ const strings = new LocalizedStrings({
         notFound: "Ресурс не найден",
         watchmaker: "Мастер",
         contactUs: "Свяжитесь с нами",
-        header: "Мы занимается ремонтом напольных часов с выездом на дом к клиентам.\n Оставьте заявку на ремонт и ожидайте мастера на выбранное время."
+        header: "Мы занимается ремонтом напольных часов с выездом на дом к клиентам.\n Оставьте заявку на ремонт и ожидайте мастера на выбранное время.",
+        enName: "Введите название на английском",
+        ruName: "Введите название на русском"
     }
 });
 

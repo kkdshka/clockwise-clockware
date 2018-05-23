@@ -1,7 +1,7 @@
 const db = require('../models');
 const Reservation = db.reservation;
-const City = db.city;
 const Watchmaker = db.watchmaker;
+const City = db.city;
 
 //reservation = {name, city, email, clockSize, date, id}
 function addReservation(reservation) {
@@ -25,7 +25,10 @@ function deleteReservation(id) {
 }
 
 function getAllReservations() {
-    return Reservation.findAll({include: [City, Watchmaker]});
+    return Reservation.findAll({
+        include: [City, Watchmaker],
+        order: [['date', 'DESC']],
+    });
 }
 
 module.exports = {

@@ -6,7 +6,10 @@ import strings from '../localization.js';
 export default class Home extends React.Component {
     componentWillMount() {
         document.body.classList.add("customer-form");
-        strings.setLanguage(this.props.language);
+
+        const {language} = this.props;
+
+        strings.setLanguage(language);
     }
 
     componentWillUnmount() {
@@ -18,6 +21,8 @@ export default class Home extends React.Component {
     };
 
     render() {
+        const {cityTranslations} = this.props;
+
         return <div>
             <div className="custom-header">
                 <div className="container">
@@ -27,12 +32,13 @@ export default class Home extends React.Component {
                             <h5>{strings.header}</h5>
                         </div>
                         <div className="col-1 align-self-center">
-                            <Localization update={this.update} color="outline-secondary"/>
+                            <Localization update={this.update} color="outline-secondary"
+                                          cityTranslations={cityTranslations}/>
                         </div>
                     </div>
                 </div>
             </div>
-            <Order/>
+            <Order cityTranslations={cityTranslations}/>
             <footer className="footer">
                 <div className="container">
                     <div className="row">
