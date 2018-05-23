@@ -7,6 +7,10 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             unique: true
         },
+        timezone: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
         id: {
             allowNull: false,
             autoIncrement: true,

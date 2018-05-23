@@ -46,7 +46,10 @@ const strings = new LocalizedStrings({
         contactUs: "Contact us",
         header: "We are repairing grandfather clocks at client's house.\n Fill the form and wait for our watchmaker.",
         enName: "Enter name in english",
-        ruName: "Enter name in russian"
+        ruName: "Enter name in russian",
+        timezone: "Time zone",
+        timezoneUSA: "(UTC-05:00) USA",
+        timezoneUkraine: "(UTC+02:00) Kiev"
     },
     ru: {
         main: "Главная",
@@ -93,7 +96,10 @@ const strings = new LocalizedStrings({
         contactUs: "Свяжитесь с нами",
         header: "Мы занимается ремонтом напольных часов с выездом на дом к клиентам.\n Оставьте заявку на ремонт и ожидайте мастера на выбранное время.",
         enName: "Введите название на английском",
-        ruName: "Введите название на русском"
+        ruName: "Введите название на русском",
+        timezone: "Часовой пояс",
+        timezoneUSA: "(UTC-05:00) США",
+        timezoneUkraine: "(UTC+02:00) Киев"
     }
 });
 

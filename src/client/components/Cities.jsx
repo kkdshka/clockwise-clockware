@@ -4,6 +4,7 @@ import Modal from 'react-bootstrap4-modal';
 import restApiClient from '../restApiClient/index';
 import validation from '../validation';
 import strings from '../localization.js';
+import moment from 'moment-timezone';
 
 export default class Cities extends React.Component {
     constructor(props) {
@@ -30,11 +31,11 @@ export default class Cities extends React.Component {
 
         if (validation.isValidName(this.refs[modalName + fieldName].value)) {
             this.setState({name: {isValid: true, message: ''}});
-            event.currentTarget.className = 'form-control form-control-sm is-valid';
+            event.currentTarget.className = 'form-control is-valid';
         }
         else {
             this.setState({name: {isValid: false, message: strings.notEmptyNameWarning}});
-            event.currentTarget.className = 'form-control form-control-sm is-invalid';
+            event.currentTarget.className = 'form-control is-invalid';
         }
     };
 
@@ -62,6 +63,7 @@ export default class Cities extends React.Component {
 
         const data = {
             name: this.refs.addEnName.value,
+            timezone: this.refs.addTimezone.value,
             translations: [
                 {language: 'ru', name: this.refs.addRuName.value},
                 {language: 'en', name: this.refs.addEnName.value}
@@ -84,6 +86,7 @@ export default class Cities extends React.Component {
 
         const data = {
             name: this.refs.editEnName.value,
+            timezone: this.refs.editTimezone.value,
             id: id,
             translations: [
                 {id: cityTranslations.getId(id, 'ru'), language: 'ru', name: this.refs.editRuName.value, city_id: id},
@@ -109,6 +112,7 @@ export default class Cities extends React.Component {
         return cities.map(city => {
             return <tr key={'city' + city.id}>
                 <td>{cityTranslations.getName(city.id)}</td>
+                <td>{city.timezone || ''}</td>
                 <td>
                     <button type="button" className="btn btn-warning" onClick={this.handleOnEditClick(city)}>
                         <i className="fa fa-pencil"/>
@@ -122,6 +126,12 @@ export default class Cities extends React.Component {
             </tr>
         });
     }
+
+    // renderTimezoneSelect() {
+    //     return moment.tz.names().map((timezone) => {
+    //         return <option id={timezone}>{timezone}</option>
+    //     });
+    // }
 
     renderFormError() {
         const {formError} = this.state;
@@ -165,6 +175,13 @@ export default class Cities extends React.Component {
                             <input type="text" className="form-control" id="add-ru-name" ref="addRuName"
                                    onBlur={this.handleValidation('RuName')}/>
                             <div className="invalid-feedback">{message}</div>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="add-timezone">{strings.timezone + ":"}</label>
+                            <select className="form-control" id="add-timezone" ref="addTimezone">
+                                <option value="Europe/Kiev">{strings.timezoneUkraine}</option>
+                                <option value="US/Eastern">{strings.timezoneUSA}</option>
+                            </select>
                         </div>
                     </form>
                 </div>
@@ -216,6 +233,14 @@ export default class Cities extends React.Component {
                                    defaultValue={cityTranslations.getTranslation(editing.id, 'ru')}
                                    onBlur={this.handleValidation('RuName')}/>
                             <div className="invalid-feedback">{message}</div>
+                            <div className="form-group">
+                                <label htmlFor="edit-timezone">{strings.timezone + ":"}</label>
+                                <input type="text" className="form-control" id="edit-timezone" ref="editTimezone"/>
+                            </div>
+                            <select className="form-control" id="edit-timezone" ref="editTimezone">
+                                <option value="Europe/Kiev">{strings.timezoneUkraine}</option>
+                                <option value="US/Eastern">{strings.timezoneUSA}</option>
+                            </select>
                         </div>
                     </form>
                 </div>
@@ -254,6 +279,7 @@ export default class Cities extends React.Component {
                         <thead>
                         <tr>
                             <th>{strings.name}</th>
+                            <th>{strings.timezone}</th>
                             <th/>
                             <th/>
                         </tr>
