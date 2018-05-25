@@ -29,7 +29,7 @@ function getAllWatchmakers() {
 
 function getFreeWatchmakers(data) {
     const query = "SELECT * FROM watchmakers WHERE city_id = :city_id AND id NOT IN " +
-        "(SELECT watchmaker_id FROM reservations WHERE city_id = :city_id AND date = :date  AND (" +
+        "(SELECT watchmaker_id FROM reservations WHERE city_id = :city_id AND (" +
         "(finish_time > :start_time AND finish_time <= :finish_time)" +
         " OR " +
         "(start_time < :finish_time AND start_time >= :start_time)" +

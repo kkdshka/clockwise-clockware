@@ -27,7 +27,7 @@ function deleteReservation(id) {
 function getAllReservations() {
     return Reservation.findAll({
         include: [City, Watchmaker],
-        order: [['date', 'DESC']],
+        order: [['start_time', 'DESC']],
     });
 }
 

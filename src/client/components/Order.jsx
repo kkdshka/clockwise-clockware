@@ -2,6 +2,7 @@ import React from 'react';
 import restApiClient from '../restApiClient/index';
 import Modal from 'react-bootstrap4-modal';
 import strings from '../localization.js';
+import moment from 'moment-timezone';
 
 const validation = require('../validation');
 
@@ -22,13 +23,22 @@ export default class Order extends React.Component {
             },
             formError: false,
             selectWatchmakerError: false,
-            isModalOpened: false
+            isModalOpened: false,
+            citiesById: {}
         };
     }
 
     componentDidMount() {
         restApiClient.getCities()
-            .then(cities => this.setState({cities: cities}));
+            .then(cities => {
+                this.setState({cities: cities});
+                this.setState({
+                    citiesById: cities.reduce((citiesById, city) => {
+                        citiesById[city.id] = city;
+                        return citiesById;
+                    }, {})
+                });
+            });
     }
 
     validator(fieldName, element, message) {
@@ -77,20 +87,23 @@ export default class Order extends React.Component {
         if (selectWatchmakerError) {
             return <div className="alert alert-danger">{strings.chooseWatchmaker}</div>
         }
+
     }
 
     handleOnSubmitForm = (event) => {
-        const {name, city, email, clockSize, date, time} = this.refs;
-
         event.preventDefault();
+        const {name, city, email, clockSize, date, time} = this.refs;
+        const {citiesById} = this.state;
+
+        const start_time = moment.tz(date.value + " " + time.value, citiesById[city.value].timezone).format();
+        console.log(start_time);
         const params = {
             params: {
                 name: name.value,
-                cityId: city.value,
+                city_id: 1,
                 email: email.value,
-                clockSize: clockSize.value,
-                date: date.value,
-                time: time.value
+                clock_size: clockSize.value,
+                start_time: start_time,
             }
         };
         if (!validation.isValidReservation(params.params)) {
@@ -139,7 +152,7 @@ export default class Order extends React.Component {
         this.setState({
             reservation: {
                 ...reservation,
-                watchmakerId: watchmaker.id,
+                watchmaker_id: watchmaker.id,
             },
             chosenWatchmaker: watchmaker
         });

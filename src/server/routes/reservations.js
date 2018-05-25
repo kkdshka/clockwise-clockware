@@ -25,20 +25,13 @@ router.get('/data', async function (req, res) {
 });
 
 router.post('/', async function (req, res) {
-    const reservationData = {
-        name: req.body.name,
-        city_id: req.body.cityId,
-        email: req.body.email,
-        clock_size: req.body.clockSize,
-        date: req.body.date,
-        start_time: req.body.time,
-        watchmaker_id: req.body.watchmakerId,
-        finish_time: getFinishTime(req.body.time, req.body.clockSize)
-    };
+    const reservationData = req.body;
+    reservationData.finish_time = getFinishTime(req.body.start_time, req.body.clock_size);
 
     const errors = check(reservationData);
     if (errors.length > 0) {
         res.status(400).json({errors: errors});
+        console.log(errors);
         return;
     }
 
@@ -54,17 +47,8 @@ router.post('/', async function (req, res) {
 });
 
 router.put('/', async function (req, res) {
-    const reservationData = {
-        name: req.body.name,
-        city_id: req.body.cityId,
-        email: req.body.email,
-        clock_size: req.body.clockSize,
-        date: req.body.date,
-        start_time: req.body.time,
-        watchmaker_id: req.body.watchmakerId,
-        finish_time: getFinishTime(req.body.time, req.body.clockSize),
-        id: req.body.id
-    };
+    const reservationData = req.body;
+    reservationData.finish_time = getFinishTime(req.body.start_time, req.body.clock_size);
 
     const errors = check(reservationData);
     if (errors.length > 0) {
@@ -102,12 +86,12 @@ function check(reservationData) {
     if (!validation.isValidEmail(reservationData.email)) {
         errors.push('Invalid email');
     }
-    if (!validation.isValidTime(reservationData.start_time)) {
-        errors.push('Invalid time');
-    }
-    if (!validation.isValidDate(reservationData.date)) {
-        errors.push('Invalid date');
-    }
+    // if (!validation.isValidTime(reservationData.start_time)) {
+    //     errors.push('Invalid time');
+    // }
+    // if (!validation.isValidDate(reservationData.date)) {
+    //     errors.push('Invalid date');
+    // }
     return errors;
 }
 

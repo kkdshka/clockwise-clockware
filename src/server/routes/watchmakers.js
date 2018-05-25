@@ -5,6 +5,7 @@ const watchmakersRepository = require('../repositories/watchmakersRepository');
 const FreeWatchmakers = require('../services/freeWatchmakersService');
 const auth = require('../authenticationMiddleware');
 const validation = require('../validation');
+const getFinishTime = require('../services/timeHelper').getFinishTime;
 
 router.get('/', auth, function (req, res) {
     res.sendFile(path.join(__dirname, "../../../index.html"));
@@ -23,7 +24,8 @@ router.get('/data', async function (req, res) {
 });
 
 router.get('/free-watchmakers', async function (req, res) {
-    const data = (new FreeWatchmakers(req.query)).data;
+    const data = req.query;
+    data.finish_time = getFinishTime(data.start_time, data.clock_size);
     try {
         await watchmakersRepository.getFreeWatchmakers(data)
             .then((models) => {

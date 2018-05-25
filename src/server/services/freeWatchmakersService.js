@@ -2,10 +2,9 @@ const watchmakersRepository = require('../repositories/watchmakersRepository');
 
 class FreeWatchmakers {
     constructor(params) {
-        this.size = params.clockSize;
-        this.date = params.date;
-        this.startTime = params.time;
-        this.city_id = params.cityId;
+        this.size = params.clock_size;
+        this.start_date = params.start_date;
+        this.city_id = params.city_id;
     }
 
     get repairingTime() {

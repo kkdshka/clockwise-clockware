@@ -4,6 +4,7 @@ import restApiClient from '../restApiClient/index';
 import validation from '../validation.js';
 import Modal from 'react-bootstrap4-modal';
 import strings from '../localization.js';
+import moment from 'moment-timezone';
 
 export default class Reservations extends React.Component {
     constructor(props) {
@@ -89,15 +90,15 @@ export default class Reservations extends React.Component {
 
     handleOnSubmitAdd = () => {
         const {addName, addEmail, addCity, addClockSize, addDate, addTime, addWatchmakerId} = this.refs;
+        const date = new Date(addDate.value + "T" + addTime.value);
 
         const data = {
             name: addName.value,
-            cityId: addCity.value,
+            city_id: addCity.value,
             email: addEmail.value,
-            clockSize: addClockSize.value,
-            date: addDate.value,
-            time: addTime.value,
-            watchmakerId: addWatchmakerId.value
+            clock_size: addClockSize.value,
+            start_time: date,
+            watchmaker_id: addWatchmakerId.value
         };
 
         if (!validation.isValidReservation(data)) {
@@ -119,15 +120,15 @@ export default class Reservations extends React.Component {
     handleOnSubmitEdit = () => {
         const {editing: {id}} = this.state;
         const {editName, editEmail, editCity, editClockSize, editDate, editTime, editWatchmakerId} = this.refs;
+        const date = new Date(editDate.value + "T" + editTime.value);
 
         const data = {
             name: editName.value,
-            cityId: editCity.value,
+            city_id: editCity.value,
             email: editEmail.value,
-            clockSize: editClockSize.value,
-            date: editDate.value,
-            time: editTime.value,
-            watchmakerId: editWatchmakerId.value,
+            clock_size: editClockSize.value,
+            start_time: date,
+            watchmaker_id: editWatchmakerId.value,
             id: id
         };
 
@@ -141,7 +142,7 @@ export default class Reservations extends React.Component {
 
     dateToString(date) {
         const newDate = new Date(date);
-        return newDate.toLocaleDateString();
+        return newDate.toLocaleDateString() + " " + newDate.toLocaleTimeString();
     }
 
     renderFormError() {
@@ -160,14 +161,13 @@ export default class Reservations extends React.Component {
         const {cityTranslations} = this.props;
 
         return reservations.map(reservation => {
-            return <tr className={this.isToday(reservation.date) ? 'table-info' : ''}
+            return <tr className={this.isToday(reservation.start_time) ? 'table-info' : ''}
                        key={'reservation' + reservation.id}>
                 <td>{reservation.name}</td>
                 <td>{cityTranslations.getName(reservation.city_id)}</td>
                 <td>{reservation.email}</td>
                 <td>{strings[reservation.clock_size]}</td>
-                <td>{this.dateToString(reservation.date)}</td>
-                <td>{reservation.start_time}</td>
+                <td>{this.dateToString(reservation.start_time)}</td>
                 <td>{reservation.watchmaker.name}</td>
                 <td>
                     <button type="button" className="btn btn-warning"
@@ -398,7 +398,6 @@ export default class Reservations extends React.Component {
                             <th>{strings.email}</th>
                             <th>{strings.clockSize}</th>
                             <th>{strings.date}</th>
-                            <th>{strings.time}</th>
                             <th>{strings.watchmaker}</th>
                             <th/>
                             <th/>

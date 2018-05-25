@@ -47,7 +47,6 @@ export default class CityTranslations {
     }
 
     onCitiesChange() {
-        console.log('on change');
         return this.getCitiesTranslations();
     }
 
