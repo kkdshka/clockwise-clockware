@@ -8,7 +8,11 @@ module.exports = {
         host: process.env.DB_HOST,
         dialect: process.env.DB_DIALECT,
         underscored: true,
-        timestamps: false
+        timestamps: false,
+        dialectOptions: {
+            charset: 'utf8mb4',
+            collate: 'utf8_general_ci',
+        },
     },
     test: {
         username: "root",

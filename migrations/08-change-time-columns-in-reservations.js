@@ -20,7 +20,7 @@ module.exports = {
                 allowNull: false
             }),
             queryInterface.changeColumn('reservations', 'finish_time', {
-                type: Sequelize.DATEONLY,
+                type: Sequelize.TIME,
                 allowNull: false
             }),
             queryInterface.addColumn('reservations', 'date', {

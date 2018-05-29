@@ -233,10 +233,9 @@ export default class Cities extends React.Component {
                                    defaultValue={cityTranslations.getTranslation(editing.id, 'ru')}
                                    onBlur={this.handleValidation('RuName')}/>
                             <div className="invalid-feedback">{message}</div>
-                            <div className="form-group">
-                                <label htmlFor="edit-timezone">{strings.timezone + ":"}</label>
-                                <input type="text" className="form-control" id="edit-timezone" ref="editTimezone"/>
-                            </div>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="edit-timezone">{strings.timezone + ":"}</label>
                             <select className="form-control" id="edit-timezone" ref="editTimezone">
                                 <option value="Europe/Kiev">{strings.timezoneUkraine}</option>
                                 <option value="US/Eastern">{strings.timezoneUSA}</option>
