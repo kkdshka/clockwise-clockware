@@ -4,7 +4,6 @@ const path = require('path');
 const reservationsRepository = require('../repositories/reservationsRepository');
 const sendEmail = require('../sender');
 const auth = require('../authenticationMiddleware');
-const getFinishTime = require('../services/timeHelper').getFinishTime;
 const validation = require('../validation');
 
 router.get('/', auth, function (req, res) {
@@ -14,9 +13,8 @@ router.get('/', auth, function (req, res) {
 router.get('/data', async function (req, res) {
     try {
         await reservationsRepository.getAll().then((models) => {
-            res.json(models);
+            res.status(200).json(models);
         });
-        res.status(200);
     }
     catch (error) {
         console.log(error);
@@ -26,8 +24,6 @@ router.get('/data', async function (req, res) {
 
 router.post('/', async function (req, res) {
     const reservationData = req.body;
-    reservationData.finish_time = getFinishTime(req.body.start_time, req.body.clock_size);
-
     const errors = check(reservationData);
     if (errors.length > 0) {
         res.status(400).json({errors: errors});
@@ -38,7 +34,7 @@ router.post('/', async function (req, res) {
     try {
         await reservationsRepository.add(reservationData);
         sendEmail(reservationData.email, reservationData);
-        res.send(201);
+        res.send(201).end();
     }
     catch (error) {
         console.log(error);
@@ -48,7 +44,6 @@ router.post('/', async function (req, res) {
 
 router.put('/', async function (req, res) {
     const reservationData = req.body;
-    reservationData.finish_time = getFinishTime(req.body.start_time, req.body.clock_size);
 
     const errors = check(reservationData);
     if (errors.length > 0) {
@@ -58,7 +53,7 @@ router.put('/', async function (req, res) {
 
     try {
         await reservationsRepository.edit(reservationData);
-        res.status(204);
+        res.status(204).end();
     }
     catch (error) {
         console.log(error);
@@ -70,7 +65,7 @@ router.delete('/', async function (req, res) {
     const id = req.body.id;
     try {
         await reservationsRepository.delete(id);
-        res.status(204);
+        res.status(204).end();
     }
     catch (error) {
         console.log(error);

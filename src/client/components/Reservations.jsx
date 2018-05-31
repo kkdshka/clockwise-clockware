@@ -5,6 +5,7 @@ import validation from '../validation.js';
 import Modal from 'react-bootstrap4-modal';
 import strings from '../localization.js';
 import moment from 'moment-timezone';
+import timeHelper from '../timeHelper';
 
 export default class Reservations extends React.Component {
     constructor(props) {
@@ -35,7 +36,15 @@ export default class Reservations extends React.Component {
             .then(reservations => this.setState({reservations: reservations}));
 
         restApiClient.getCities()
-            .then(cities => this.setState({cities}));
+            .then(cities => {
+                this.setState({cities});
+                this.setState({
+                    citiesById: cities.reduce((citiesById, city) => {
+                        citiesById[city.id] = city;
+                        return citiesById;
+                    }, {})
+                });
+            });
 
         restApiClient.getWatchmakers()
             .then(watchmakers => this.setState({watchmakers}));
@@ -76,8 +85,8 @@ export default class Reservations extends React.Component {
 
     handleValidation = (type, message) => event => this.validator(type, event.currentTarget, message);
 
-    handleOnEditClick = (reservations) => () => {
-        this.setState({editing: reservations});
+    handleOnEditClick = (reservation) => () => {
+        this.setState({editing: reservation});
         this.openModalUpdate();
     };
 
@@ -90,14 +99,17 @@ export default class Reservations extends React.Component {
 
     handleOnSubmitAdd = () => {
         const {addName, addEmail, addCity, addClockSize, addDate, addTime, addWatchmakerId} = this.refs;
-        const date = new Date(addDate.value + "T" + addTime.value);
+        const {citiesById} = this.state;
+
+        const startMoment = moment.tz(addDate.value + " " + addTime.value, citiesById[addCity.value].timezone);
 
         const data = {
             name: addName.value,
             city_id: addCity.value,
             email: addEmail.value,
             clock_size: addClockSize.value,
-            start_time: date,
+            start_time: timeHelper.getStartTime(startMoment),
+            finish_time: timeHelper.getFinishTime(startMoment, addClockSize.value),
             watchmaker_id: addWatchmakerId.value
         };
 
@@ -120,14 +132,17 @@ export default class Reservations extends React.Component {
     handleOnSubmitEdit = () => {
         const {editing: {id}} = this.state;
         const {editName, editEmail, editCity, editClockSize, editDate, editTime, editWatchmakerId} = this.refs;
-        const date = new Date(editDate.value + "T" + editTime.value);
+        const {citiesById} = this.state;
+
+        const startMoment = moment.tz(editDate.value + " " + editTime.value, citiesById[editCity.value].timezone);
 
         const data = {
             name: editName.value,
             city_id: editCity.value,
             email: editEmail.value,
             clock_size: editClockSize.value,
-            start_time: date,
+            start_time: timeHelper.getStartTime(startMoment),
+            finish_time: timeHelper.getFinishTime(startMoment, editClockSize.value),
             watchmaker_id: editWatchmakerId.value,
             id: id
         };
@@ -297,7 +312,7 @@ export default class Reservations extends React.Component {
     };
 
     renderModalUpdate() {
-        const {isModalUpdateOpened, editing: {name, email, time, date, city, clockSize}, validationResult} = this.state;
+        const {isModalUpdateOpened, editing: {name, email, start_time, city, clockSize, watchmaker}, validationResult} = this.state;
 
         if (isModalUpdateOpened) {
             return <Modal visible={true} onClickBackdrop={this.hideModalUpdate}>
@@ -323,8 +338,7 @@ export default class Reservations extends React.Component {
                         </div>
                         <div className="form-group">
                             <label htmlFor="edit-city">{strings.city}</label>
-                            <select className="form-control" id="edit-city" ref="editCity"
-                                    defaultValue={city}>
+                            <select className="form-control" id="edit-city" ref="editCity" defaultValue={city.id}>
                                 {this.renderCities()}
                             </select>
                         </div>
@@ -340,7 +354,7 @@ export default class Reservations extends React.Component {
                         <div className="form-group">
                             <label htmlFor="edit-date">{strings.date + ":"}</label>
                             <input type="date" className="form-control" id="edit-date" ref="editDate"
-                                   defaultValue={this.dateToString(date)}
+                                   defaultValue={moment(start_time).format('YYYY-MM-DD')}
                                    onBlur={this.handleValidation('date', strings.dateWarning)}/>
                             <div className="invalid-feedback">{validationResult.date.message}</div>
                         </div>
@@ -348,13 +362,14 @@ export default class Reservations extends React.Component {
                             <label htmlFor="edit-time">{strings.time + ":"}</label>
                             <input type="time" min="09:00" max="18:00" step={60 * 60} className="form-control"
                                    id="edit-time"
-                                   ref="editTime" defaultValue={time}
+                                   ref="editTime" defaultValue={moment(start_time).format('HH:mm')}
                                    onBlur={this.handleValidation('time', strings.timeWarning)}/>
                             <div className="invalid-feedback">{validationResult.time.message}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="edit-watchmaker">{strings.watchmaker + ":"}</label>
-                            <select className="form-control" id="edit-watchmaker" ref="editWatchmakerId">
+                            <select className="form-control" id="edit-watchmaker" ref="editWatchmakerId"
+                                    defaultValue={watchmaker.id}>
                                 {this.renderWatchmakers()}
                             </select>
                         </div>
