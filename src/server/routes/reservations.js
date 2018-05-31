@@ -81,12 +81,9 @@ function check(reservationData) {
     if (!validation.isValidEmail(reservationData.email)) {
         errors.push('Invalid email');
     }
-    // if (!validation.isValidTime(reservationData.start_time)) {
-    //     errors.push('Invalid time');
-    // }
-    // if (!validation.isValidDate(reservationData.date)) {
-    //     errors.push('Invalid date');
-    // }
+    if (!validation.isValidDate(reservationData.start_time, reservationData.finish_time)) {
+        errors.push('Invalid date');
+    }
     return errors;
 }
 
