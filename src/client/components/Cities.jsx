@@ -236,7 +236,7 @@ export default class Cities extends React.Component {
                         </div>
                         <div className="form-group">
                             <label htmlFor="edit-timezone">{strings.timezone + ":"}</label>
-                            <select className="form-control" id="edit-timezone" ref="editTimezone">
+                            <select className="form-control" id="edit-timezone" ref="editTimezone" defaultValue={editing.timezone}>
                                 <option value="Europe/Kiev">{strings.timezoneUkraine}</option>
                                 <option value="US/Eastern">{strings.timezoneUSA}</option>
                             </select>

@@ -233,7 +233,7 @@ export default class Watchmakers extends Component {
                         <div className="form-group">
                             <label htmlFor="edit-city">{strings.city + ":"}</label>
                             <select className="form-control" id="edit-city" ref="editCity"
-                                    defaultValue={city}>
+                                    defaultValue={city.id}>
                                 {this.renderCities()}
                             </select>
                         </div>
