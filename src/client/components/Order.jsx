@@ -3,6 +3,7 @@ import restApiClient from '../restApiClient/index';
 import Modal from 'react-bootstrap4-modal';
 import strings from '../localization.js';
 import moment from 'moment-timezone';
+import timeHelper from '../timeHelper';
 
 const validation = require('../validation');
 
@@ -95,15 +96,16 @@ export default class Order extends React.Component {
         const {name, city, email, clockSize, date, time} = this.refs;
         const {citiesById} = this.state;
 
-        const start_time = moment.tz(date.value + " " + time.value, citiesById[city.value].timezone).format();
-        console.log(start_time);
+        const startMoment = moment.tz(date.value + " " + time.value, citiesById[city.value].timezone);
+
         const params = {
             params: {
                 name: name.value,
-                city_id: 1,
+                city_id: city.value,
                 email: email.value,
                 clock_size: clockSize.value,
-                start_time: start_time,
+                start_time: timeHelper.getStartTime(startMoment),
+                finish_time: timeHelper.getFinishTime(startMoment, clockSize.value)
             }
         };
         if (!validation.isValidReservation(params.params)) {
