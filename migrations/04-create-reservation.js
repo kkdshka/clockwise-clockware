@@ -27,16 +27,12 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: false
             },
-            date: {
-                type: Sequelize.DATEONLY,
-                allowNull: false
-            },
             start_time: {
-                type: Sequelize.TIME,
+                type: Sequelize.DATE,
                 allowNull: false
             },
             finish_time: {
-                type: Sequelize.TIME,
+                type: Sequelize.DATE,
                 allowNull: false
             },
             watchmaker_id: {
