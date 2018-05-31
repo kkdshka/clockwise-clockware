@@ -17,7 +17,7 @@ router.get('/data', async function (req, res) {
     }
     catch (error) {
         console.log(error);
-        res.status(500).json({error: error});
+        res.sendStatus(500).json({error: error});
     }
 });
 
@@ -32,7 +32,7 @@ router.get('/free-watchmakers', async function (req, res) {
     }
     catch (error) {
         console.log(error);
-        res.status(500).json({error: error});
+        res.sendStatus(500).json({error: error});
     }
 });
 
@@ -50,11 +50,11 @@ router.post('/', async function (req, res) {
 
     try {
         await watchmakersRepository.add(watchmakerData);
-        res.status(201);
+        res.sendStatus(201).end();
     }
     catch (error) {
         console.log(error);
-        res.status(500).json({error: error});
+        res.sendStatus(500).json({error: error});
     }
 });
 
@@ -73,11 +73,11 @@ router.put('/', async function (req, res) {
 
     try {
         await watchmakersRepository.edit(watchmakerData);
-        res.status(204);
+        res.sendStatus(204).end();
     }
     catch (error) {
         console.log(error);
-        res.status(500).json({error: error});
+        res.sendStatus(500).json({error: error});
     }
 });
 
@@ -85,11 +85,11 @@ router.delete('/', async function (req, res) {
     const id = req.body.id;
     try {
         await watchmakersRepository.delete(id);
-        res.status(204);
+        res.sendStatus(204).end();
     }
     catch (error) {
         console.log(error);
-        res.status(500).json({error: error});
+        res.sendStatus(500).json({error: error});
     }
 });
 

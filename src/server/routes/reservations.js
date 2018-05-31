@@ -18,7 +18,7 @@ router.get('/data', async function (req, res) {
     }
     catch (error) {
         console.log(error);
-        res.status(500).json({error: error});
+        res.sendStatus(500).json({error: error});
     }
 });
 
@@ -26,7 +26,7 @@ router.post('/', async function (req, res) {
     const reservationData = req.body;
     const errors = check(reservationData);
     if (errors.length > 0) {
-        res.status(400).json({errors: errors});
+        res.sendStatus(400).json({errors: errors});
         console.log(errors);
         return;
     }
@@ -34,11 +34,11 @@ router.post('/', async function (req, res) {
     try {
         await reservationsRepository.add(reservationData);
         sendEmail(reservationData.email, reservationData);
-        res.send(201).end();
+        res.sendStatus(201).end();
     }
     catch (error) {
         console.log(error);
-        res.status(500).json({error: error});
+        res.sendStatus(500).json({error: error});
     }
 });
 
@@ -47,17 +47,17 @@ router.put('/', async function (req, res) {
 
     const errors = check(reservationData);
     if (errors.length > 0) {
-        res.status(400).json({errors: errors});
+        res.sendStatus(400).json({errors: errors});
         return;
     }
 
     try {
         await reservationsRepository.edit(reservationData);
-        res.status(204).end();
+        res.sendStatus(204).end();
     }
     catch (error) {
         console.log(error);
-        res.status(500).json({error: error});
+        res.sendStatus(500).json({error: error});
     }
 });
 
@@ -65,11 +65,11 @@ router.delete('/', async function (req, res) {
     const id = req.body.id;
     try {
         await reservationsRepository.delete(id);
-        res.status(204).end();
+        res.sendStatus(204).end();
     }
     catch (error) {
         console.log(error);
-        res.status(500).json({error: error});
+        res.sendStatus(500).json({error: error});
     }
 });
 

@@ -17,7 +17,7 @@ router.get('/data', async function (req, res) {
     }
     catch (error) {
         console.log(error);
-        res.status(500).json({error: error});
+        res.sendStatus(500).json({error: error});
     }
 });
 
@@ -28,7 +28,7 @@ router.get('/translations', async function (req, res) {
     }
     catch (error) {
         console.log(error);
-        res.status(500).json({error: error});
+        res.sendStatus(500).json({error: error});
     }
 });
 
@@ -46,11 +46,11 @@ router.post('/', async function (req, res) {
             translation.city_id = cityId;
         });
         await citiesRepository.addTranslations(cityData.translations);
-        res.status(201).end();
+        res.sendStatus(201).end();
     }
     catch (error) {
         console.log(error);
-        res.status(500).json({error: error});
+        res.sendStatus(500).json({error: error});
     }
 });
 
@@ -65,11 +65,11 @@ router.put('/', async function (req, res) {
     try {
         await citiesRepository.editTranslations(cityData.translations);
         await citiesRepository.editCity(cityData);
-        res.status(204).end();
+        res.sendStatus(204).end();
     }
     catch (error) {
         console.log(error);
-        res.status(500).json({error: error});
+        res.sendStatus(500).json({error: error});
     }
 });
 
@@ -78,11 +78,11 @@ router.delete('/', async function (req, res) {
     try {
         await citiesRepository.deleteTranslations(id);
         await citiesRepository.deleteCity(id);
-        res.status(204).end();
+        res.sendStatus(204).end();
     }
     catch (error) {
         console.log(error);
-        res.status(500).json({error: error});
+        res.sendStatus(500).json({error: error});
     }
 });
 
