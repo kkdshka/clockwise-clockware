@@ -14,7 +14,7 @@ function isValidDate(startTime, finishTime) {
 }
 
 function isValidReservation(params) {
-    return isValidName(params.name) && isValidEmail(params.email);
+    return isValidName(params.name) && isValidEmail(params.email) && isValidDate(params.start_time, params.finish_time);
 }
 
 function isValidWatchmakerName(name) {

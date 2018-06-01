@@ -147,6 +147,14 @@ export default class Reservations extends React.Component {
             id: id
         };
 
+        if (!validation.isValidReservation(data)) {
+            this.setState({formError: true});
+            return;
+        }
+        else {
+            this.setState({formError: false});
+        }
+
         restApiClient.editReservation(data);
 
         restApiClient.getReservations()

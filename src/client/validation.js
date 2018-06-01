@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 function isValidName(name) {
     return name.length > 2;
 }
@@ -27,8 +29,12 @@ function isValidTime(time, date) {
     }
 }
 
+function isValidDateToSend(startTime, finishTime) {
+    return moment(startTime).isBefore(moment(finishTime)) && moment().isBefore(moment(startTime));
+}
+
 function isValidReservation(params) {
-    return isValidName(params.name) && isValidEmail(params.email);
+    return isValidName(params.name) && isValidEmail(params.email) && isValidDateToSend(params.start_time, params.finish_time);
 }
 
 function isValidWatchmakerName(name) {
