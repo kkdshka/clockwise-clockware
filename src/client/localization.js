@@ -49,10 +49,9 @@ const strings = new LocalizedStrings({
         enName: "Enter name in english",
         ruName: "Enter name in russian",
         timezone: "Time zone",
-        timezoneUSA: "(UTC-05:00) USA",
-        timezoneUkraine: "(UTC+02:00) Kiev",
-        timezoneTranslations: timezoneTranslations.en
-    },
+        timezoneTranslations: timezoneTranslations.en,
+        emailMessage: "Your order is accepted. Our watchmaker will visit you "
+},
     ru: {
         main: "Главная",
         clients: "Клиенты",
@@ -100,9 +99,8 @@ const strings = new LocalizedStrings({
         enName: "Введите название на английском",
         ruName: "Введите название на русском",
         timezone: "Часовой пояс",
-        timezoneUSA: "(UTC-05:00) США",
-        timezoneUkraine: "(UTC+02:00) Киев",
-        timezoneTranslations: timezoneTranslations.ru
+        timezoneTranslations: timezoneTranslations.ru,
+        emailMessage: "Ваш заказ на ремонт часов принят. Ожидайте мастера "
     }
 });
 

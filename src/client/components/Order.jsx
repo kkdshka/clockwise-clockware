@@ -105,7 +105,8 @@ export default class Order extends React.Component {
                 email: email.value,
                 clock_size: clockSize.value,
                 start_time: timeHelper.getStartTime(startMoment),
-                finish_time: timeHelper.getFinishTime(startMoment, clockSize.value)
+                finish_time: timeHelper.getFinishTime(startMoment, clockSize.value),
+                emailMessage: strings.emailMessage + moment(date.value + " " + time.value).format('DD.MM.YYYY HH:mm')
             }
         };
         if (!validation.isValidReservation(params.params)) {

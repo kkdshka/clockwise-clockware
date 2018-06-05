@@ -33,7 +33,8 @@ router.post('/', async function (req, res) {
 
     try {
         await reservationsRepository.add(reservationData);
-        sendEmail(reservationData.email, reservationData);
+        sendEmail(reservationData.email, reservationData.emailMessage);
+
         res.sendStatus(201).end();
     }
     catch (error) {
