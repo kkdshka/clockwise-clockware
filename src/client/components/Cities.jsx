@@ -5,6 +5,8 @@ import restApiClient from '../restApiClient/index';
 import validation from '../validation';
 import strings from '../localization.js';
 import moment from 'moment-timezone';
+import SelectTimezone from './SelectTimezone.jsx';
+import translations from "../localization";
 
 export default class Cities extends React.Component {
     constructor(props) {
@@ -112,7 +114,7 @@ export default class Cities extends React.Component {
         return cities.map(city => {
             return <tr key={'city' + city.id}>
                 <td>{cityTranslations.getName(city.id)}</td>
-                <td>{city.timezone || ''}</td>
+                <td>{translations.timezoneTranslations[city.timezone] || ''}</td>
                 <td>
                     <button type="button" className="btn btn-warning" onClick={this.handleOnEditClick(city)}>
                         <i className="fa fa-pencil"/>
@@ -126,12 +128,6 @@ export default class Cities extends React.Component {
             </tr>
         });
     }
-
-    // renderTimezoneSelect() {
-    //     return moment.tz.names().map((timezone) => {
-    //         return <option id={timezone}>{timezone}</option>
-    //     });
-    // }
 
     renderFormError() {
         const {formError} = this.state;
@@ -178,9 +174,8 @@ export default class Cities extends React.Component {
                         </div>
                         <div className="form-group">
                             <label htmlFor="add-timezone">{strings.timezone + ":"}</label>
-                            <select className="form-control" id="add-timezone" ref="addTimezone">
-                                <option value="Europe/Kiev">{strings.timezoneUkraine}</option>
-                                <option value="US/Eastern">{strings.timezoneUSA}</option>
+                            <select className={'form-control'} id="add-timezone" ref="addTimezone" defaultValue='Europe/Kiev'>
+                                <SelectTimezone/>
                             </select>
                         </div>
                     </form>
@@ -236,9 +231,8 @@ export default class Cities extends React.Component {
                         </div>
                         <div className="form-group">
                             <label htmlFor="edit-timezone">{strings.timezone + ":"}</label>
-                            <select className="form-control" id="edit-timezone" ref="editTimezone" defaultValue={editing.timezone}>
-                                <option value="Europe/Kiev">{strings.timezoneUkraine}</option>
-                                <option value="US/Eastern">{strings.timezoneUSA}</option>
+                            <select className={'form-control'} id="edit-timezone" ref="editTimezone" defaultValue={editing.timezone}>
+                                <SelectTimezone/>
                             </select>
                         </div>
                     </form>
@@ -272,7 +266,7 @@ export default class Cities extends React.Component {
                 </div>
             </div>
             <div className="row mt-4">
-                <div className="col-sm-4">
+                <div className="col-sm-6">
                     <h4 className="row justify-content-md-center">{strings.cities}</h4>
                     <table className="table table-striped">
                         <thead>

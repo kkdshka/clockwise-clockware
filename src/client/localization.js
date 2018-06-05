@@ -1,4 +1,5 @@
 import LocalizedStrings from 'react-localization';
+import timezoneTranslations from './timezoneTranslations.js';
 
 const strings = new LocalizedStrings({
     en: {
@@ -49,7 +50,8 @@ const strings = new LocalizedStrings({
         ruName: "Enter name in russian",
         timezone: "Time zone",
         timezoneUSA: "(UTC-05:00) USA",
-        timezoneUkraine: "(UTC+02:00) Kiev"
+        timezoneUkraine: "(UTC+02:00) Kiev",
+        timezoneTranslations: timezoneTranslations.en
     },
     ru: {
         main: "Главная",
@@ -99,7 +101,8 @@ const strings = new LocalizedStrings({
         ruName: "Введите название на русском",
         timezone: "Часовой пояс",
         timezoneUSA: "(UTC-05:00) США",
-        timezoneUkraine: "(UTC+02:00) Киев"
+        timezoneUkraine: "(UTC+02:00) Киев",
+        timezoneTranslations: timezoneTranslations.ru
     }
 });
 
