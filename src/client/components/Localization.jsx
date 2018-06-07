@@ -4,8 +4,10 @@ import strings from '../localization.js';
 export default class Localization extends React.Component {
     setLanguageToEnglish = () => {
         const {cityTranslations} = this.props;
+        if (cityTranslations) {
+            cityTranslations.changeLanguage('en');
+        }
 
-        cityTranslations.changeLanguage('en');
         localStorage.setItem('language', 'en');
         strings.setLanguage('en');
         this.props.update();
@@ -13,8 +15,10 @@ export default class Localization extends React.Component {
 
     setLanguageToRussian = () => {
         const {cityTranslations} = this.props;
+        if (cityTranslations) {
+            cityTranslations.changeLanguage('ru');
+        }
 
-        cityTranslations.changeLanguage('ru');
         localStorage.setItem('language', 'ru');
         strings.setLanguage('ru');
         this.props.update();

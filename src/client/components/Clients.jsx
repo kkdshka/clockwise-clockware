@@ -242,10 +242,12 @@ export default class Clients extends React.Component {
     };
 
     render() {
+        const {language, cityTranslations} = this.props;
+
         return <div className="container">
             <div className="row">
                 <div className="col-sm">
-                    <Navigation active="clients" update={this.update} language={this.props.language}/>
+                    <Navigation active="clients" update={this.update} language={language} cityTranslations={cityTranslations}/>
                 </div>
             </div>
             <div className="row mt-4">

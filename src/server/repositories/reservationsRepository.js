@@ -5,7 +5,8 @@ const City = db.city;
 
 //reservation = {name, city, email, clockSize, date, id}
 function addReservation(reservation) {
-    return Reservation.create(reservation);
+    return Reservation.create(reservation)
+        .then(model => model.id);
 }
 
 function editReservation(reservation) {
@@ -31,9 +32,17 @@ function getAllReservations() {
     });
 }
 
+function getReservationById(id) {
+    return Reservation.findOne({
+        where: {id: id},
+        include: [City, Watchmaker]
+    });
+}
+
 module.exports = {
     add: addReservation,
     edit: editReservation,
     delete: deleteReservation,
-    getAll: getAllReservations
+    getAll: getAllReservations,
+    getById: getReservationById
 };

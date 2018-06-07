@@ -2,6 +2,7 @@ import cities from './cities';
 import clients from './clients';
 import watchmakers from './watchmakers';
 import reservations from './reservations';
+import feedbacks from "./feedbacks";
 
 module.exports = {
     getCities: cities.getCities,
@@ -13,6 +14,7 @@ module.exports = {
     editClient: clients.editClient,
     deleteClient: clients.deleteClient,
     getReservations: reservations.getReservations,
+    getReservationById: reservations.getReservationById,
     addReservation: reservations.addReservation,
     editReservation: reservations.editReservation,
     deleteReservation: reservations.deleteReservation,
@@ -20,5 +22,9 @@ module.exports = {
     getFreeWatchmakers: watchmakers.getFreeWatchmakers,
     addWatchmaker: watchmakers.addWatchmaker,
     editWatchmaker: watchmakers.editWatchmaker,
-    deleteWatchmaker: watchmakers.deleteWatchmaker
+    deleteWatchmaker: watchmakers.deleteWatchmaker,
+    getFeedbacks: feedbacks.getFeedbacks,
+    addFeedback: feedbacks.addFeedback,
+    editFeedback: feedbacks.editFeedback,
+    deleteFeedback: feedbacks.deleteFeedback
 };

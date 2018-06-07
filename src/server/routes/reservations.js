@@ -5,6 +5,8 @@ const reservationsRepository = require('../repositories/reservationsRepository')
 const sendEmail = require('../sender');
 const auth = require('../authenticationMiddleware');
 const validation = require('../validation');
+const schedule = require('node-schedule');
+const moment = require('moment-timezone');
 
 router.get('/', auth, function (req, res) {
     res.sendFile(path.join(__dirname, "../../../index.html"));
@@ -22,6 +24,17 @@ router.get('/data', async function (req, res) {
     }
 });
 
+router.get('/:id', async function (req, res) {
+    try {
+        const reservation = await reservationsRepository.getById(req.query.id);
+        res.status(200).json(reservation);
+    }
+    catch(error) {
+        console.log(error);
+        res.sendStatus(500).json({error: error});
+    }
+});
+
 router.post('/', async function (req, res) {
     const reservationData = req.body;
     const errors = check(reservationData);
@@ -32,8 +45,18 @@ router.post('/', async function (req, res) {
     }
 
     try {
-        await reservationsRepository.add(reservationData);
+        const id = await reservationsRepository.add(reservationData);
         sendEmail(reservationData.email, reservationData.emailMessage);
+
+        const taskMoment = moment.tz(reservationData.finish_time, reservationData.timezone).add(1, 'hour').format();
+        const taskDate = new Date(taskMoment);
+
+        const host = req.get('host');
+        const link = 'http://' + host + '/feedback?' + id;
+
+        const task = schedule.scheduleJob(taskDate, function(){
+            sendEmail(reservationData.email, reservationData.feedbackEmailMessage + link);
+        });
 
         res.sendStatus(201).end();
     }

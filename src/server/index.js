@@ -24,6 +24,8 @@ const reservations = require('./routes/reservations');
 const admin = require('./routes/admin');
 const login = require('./routes/login');
 const logout = require('./routes/logout');
+const feedback = require('./routes/feedback');
+const adminFeedbacks = require('./routes/adminFeedbacks');
 
 app.use(express.static(__dirname +'./../../')); //serves the index.html
 
@@ -31,9 +33,11 @@ app.use('/admin/watchmakers', watchmakers);
 app.use('/admin/cities', cities);
 app.use('/admin/clients', clients);
 app.use('/admin/reservations', reservations);
+app.use('/admin/feedbacks', adminFeedbacks);
 app.use('/admin', admin);
 app.use('/login', login);
 app.use('/logout', logout);
+app.use('/feedback', feedback);
 
 app.use('/', index);
 const PORT = process.env.PORT || 3000;

@@ -22,9 +22,16 @@ function deleteReservation(id) {
         .catch(error => console.log(error));
 }
 
+function getReservationById(id) {
+    return axios.get('/admin/reservations/:id', {params: {id: id}})
+        .then(res => res.data)
+        .catch(error => console.log(error));
+}
+
 module.exports = {
     getReservations: getReservations,
     addReservation: addReservation,
     editReservation: editReservation,
-    deleteReservation: deleteReservation
+    deleteReservation: deleteReservation,
+    getReservationById: getReservationById
 };

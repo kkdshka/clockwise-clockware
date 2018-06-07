@@ -46,6 +46,9 @@ export default class AdminNavigation extends React.Component {
                     <li className={"nav-item" + this.highlightIfActive("reservations")}>
                         <Link className="nav-link" to="/admin/reservations">{strings.reservations}</Link>
                     </li>
+                    <li className={"nav-item" + this.highlightIfActive("feedbacks")}>
+                        <Link className="nav-link" to="/admin/feedbacks">{strings.feedbacks}</Link>
+                    </li>
                     <li className={"nav-item"}>
                         <button className={"btn btn-secondary"}
                                 onClick={(event) => this.handleOnLogoutClick(event)}>{strings.logout}

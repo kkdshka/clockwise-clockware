@@ -50,7 +50,13 @@ const strings = new LocalizedStrings({
         ruName: "Enter name in russian",
         timezone: "Time zone",
         timezoneTranslations: timezoneTranslations.en,
-        emailMessage: "Your order is accepted. Our watchmaker will visit you "
+        askFeedback: "Leave comment and choose rate",
+        feedback: "Feedback",
+        emailMessage: "Your order is accepted. Our watchmaker will visit you ",
+        feedbackEmailMessage: 'Feedback link: ',
+        feedbacks: "Feedbacks",
+        watchmakerName: "Watchmaker name",
+        clientEmail: "Client email"
 },
     ru: {
         main: "Главная",
@@ -100,7 +106,13 @@ const strings = new LocalizedStrings({
         ruName: "Введите название на русском",
         timezone: "Часовой пояс",
         timezoneTranslations: timezoneTranslations.ru,
-        emailMessage: "Ваш заказ на ремонт часов принят. Ожидайте мастера "
+        askFeedback: "Напишите отзыв и поставьте оценку",
+        feedback: "Отзыв",
+        emailMessage: "Ваш заказ на ремонт часов принят. Ожидайте мастера ",
+        feedbackEmailMessage: 'Оставьте отзыв по ссылке: ',
+        feedbacks: "Отзывы",
+        watchmakerName: "Имя мастера",
+        clientEmail: "Почта клиента"
     }
 });
 

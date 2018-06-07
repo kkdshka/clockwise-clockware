@@ -96,20 +96,22 @@ export default class Order extends React.Component {
         const {name, city, email, clockSize, date, time} = this.refs;
         const {citiesById} = this.state;
 
-        const startMoment = moment.tz(date.value + " " + time.value, citiesById[city.value].timezone);
+        const timezone = citiesById[city.value].timezone;
+        const startMoment = moment.tz(date.value + " " + time.value, timezone);
 
         const params = {
-            params: {
-                name: name.value,
-                city_id: city.value,
-                email: email.value,
-                clock_size: clockSize.value,
-                start_time: timeHelper.getStartTime(startMoment),
-                finish_time: timeHelper.getFinishTime(startMoment, clockSize.value),
-                emailMessage: strings.emailMessage + moment(date.value + " " + time.value).format('DD.MM.YYYY HH:mm')
-            }
+            name: name.value,
+            city_id: city.value,
+            email: email.value,
+            clock_size: clockSize.value,
+            start_time: timeHelper.getStartTime(startMoment),
+            finish_time: timeHelper.getFinishTime(startMoment, clockSize.value),
+            emailMessage: strings.emailMessage + moment(date.value + " " + time.value).format('DD.MM.YYYY HH:mm'),
+            feedbackEmailMessage: strings.feedbackEmailMessage,
+            timezone: timezone
         };
-        if (!validation.isValidReservation(params.params)) {
+
+        if (!validation.isValidReservation(params)) {
             this.setState({formError: true});
             return;
         }
@@ -117,10 +119,15 @@ export default class Order extends React.Component {
             this.setState({formError: false});
         }
 
-        restApiClient.getFreeWatchmakers(params)
-            .then(freeWatchmakers => this.setState({freeWatchmakers: freeWatchmakers}));
+        restApiClient.getFreeWatchmakers({
+            params: {
+                city_id: params.city_id,
+                start_time: params.start_time,
+                finish_time: params.finish_time
+            }
+        }).then(freeWatchmakers => this.setState({freeWatchmakers: freeWatchmakers}));
 
-        this.setState({reservation: params.params});
+        this.setState({reservation: params});
         this.openModal();
     };
 

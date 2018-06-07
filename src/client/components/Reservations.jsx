@@ -102,6 +102,7 @@ export default class Reservations extends React.Component {
         const {citiesById} = this.state;
 
         const startMoment = moment.tz(addDate.value + " " + addTime.value, citiesById[addCity.value].timezone);
+        const timezone = citiesById[addCity.value].timezone;
 
         const data = {
             name: addName.value,
@@ -110,7 +111,10 @@ export default class Reservations extends React.Component {
             clock_size: addClockSize.value,
             start_time: timeHelper.getStartTime(startMoment),
             finish_time: timeHelper.getFinishTime(startMoment, addClockSize.value),
-            watchmaker_id: addWatchmakerId.value
+            watchmaker_id: addWatchmakerId.value,
+            emailMessage: strings.emailMessage + moment(addDate.value + " " + addTime.value).format('DD.MM.YYYY HH:mm'),
+            feedbackEmailMessage: strings.feedbackEmailMessage,
+            timezone: timezone
         };
 
         if (!validation.isValidReservation(data)) {
@@ -135,6 +139,7 @@ export default class Reservations extends React.Component {
         const {citiesById} = this.state;
 
         const startMoment = moment.tz(editDate.value + " " + editTime.value, citiesById[editCity.value].timezone);
+        const timezone = citiesById[editCity.value].timezone;
 
         const data = {
             name: editName.value,
@@ -144,7 +149,10 @@ export default class Reservations extends React.Component {
             start_time: timeHelper.getStartTime(startMoment),
             finish_time: timeHelper.getFinishTime(startMoment, editClockSize.value),
             watchmaker_id: editWatchmakerId.value,
-            id: id
+            id: id,
+            emailMessage: strings.emailMessage + moment(editDate.value + " " + editTime.value).format('DD.MM.YYYY HH:mm'),
+            feedbackEmailMessage: strings.feedbackEmailMessage,
+            timezone: timezone
         };
 
         if (!validation.isValidReservation(data)) {
