@@ -52,7 +52,7 @@ router.post('/', async function (req, res) {
         const taskDate = new Date(taskMoment);
 
         const host = req.get('host');
-        const link = 'http://' + host + '/feedback?' + id;
+        const link = 'http://' + host + '/feedback?' + Buffer.from(String(id)).toString('base64');
 
         const task = schedule.scheduleJob(taskDate, function(){
             sendEmail(reservationData.email, reservationData.feedbackEmailMessage + link);
