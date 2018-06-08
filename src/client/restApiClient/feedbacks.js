@@ -21,9 +21,16 @@ function deleteFeedback(id) {
         .catch(error => console.log(error));
 }
 
+function getTenLastFeedbacks() {
+    return axios.get('/admin/feedbacks/10last')
+        .then(res => res.data)
+        .catch(error => console.log(error));
+}
+
 module.exports = {
     getFeedbacks: getFeedbacks,
     addFeedback: addFeedback,
     editFeedback: editFeedback,
-    deleteFeedback: deleteFeedback
+    deleteFeedback: deleteFeedback,
+    getTenLastFeedbacks: getTenLastFeedbacks
 };

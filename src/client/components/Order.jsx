@@ -25,7 +25,8 @@ export default class Order extends React.Component {
             formError: false,
             selectWatchmakerError: false,
             isModalOpened: false,
-            citiesById: {}
+            citiesById: {},
+            feedbacks: []
         };
     }
 
@@ -40,6 +41,9 @@ export default class Order extends React.Component {
                     }, {})
                 });
             });
+
+        restApiClient.getTenLastFeedbacks()
+            .then(feedbacks => this.setState({feedbacks}));
     }
 
     validator(fieldName, element, message) {
@@ -266,6 +270,28 @@ export default class Order extends React.Component {
         </Modal>
     }
 
+    renderFeedbacks() {
+        const {feedbacks} = this.state;
+
+        return <ul className="feedback-list list-group">
+            {/*<li className="list-group-item"><h6>{strings.feedbacks}</h6></li>*/}
+            {feedbacks.map(feedback => {
+                if (feedback.feedback.length > 0) {
+                    return <li className="list-group-item" key={'feedback' + feedback.id}>
+                        <div className="row">
+                            <div className="img col-3">
+                                <i className="border  fa fa-user-secret"/>
+                            </div>
+                            <div className="col-8 ">
+                                {feedback.feedback}
+                            </div>
+                        </div>
+                    </li>
+                }
+            })}
+        </ul>
+    }
+
     minDate() {
         function pad(number) {
             if (number < 10) {
@@ -342,6 +368,7 @@ export default class Order extends React.Component {
                                 onClick={this.handleOnSubmitForm}>{strings.confirm}
                         </button>
                     </form>
+                    {this.renderFeedbacks()}
                 </div>
             </div>
         </div>

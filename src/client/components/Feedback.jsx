@@ -88,7 +88,7 @@ export default class Feedback extends React.Component {
                 <div className="container">
                     <div className="row">
                         <div className="col-10">
-                            <h4 className="text-center"><em>Clockwise Clockware</em></h4>
+                            <a className="nav-link text-center" href = '/'><h3><em>Clockwise Clockware</em></h3></a>
                         </div>
                         <div className="col-1 align-self-center">
                             <Localization update={this.update} color="outline-secondary"

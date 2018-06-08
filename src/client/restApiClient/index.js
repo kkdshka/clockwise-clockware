@@ -26,5 +26,6 @@ module.exports = {
     getFeedbacks: feedbacks.getFeedbacks,
     addFeedback: feedbacks.addFeedback,
     editFeedback: feedbacks.editFeedback,
-    deleteFeedback: feedbacks.deleteFeedback
+    deleteFeedback: feedbacks.deleteFeedback,
+    getTenLastFeedbacks: feedbacks.getTenLastFeedbacks
 };

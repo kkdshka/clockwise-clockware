@@ -25,3 +25,12 @@
     padding-top: 11px;
     background-color: rgba(255, 255, 255, 0.8);
 }
+
+.feedback-list {
+    opacity: 0.8;
+    margin-bottom: 76px;
+}
+
+.img {
+    font-size: 3em;
+}
