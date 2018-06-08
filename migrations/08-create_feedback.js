@@ -13,12 +13,17 @@ module.exports = {
             },
             rating: {
                 type: Sequelize.STRING,
+                allowNull: false,
             },
             reservation_id: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
                 unique: true
             },
+            watchmaker_id: {
+                type: Sequelize.INTEGER,
+                allowNull: false,
+            }
         });
     },
     down: (queryInterface, Sequelize) => {

@@ -4,18 +4,19 @@ module.exports = (sequelize, DataTypes) => {
     const Feedback =  sequelize.define('feedback', {
         feedback: {
             type: DataTypes.STRING,
-            allowNull: false,
-            unique: true
         },
         rating: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true
         },
         reservation_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
             unique: true
+        },
+        watchmaker_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
         },
         id: {
             allowNull: false,

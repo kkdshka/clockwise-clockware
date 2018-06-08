@@ -23,7 +23,6 @@ export default class Feedback extends React.Component {
     }
 
 
-
     handleOnSubmitClick = () => {
         const {feedback, rating} = this.refs;
         const {reservation} = this.state;
@@ -31,10 +30,12 @@ export default class Feedback extends React.Component {
         const feedbackData = {
             feedback: feedback.value,
             rating: rating.value,
-            reservation_id: reservation.id
+            reservation_id: reservation.id,
+            watchmaker_id: reservation.watchmaker.id
         };
 
         restApiClient.addFeedback(feedbackData);
+        window.location.href = '/';
     };
 
     componentWillUnmount() {

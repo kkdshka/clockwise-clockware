@@ -30,9 +30,25 @@ function getAllFeedbacks() {
     });
 }
 
+function getTenLastFeedbacks() {
+    return Feedback.findAll({
+        include: [{model: Reservation, include: {model: Watchmaker}}],
+        limit: 10,
+        order: [['id', 'DESC']]
+    });
+}
+
+function getAllWatchmakerFeedbacks(id) {
+    return Feedback.findAll({
+        where: {watchmaker_id: id}
+    });
+}
+
 module.exports = {
     add: addFeedback,
     edit: editFeedback,
     delete: deleteFeedback,
-    getAll: getAllFeedbacks
+    getAll: getAllFeedbacks,
+    getTenLast: getTenLastFeedbacks,
+    getAllWatchmakerFeedbacks: getAllWatchmakerFeedbacks
 };

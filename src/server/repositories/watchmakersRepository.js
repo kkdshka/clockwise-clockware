@@ -42,10 +42,15 @@ function getFreeWatchmakers(data) {
     });
 }
 
+function getWatchmakerById(id) {
+    return Watchmaker.findById(id);
+}
+
 module.exports = {
     add: addWatchmaker,
     edit: editWatchmaker,
     delete: deleteWatchmaker,
     getAll: getAllWatchmakers,
-    getFreeWatchmakers: getFreeWatchmakers
+    getFreeWatchmakers: getFreeWatchmakers,
+    getById: getWatchmakerById
 };
