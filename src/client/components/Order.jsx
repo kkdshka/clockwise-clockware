@@ -279,10 +279,10 @@ export default class Order extends React.Component {
                 if (feedback.feedback.length > 0) {
                     return <li className="list-group-item" key={'feedback' + feedback.id}>
                         <div className="row">
-                            <div className="img col-3">
-                                <i className="border  fa fa-user-secret"/>
+                            <div className="border img col-2">
+                                <i className="fa fa-user-secret"/>
                             </div>
-                            <div className="col-8 ">
+                            <div className="col-10 ">
                                 {feedback.feedback}
                             </div>
                         </div>

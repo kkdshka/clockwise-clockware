@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const reservationsRepository = require('../repositories/reservationsRepository');
+const tokenLifetimeRepository = require('../repositories/tokenLifetimesRepository');
 const sendEmail = require('../sender');
 const auth = require('../authenticationMiddleware');
 const validation = require('../validation');
@@ -52,10 +53,21 @@ router.post('/', async function (req, res) {
         const taskDate = new Date(taskMoment);
 
         const host = req.get('host');
-        const link = 'http://' + host + '/feedback?' + Buffer.from(String(id)).toString('base64');
+        const token =  Buffer.from(String(id)).toString('base64');
+        const link = 'http://' + host + '/feedback?token=' + token;
+        const tokenLifetimeEnd = moment.tz(taskMoment, reservationData.timezone).add(1, 'day').format();
+
+        await tokenLifetimeRepository.addToken({
+            token: token,
+            lifetime_end: tokenLifetimeEnd
+        });
 
         const task = schedule.scheduleJob(taskDate, function(){
             sendEmail(reservationData.email, reservationData.feedbackEmailMessage + link);
+        });
+
+        schedule.scheduleJob('* * 1 * *', function(){
+            tokenLifetimeRepository.findAndDeleteExpiredTokens();
         });
 
         res.sendStatus(201).end();
