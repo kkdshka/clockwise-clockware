@@ -8,7 +8,7 @@ router.get('/', async function (req, res) {
     try {
         const token = await tokenLifetimeRepository.getTokenLifetime(req.query.token);
 
-        if (moment(token.lifetime_end).isAfter(moment())) {
+        if (moment(token.lifetime_end).isAfter(moment()) && !token.is_used) {
             res.sendFile(path.join(__dirname, "../../../index.html"));
         }
         else {

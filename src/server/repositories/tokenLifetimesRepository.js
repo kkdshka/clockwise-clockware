@@ -13,11 +13,13 @@ function deleteToken(tokenId) {
 }
 
 function findAndDeleteExpiredTokens() {
-    return TokenLifetime.destroy({where: {
+    return TokenLifetime.destroy({
+        where: {
             lifetime_end: {
                 [Op.gte]: Date.now(),
             }
-        }}).catch(error => console.log(error));
+        }
+    }).catch(error => console.log(error));
 }
 
 function getTokenLifetime(token) {
@@ -26,9 +28,15 @@ function getTokenLifetime(token) {
         .catch(error => console.log(error));
 }
 
+function updateToken(token) {
+    return TokenLifetime.update(token, {where: {id: token.id}})
+        .catch(error => console.log(error));
+}
+
 module.exports = {
     addToken: addToken,
     deleteToken: deleteToken,
     findAndDeleteExpiredTokens: findAndDeleteExpiredTokens,
-    getTokenLifetime: getTokenLifetime
+    getTokenLifetime: getTokenLifetime,
+    updateToken: updateToken
 };

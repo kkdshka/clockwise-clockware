@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.DATE,
             allowNull: false,
         },
+        is_used: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
+        },
         id: {
             allowNull: false,
             autoIncrement: true,

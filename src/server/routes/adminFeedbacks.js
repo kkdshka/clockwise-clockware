@@ -3,6 +3,7 @@ const router = express.Router();
 const path = require('path');
 const auth = require('../authenticationMiddleware');
 const feedbacksRepository = require('../repositories/feedbacksRepository');
+const tokenLifetimeRepository = require('../repositories/tokenLifetimesRepository');
 const feedbackService = require('../feedbackService');
 
 router.get('/', auth, function (req, res) {
@@ -39,6 +40,10 @@ router.post('/', async function (req, res) {
     try {
         await feedbacksRepository.add(feedbackData);
         await feedbackService.changeWatchmakersRating(feedbackData.watchmaker_id);
+        const tokenLifetime = await tokenLifetimeRepository.getTokenLifetime(feedbackData.token);
+        tokenLifetime.is_used = true;
+        console.log(tokenLifetime);
+        await tokenLifetimeRepository.updateToken(tokenLifetime);
         res.sendStatus(201).end();
     }
     catch (error) {

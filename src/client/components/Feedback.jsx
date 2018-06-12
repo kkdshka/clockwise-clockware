@@ -17,7 +17,7 @@ export default class Feedback extends React.Component {
         const {language} = this.props;
         strings.setLanguage(language);
 
-        const reservationId = Buffer.from(String(window.location.href.split('?token=')[1]), 'base64').toString('ascii');
+        const reservationId = Buffer.from(String(window.location.href.split('?token=')[1] || ''), 'base64').toString('ascii');
         restApiClient.getReservationById(reservationId)
             .then(reservation => this.setState({reservation}));
     }
@@ -31,7 +31,8 @@ export default class Feedback extends React.Component {
             feedback: feedback.value,
             rating: rating.value,
             reservation_id: reservation.id,
-            watchmaker_id: reservation.watchmaker.id
+            watchmaker_id: reservation.watchmaker.id,
+            token: window.location.href.split('?token=')[1]
         };
 
         restApiClient.addFeedback(feedbackData);
