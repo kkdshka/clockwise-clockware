@@ -9,6 +9,8 @@ export default class Navigation extends React.Component {
     }
 
     render() {
+        const {update, cityTranslations} = this.props;
+
         return (
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div className="collapse navbar-collapse" id="navbarNav">
@@ -19,7 +21,7 @@ export default class Navigation extends React.Component {
                     </ul>
                     <ul className="navbar-nav ml-auto">
                         <li className={"nav-item"}>
-                            <Localization update={this.props.update} color="secondary"/>
+                            <Localization update={update} cityTranslations={cityTranslations} color="secondary"/>
                         </li>
                     </ul>
                 </div>

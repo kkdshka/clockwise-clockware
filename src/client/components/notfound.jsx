@@ -7,10 +7,16 @@ export default class NotFound extends React.Component {
         strings.setLanguage(this.props.language);
     }
 
+    update = () => {
+        this.forceUpdate();
+    };
+
     render() {
+        const {language, cityTranslations} = this.props;
+
         return (
             <div>
-                <Navigation language={this.props.language}/>
+                <Navigation language={language} cityTranslations={cityTranslations} update={this.update}/>
                 <h2>{strings.notFound}</h2>
             </div>
         );
