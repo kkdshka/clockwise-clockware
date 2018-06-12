@@ -42,7 +42,6 @@ router.post('/', async function (req, res) {
         await feedbackService.changeWatchmakersRating(feedbackData.watchmaker_id);
         const tokenLifetime = await tokenLifetimeRepository.getTokenLifetime(feedbackData.token);
         tokenLifetime.is_used = true;
-        console.log(tokenLifetime);
         await tokenLifetimeRepository.updateToken(tokenLifetime);
         res.sendStatus(201).end();
     }

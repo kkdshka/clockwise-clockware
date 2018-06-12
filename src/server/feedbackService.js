@@ -16,7 +16,7 @@ async function changeWatchmakersRating(watchmakerId) {
             const ratingsSum = feedbackRatings.reduce((accumulator, feedbackRating) => {
                 return Number(accumulator) + Number(feedbackRating);
             });
-            watchmaker.rating =  ratingsSum / feedbacksCount;
+            watchmaker.rating =  Math.round(ratingsSum / feedbacksCount);
             watchmakerRepository.edit(watchmaker);
         }
     }
