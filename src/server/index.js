@@ -3,6 +3,7 @@ const app = express();
 const path = require('path');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
+const clearingTokens = require('./clearingTokensService');
 
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());

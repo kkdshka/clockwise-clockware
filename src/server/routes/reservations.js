@@ -52,13 +52,13 @@ router.post('/', async function (req, res) {
         const reservationId = await reservationsRepository.add(reservationData);
         sendEmail(reservationData.email, reservationData.emailMessage);
 
-        const taskMoment = moment.tz(reservationData.start_time, reservationData.timezone).add(2, 'minutes').format();
+        const taskMoment = moment.tz(reservationData.finish_time, reservationData.timezone).add(1, 'hour').format();
         const taskDate = new Date(taskMoment);
 
         const host = req.get('host');
         const token =  Buffer.from(String(reservationId)).toString('base64');
         const link = 'http://' + host + '/feedback?token=' + token;
-        const tokenLifetimeEnd = moment.tz(taskMoment, reservationData.timezone).add(15, 'minutes').format();
+        const tokenLifetimeEnd = moment.tz(taskMoment, reservationData.timezone).add(1, 'day').format();
 
         await tokenLifetimeRepository.addToken({
             token: token,
@@ -67,10 +67,6 @@ router.post('/', async function (req, res) {
 
         const task = schedule.scheduleJob(taskDate, function(){
             sendEmail(reservationData.email, reservationData.feedbackEmailMessage + link);
-        });
-
-        schedule.scheduleJob('* * 1 * *', function(){
-            tokenLifetimeRepository.findAndDeleteExpiredTokens();
         });
 
         res.sendStatus(201).end();

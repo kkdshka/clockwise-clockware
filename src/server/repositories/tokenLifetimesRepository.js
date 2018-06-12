@@ -1,5 +1,7 @@
 const db = require('../models');
 const TokenLifetime = db.token_lifetime;
+const Sequelize = require('sequelize');
+const op = Sequelize.Op;
 
 function addToken(token) {
     return TokenLifetime.create(token)
@@ -16,7 +18,7 @@ function findAndDeleteExpiredTokens() {
     return TokenLifetime.destroy({
         where: {
             lifetime_end: {
-                [Op.gte]: Date.now(),
+                [op.lte]: Date.now(),
             }
         }
     }).catch(error => console.log(error));
