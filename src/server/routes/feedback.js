@@ -12,7 +12,8 @@ router.get('/', async function (req, res) {
             res.sendFile(path.join(__dirname, "../../../index.html"));
         }
         else {
-            res.sendStatus(404);
+            // res.sendStatus(404);
+            res.redirect('/notFound');
         }
     } catch (error) {
         res.sendStatus(404);

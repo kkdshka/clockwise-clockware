@@ -38,7 +38,7 @@ ReactDOM.render(
                    render={() => <Cities language={getLanguage()} cityTranslations={cityTranslations}/>}/>
             <Route path="/admin/reservations"
                    render={() => <Reservations language={getLanguage()} cityTranslations={cityTranslations}/>}/>
-            <Route render={() => <NotFound language={getLanguage()}/>}/>
+            <Route render={() => <NotFound language={getLanguage()} cityTranslations={cityTranslations}/>}/>
         </Switch>
     </Router>,
     document.getElementById("root")
