@@ -153,11 +153,6 @@ export default class Order extends React.Component {
                     this.setState({confirmation: 'opened'});
                 }
             });
-        restApiClient.addClient({
-            name: name,
-            email: email,
-        });
-
         this.hideModal();
     };
 

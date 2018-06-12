@@ -4,6 +4,8 @@ const Client = db.client;
 //client = {name, city, email, id}
 function addClient(client) {
     return Client.upsert(client)
+        .then(model => model.id)
+        .catch(error => console.log(error));
 }
 
 function editClient(client) {

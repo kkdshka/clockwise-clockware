@@ -3,6 +3,7 @@ const router = express.Router();
 const path = require('path');
 const reservationsRepository = require('../repositories/reservationsRepository');
 const tokenLifetimeRepository = require('../repositories/tokenLifetimesRepository');
+const clientRepository = require('../repositories/clientsRepository');
 const sendEmail = require('../sender');
 const auth = require('../authenticationMiddleware');
 const validation = require('../validation');
@@ -46,16 +47,18 @@ router.post('/', async function (req, res) {
     }
 
     try {
-        const id = await reservationsRepository.add(reservationData);
+        const clientId = await clientRepository.add(reservationData);
+
+        const reservationId = await reservationsRepository.add(reservationData);
         sendEmail(reservationData.email, reservationData.emailMessage);
 
-        const taskMoment = moment.tz(reservationData.finish_time, reservationData.timezone).add(1, 'hour').format();
+        const taskMoment = moment.tz(reservationData.start_time, reservationData.timezone).add(2, 'minutes').format();
         const taskDate = new Date(taskMoment);
 
         const host = req.get('host');
-        const token =  Buffer.from(String(id)).toString('base64');
+        const token =  Buffer.from(String(reservationId)).toString('base64');
         const link = 'http://' + host + '/feedback?token=' + token;
-        const tokenLifetimeEnd = moment.tz(taskMoment, reservationData.timezone).add(1, 'day').format();
+        const tokenLifetimeEnd = moment.tz(taskMoment, reservationData.timezone).add(15, 'minutes').format();
 
         await tokenLifetimeRepository.addToken({
             token: token,
