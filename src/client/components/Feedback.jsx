@@ -1,4 +1,5 @@
 import React from 'react';
+import Rating from 'react-rating';
 import Localization from './Localization.jsx';
 import strings from '../localization.js';
 import restApiClient from "../restApiClient";
@@ -7,7 +8,8 @@ export default class Feedback extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            reservation: {}
+            reservation: {},
+            rating: 5
         };
     }
 
@@ -24,12 +26,12 @@ export default class Feedback extends React.Component {
 
 
     handleOnSubmitClick = () => {
-        const {feedback, rating} = this.refs;
-        const {reservation} = this.state;
+        const {feedback} = this.refs;
+        const {reservation, rating} = this.state;
 
         const feedbackData = {
             feedback: feedback.value,
-            rating: rating.value,
+            rating: rating,
             reservation_id: reservation.id,
             watchmaker_id: reservation.watchmaker.id,
             token: window.location.href.split('?token=')[1]
@@ -48,6 +50,8 @@ export default class Feedback extends React.Component {
     };
 
     renderFeedbackForm() {
+        const {rating} = this.state;
+
         return <div className="container">
             <div className="row mt-4">
                 <div className="col col-sm-5 offset-sm-1">
@@ -64,13 +68,11 @@ export default class Feedback extends React.Component {
                         <div className="form-group row">
                             <label className="col-4 col-form-label" htmlFor="rating">{strings.rating + ":"}</label>
                             <div className="col-sm-8">
-                                <select className="form-control" id="rating" ref="rating" defaultValue={5}>
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                </select>
+                                <Rating start={0} stop={5} initialRating={rating} onChange={(rating) => {
+                                    this.setState({rating: rating})
+                                }}
+                                        emptySymbol="fa fa-star-o fa-2x star-color"
+                                        fullSymbol="fa fa-star fa-2x star-color"/>
                             </div>
                         </div>
                         <button type="button" className="btn btn-primary"
@@ -89,7 +91,7 @@ export default class Feedback extends React.Component {
                 <div className="container">
                     <div className="row">
                         <div className="col-10">
-                            <a className="nav-link text-center" href = '/'><h3><em>Clockwise Clockware</em></h3></a>
+                            <a className="nav-link text-center" href='/'><h3><em>Clockwise Clockware</em></h3></a>
                         </div>
                         <div className="col-1 align-self-center">
                             <Localization update={this.update} color="outline-secondary"
