@@ -18,11 +18,19 @@ module.exports = {
             reservation_id: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
-                unique: true
+                unique: true,
+                references: {
+                    model: 'reservations',
+                    key: 'id'
+                },
             },
             watchmaker_id: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
+                references: {
+                    model: 'watchmakers',
+                    key: 'id'
+                },
             }
         });
     },
