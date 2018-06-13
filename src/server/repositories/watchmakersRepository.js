@@ -4,7 +4,8 @@ const City = db.city;
 
 //watchmaker = {name, city, rate, id}
 function addWatchmaker(watchmaker) {
-    return Watchmaker.create(watchmaker);
+    return Watchmaker.create(watchmaker)
+        .catch(error => console.log(error));
 }
 
 function editWatchmaker(watchmaker) {
@@ -12,7 +13,7 @@ function editWatchmaker(watchmaker) {
         where: {
             id: watchmaker.id
         }
-    });
+    }).catch(error => console.log(error));
 }
 
 function deleteWatchmaker(id) {
@@ -20,11 +21,12 @@ function deleteWatchmaker(id) {
         where: {
             id: id
         }
-    });
+    }).catch(error => console.log(error));
 }
 
 function getAllWatchmakers() {
-    return Watchmaker.findAll({include: {model: City}});
+    return Watchmaker.findAll({include: {model: City}})
+        .catch(error => console.log(error));
 }
 
 function getFreeWatchmakers(data) {
@@ -39,11 +41,12 @@ function getFreeWatchmakers(data) {
     return db.sequelize.query(query, {
         replacements: data,
         type: db.sequelize.QueryTypes.SELECT,
-    });
+    }).catch(error => console.log(error));
 }
 
 function getWatchmakerById(id) {
-    return Watchmaker.findById(id);
+    return Watchmaker.findById(id)
+        .catch(error => console.log(error));
 }
 
 module.exports = {

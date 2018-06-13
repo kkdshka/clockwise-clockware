@@ -7,7 +7,8 @@ const Client = db.client;
 //reservation = {name, city, email, clockSize, date, id}
 function addReservation(reservation) {
     return Reservation.create(reservation)
-        .then(model => model.id);
+        .then(model => model.id)
+        .catch(error => console.log(error));
 }
 
 function editReservation(reservation) {
@@ -15,7 +16,7 @@ function editReservation(reservation) {
         where: {
             id: reservation.id
         }
-    });
+    }).catch(error => console.log(error));
 }
 
 function deleteReservation(id) {
@@ -23,21 +24,21 @@ function deleteReservation(id) {
         where: {
             id: id
         }
-    });
+    }).catch(error => console.log(error));
 }
 
 function getAllReservations() {
     return Reservation.findAll({
         include: [City, Watchmaker, Client],
         order: [['start_time', 'DESC']],
-    });
+    }).catch(error => console.log(error));
 }
 
 function getReservationById(id) {
     return Reservation.findOne({
         where: {id: id},
         include: [City, Watchmaker]
-    });
+    }).catch(error => console.log(error));
 }
 
 module.exports = {

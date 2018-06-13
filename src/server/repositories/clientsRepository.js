@@ -20,7 +20,7 @@ function editClient(client) {
         where: {
             id: client.id
         }
-    });
+    }).catch(error => console.log(error));
 }
 
 function deleteClient(id) {
@@ -28,11 +28,12 @@ function deleteClient(id) {
         where: {
             id: id
         }
-    });
+    }).catch(error => console.log(error));
 }
 
 function getAllClients() {
-    return Client.findAll();
+    return Client.findAll()
+        .catch(error => console.log(error));
 }
 
 module.exports = {

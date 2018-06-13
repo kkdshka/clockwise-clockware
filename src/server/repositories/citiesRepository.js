@@ -28,23 +28,24 @@ function editCityTranslations(cityTranslations) {
 function deleteCity(id) {
     return City.destroy({
         where: {id: id}
-    });
+    }).catch(error => console.log(error));
 }
 
 function deleteCityTranslations(id) {
     return CityTranslation.destroy({
         where: {city_id: id}
-    });
+    }).catch(error => console.log(error));
 }
 
 function getAllCities() {
-    return City.findAll();
+    return City.findAll()
+        .catch(error => console.log(error));
 }
 
 function getCityTranslations() {
     return CityTranslation.findAll({
         include: {model: City}
-    });
+    }).catch(error => console.log(error));
 }
 
 module.exports = {
