@@ -301,6 +301,7 @@ export default class Order extends React.Component {
 
     render() {
         const {validationResult: {name, email, time, date}} = this.state;
+        const {forCustomer} = this.props;
         return <div className="container">
             <div className="row mt-4">
                 <div className="col col-sm-5 offset-sm-1">
@@ -363,7 +364,7 @@ export default class Order extends React.Component {
                                 onClick={this.handleOnSubmitForm}>{strings.confirm}
                         </button>
                     </form>
-                    {this.renderFeedbacks()}
+                    {forCustomer ? this.renderFeedbacks() : ''}
                 </div>
             </div>
         </div>

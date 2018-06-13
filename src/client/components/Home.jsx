@@ -38,7 +38,7 @@ export default class Home extends React.Component {
                     </div>
                 </div>
             </div>
-            <Order cityTranslations={cityTranslations}/>
+            <Order cityTranslations={cityTranslations} forCustomer={true}/>
             <footer className="footer">
                 <div className="container">
                     <div className="row">

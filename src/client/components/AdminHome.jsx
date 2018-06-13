@@ -22,7 +22,7 @@ export default class Home extends React.Component {
                 <div className="col">
                     <Navigation active="home" update={this.update} language={language}
                                 cityTranslations={cityTranslations}/>
-                    <Order cityTranslations={cityTranslations}/>
+                    <Order cityTranslations={cityTranslations} forCustomer={false}/>
                 </div>
             </div>
         </div>
