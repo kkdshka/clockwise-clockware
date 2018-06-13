@@ -25,10 +25,10 @@ export default class AdminFeedbacks extends React.Component {
 
         return feedbacks.map(feedback => {
             return <tr key={'feedback' + feedback.id}>
-                <td>{feedback.reservation.watchmaker.name}</td>
+                <td>{feedback.watchmaker.name}</td>
                 <td>{feedback.rating}</td>
                 <td>{feedback.feedback}</td>
-                <td>{feedback.reservation.email}</td>
+                <td>{feedback.reservation.client.email}</td>
             </tr>
         });
     }

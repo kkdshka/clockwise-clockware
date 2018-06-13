@@ -3,9 +3,16 @@ const Client = db.client;
 
 //client = {name, city, email, id}
 function addClient(client) {
-    return Client.upsert(client)
-        .then(model => model.id)
-        .catch(error => console.log(error));
+    return Client.findOne({where: {email: client.email}}).then((model) => {
+        if(!model) {
+            return Client.create(client)
+                .then((res) => res.id)
+                .catch(error => console.log(error));
+        }
+        return Client.update(client, {where: {email: client.email}})
+            .then(() => model.id)
+            .catch((error) => console.log(error));
+    }).catch(error => console.log(error));
 }
 
 function editClient(client) {

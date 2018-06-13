@@ -194,9 +194,9 @@ export default class Reservations extends React.Component {
         return reservations.map(reservation => {
             return <tr className={this.isToday(reservation.start_time) ? 'table-info' : ''}
                        key={'reservation' + reservation.id}>
-                <td>{reservation.name}</td>
+                <td>{reservation.client.name}</td>
                 <td>{cityTranslations.getName(reservation.city_id)}</td>
-                <td>{reservation.email}</td>
+                <td>{reservation.client.email}</td>
                 <td>{strings[reservation.clock_size]}</td>
                 <td>{this.dateToString(reservation.start_time)}</td>
                 <td>{reservation.watchmaker.name}</td>
@@ -328,7 +328,7 @@ export default class Reservations extends React.Component {
     };
 
     renderModalUpdate() {
-        const {isModalUpdateOpened, editing: {name, email, start_time, city, clockSize, watchmaker}, validationResult} = this.state;
+        const {isModalUpdateOpened, editing: {client, start_time, city, clockSize, watchmaker}, validationResult} = this.state;
 
         if (isModalUpdateOpened) {
             return <Modal visible={true} onClickBackdrop={this.hideModalUpdate}>
@@ -341,14 +341,14 @@ export default class Reservations extends React.Component {
                         <div className="form-group">
                             <label htmlFor="edit-name">{strings.name + ":"}</label>
                             <input type="text" className="form-control" id="edit-name" ref="editName"
-                                   defaultValue={name}
+                                   defaultValue={client.name}
                                    onBlur={this.handleValidation('name', strings.nameWarning)}/>
                             <div className="invalid-feedback">{validationResult.name.message}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="edit-name">{strings.email + ":"}</label>
                             <input type="text" className="form-control" id="edit-email" ref="editEmail"
-                                   defaultValue={email}
+                                   defaultValue={client.email}
                                    onBlur={this.handleValidation('email', strings.emailWarning)}/>
                             <div className="invalid-feedback">{validationResult.email.message}</div>
                         </div>

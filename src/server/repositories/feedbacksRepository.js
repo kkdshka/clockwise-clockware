@@ -2,6 +2,7 @@ const db = require('../models');
 const Feedback = db.feedback;
 const Reservation = db.reservation;
 const Watchmaker = db.watchmaker;
+const Client = db.client;
 
 //client = {name, city, email, id}
 function addFeedback(feedback) {
@@ -26,7 +27,7 @@ function deleteFeedback(id) {
 
 function getAllFeedbacks() {
     return Feedback.findAll({
-        include: [{model: Reservation, include: {model: Watchmaker}}]
+        include: [{model: Reservation, include: {model: Client}}, {model: Watchmaker}]
     });
 }
 

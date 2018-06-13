@@ -1,14 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
     const Reservation = sequelize.define('reservation', {
-        name: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
         clock_size: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -30,7 +22,8 @@ module.exports = (sequelize, DataTypes) => {
     }, {timestamps: false});
     Reservation.associate = function (models) {
         Reservation.belongsTo(models.city, {foreignKey: 'city_id', foreignKeyConstraint: true});
-        Reservation.belongsTo(models.watchmaker, {foreignKey: 'watchmaker_id', foreignKeyConstraint: true})
+        Reservation.belongsTo(models.watchmaker, {foreignKey: 'watchmaker_id', foreignKeyConstraint: true});
+        Reservation.belongsTo(models.client, {foreignKey: 'client_id', foreignKeyConstraint: true})
     };
     return Reservation;
 };

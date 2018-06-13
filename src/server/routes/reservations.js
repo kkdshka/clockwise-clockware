@@ -48,6 +48,7 @@ router.post('/', async function (req, res) {
 
     try {
         const clientId = await clientRepository.add(reservationData);
+        reservationData.client_id = clientId;
 
         const reservationId = await reservationsRepository.add(reservationData);
         sendEmail(reservationData.email, reservationData.emailMessage);

@@ -2,6 +2,7 @@ const db = require('../models');
 const Reservation = db.reservation;
 const Watchmaker = db.watchmaker;
 const City = db.city;
+const Client = db.client;
 
 //reservation = {name, city, email, clockSize, date, id}
 function addReservation(reservation) {
@@ -27,7 +28,7 @@ function deleteReservation(id) {
 
 function getAllReservations() {
     return Reservation.findAll({
-        include: [City, Watchmaker],
+        include: [City, Watchmaker, Client],
         order: [['start_time', 'DESC']],
     });
 }
