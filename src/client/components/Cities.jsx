@@ -4,7 +4,6 @@ import Modal from 'react-bootstrap4-modal';
 import restApiClient from '../restApiClient/index';
 import validation from '../validation';
 import strings from '../localization.js';
-import moment from 'moment-timezone';
 import SelectTimezone from './SelectTimezone.jsx';
 import translations from "../localization";
 
@@ -47,10 +46,14 @@ export default class Cities extends React.Component {
     };
 
     handleOnDeleteClick = (id) => () => {
-        restApiClient.deleteCity(id);
+        const {cities} = this.state;
 
-        restApiClient.getCities()
-            .then(cities => this.setState({cities: cities}));
+        restApiClient.deleteCity(id)
+            .then(res => {
+                if (res.status === 204) {
+                    this.setState({cities: cities.filter(city => city.id != id)});
+                }
+            });
     };
 
     handleOnSubmitAdd = () => {
@@ -174,7 +177,8 @@ export default class Cities extends React.Component {
                         </div>
                         <div className="form-group">
                             <label htmlFor="add-timezone">{strings.timezone + ":"}</label>
-                            <select className={'form-control'} id="add-timezone" ref="addTimezone" defaultValue='Europe/Kiev'>
+                            <select className={'form-control'} id="add-timezone" ref="addTimezone"
+                                    defaultValue='Europe/Kiev'>
                                 <SelectTimezone/>
                             </select>
                         </div>
@@ -231,7 +235,8 @@ export default class Cities extends React.Component {
                         </div>
                         <div className="form-group">
                             <label htmlFor="edit-timezone">{strings.timezone + ":"}</label>
-                            <select className={'form-control'} id="edit-timezone" ref="editTimezone" defaultValue={editing.timezone}>
+                            <select className={'form-control'} id="edit-timezone" ref="editTimezone"
+                                    defaultValue={editing.timezone}>
                                 <SelectTimezone/>
                             </select>
                         </div>

@@ -76,7 +76,6 @@ router.put('/', async function (req, res) {
 router.delete('/', async function (req, res) {
     const id = req.body.id;
     try {
-        await citiesRepository.deleteTranslations(id);
         await citiesRepository.deleteCity(id);
         res.sendStatus(204).end();
     }

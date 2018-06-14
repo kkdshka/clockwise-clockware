@@ -26,15 +26,12 @@ function editCityTranslations(cityTranslations) {
 }
 
 function deleteCity(id) {
-    return City.destroy({
-        where: {id: id}
-    }).catch(error => console.log(error));
-}
-
-function deleteCityTranslations(id) {
-    return CityTranslation.destroy({
-        where: {city_id: id}
-    }).catch(error => console.log(error));
+    return CityTranslation.destroy({where: {city_id: id}})
+        .then(() => {
+            return City.destroy({where: {id: id}})
+                .catch(error => console.log(error));
+        })
+        .catch(error => console.log(error));
 }
 
 function getAllCities() {
@@ -55,6 +52,5 @@ module.exports = {
     getCities: getAllCities,
     addTranslations: addCityTranslations,
     editTranslations: editCityTranslations,
-    deleteTranslations: deleteCityTranslations,
     getTranslations: getCityTranslations
 };
