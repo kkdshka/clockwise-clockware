@@ -91,10 +91,14 @@ export default class Reservations extends React.Component {
     };
 
     handleOnDeleteClick = (id) => () => {
-        restApiClient.deleteReservation(id);
+        const {reservations} = this.state;
 
-        restApiClient.getReservations()
-            .then(reservations => this.setState({reservations: reservations}));
+        restApiClient.deleteReservation(id)
+            .then(res => {
+                if (res.status === 204) {
+                    reservations.filter(reservation => reservation.id !== id);
+                }
+            });
     };
 
     handleOnSubmitAdd = () => {

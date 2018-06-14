@@ -51,10 +51,14 @@ export default class Watchmakers extends Component {
     };
 
     handleOnDeleteClick = (id) => () => {
-        restApiClient.deleteWatchmaker(id);
+        const {watchmakers} = this.state;
 
-        restApiClient.getWatchmakers()
-            .then(watchmakers => this.setState({watchmakers: watchmakers}));
+        restApiClient.deleteWatchmaker(id)
+            .then(res => {
+                if (res.status === 204) {
+                    watchmakers.filter(watchmaker => watchmaker.id !== id);
+                }
+            });
     };
 
     handleOnSubmitAdd = () => {

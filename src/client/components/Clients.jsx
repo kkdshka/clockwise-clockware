@@ -60,10 +60,14 @@ export default class Clients extends React.Component {
     };
 
     handleOnDeleteClick = (id) => () => {
-        restApiClient.deleteClient(id);
+        const {clients} = this.state;
 
-        restApiClient.getClients()
-            .then(clients => this.setState({clients: clients}));
+        restApiClient.deleteClient(id)
+            .then(res => {
+                if (res.status === 204) {
+                    clients.filter(client => client.id !== id);
+                }
+            });
     };
 
     handleOnSubmitAdd = () => {
@@ -247,7 +251,8 @@ export default class Clients extends React.Component {
         return <div className="container">
             <div className="row">
                 <div className="col-sm">
-                    <Navigation active="clients" update={this.update} language={language} cityTranslations={cityTranslations}/>
+                    <Navigation active="clients" update={this.update} language={language}
+                                cityTranslations={cityTranslations}/>
                 </div>
             </div>
             <div className="row mt-4">
