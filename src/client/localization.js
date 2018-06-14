@@ -56,7 +56,8 @@ const strings = new LocalizedStrings({
         feedbackEmailMessage: 'Feedback link: ',
         feedbacks: "Feedbacks",
         watchmakerName: "Watchmaker name",
-        clientEmail: "Client email"
+        clientEmail: "Client email",
+        deletingMessage: "Are you sure?"
 },
     ru: {
         main: "Главная",
@@ -112,7 +113,8 @@ const strings = new LocalizedStrings({
         feedbackEmailMessage: 'Оставьте отзыв по ссылке: ',
         feedbacks: "Отзывы",
         watchmakerName: "Имя мастера",
-        clientEmail: "Почта клиента"
+        clientEmail: "Почта клиента",
+        deletingMessage: "Вы уверены?"
     }
 });
 

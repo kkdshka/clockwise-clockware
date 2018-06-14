@@ -6,6 +6,7 @@ import validation from '../validation';
 import strings from '../localization.js';
 import SelectTimezone from './SelectTimezone.jsx';
 import translations from "../localization";
+import DeleteButton from "./DeleteButton.jsx";
 
 export default class Cities extends React.Component {
     constructor(props) {
@@ -124,9 +125,7 @@ export default class Cities extends React.Component {
                     </button>
                 </td>
                 <td>
-                    <button type="button" className="btn btn-danger" onClick={this.handleOnDeleteClick(city.id)}>
-                        <i className="fa fa-remove"/>
-                    </button>
+                    <DeleteButton handleDelete={this.handleOnDeleteClick(city.id)} deletingMessage={strings.deletingMessage}/>
                 </td>
             </tr>
         });

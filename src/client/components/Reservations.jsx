@@ -6,6 +6,7 @@ import Modal from 'react-bootstrap4-modal';
 import strings from '../localization.js';
 import moment from 'moment-timezone';
 import timeHelper from '../timeHelper';
+import DeleteButton from "./DeleteButton.jsx";
 
 export default class Reservations extends React.Component {
     constructor(props) {
@@ -211,10 +212,7 @@ export default class Reservations extends React.Component {
                     </button>
                 </td>
                 <td>
-                    <button type="button" className="btn btn-danger"
-                            onClick={this.handleOnDeleteClick(reservation.id)}>
-                        <i className="fa fa-remove"/>
-                    </button>
+                    <DeleteButton handleDelete={this.handleOnDeleteClick(reservation.id)} deletingMessage={strings.deletingMessage}/>
                 </td>
             </tr>
         });

@@ -4,6 +4,7 @@ import restApiClient from '../restApiClient/index';
 import Modal from 'react-bootstrap4-modal';
 import validation from "../validation";
 import strings from '../localization.js';
+import DeleteButton from "./DeleteButton.jsx";
 
 export default class Clients extends React.Component {
     constructor(props) {
@@ -133,10 +134,7 @@ export default class Clients extends React.Component {
                     </button>
                 </td>
                 <td>
-                    <button type="button" className="btn btn-danger"
-                            onClick={this.handleOnDeleteClick(client.id)}>
-                        <i className="fa fa-remove"/>
-                    </button>
+                    <DeleteButton handleDelete={this.handleOnDeleteClick(client.id)} deletingMessage={strings.deletingMessage}/>
                 </td>
             </tr>
         });
