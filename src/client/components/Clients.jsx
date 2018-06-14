@@ -66,7 +66,7 @@ export default class Clients extends React.Component {
         restApiClient.deleteClient(id)
             .then(res => {
                 if (res.status === 204) {
-                    clients.filter(client => client.id !== id);
+                    this.setState({clients: clients.filter(client => client.id !== id)});
                 }
             });
     };
