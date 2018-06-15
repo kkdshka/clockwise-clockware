@@ -18,7 +18,13 @@ function editCity(data) {
 
 function deleteCity(id) {
     return axios.delete('/admin/cities/', {data: {id: id}})
-        .catch(error => console.log(error));
+        .then(res => res)
+        .catch(error => {
+            return {
+                error: error.response.data,
+                status: error.response.status
+            }
+        });
 }
 
 module.exports = {

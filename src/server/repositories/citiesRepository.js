@@ -26,12 +26,7 @@ function editCityTranslations(cityTranslations) {
 }
 
 function deleteCity(id) {
-    return CityTranslation.destroy({where: {city_id: id}})
-        .then(() => {
-            return City.destroy({where: {id: id}})
-                .catch(error => console.log(error));
-        })
-        .catch(error => console.log(error));
+    return City.destroy({where: {id: id}});
 }
 
 function getAllCities() {

@@ -9,6 +9,7 @@ const auth = require('../authenticationMiddleware');
 const validation = require('../validation');
 const schedule = require('node-schedule');
 const moment = require('moment-timezone');
+const Sequelize = require('sequelize');
 
 router.get('/', auth, function (req, res) {
     res.sendFile(path.join(__dirname, "../../../index.html"));
@@ -31,7 +32,7 @@ router.get('/:id', async function (req, res) {
         const reservation = await reservationsRepository.getById(req.query.id);
         res.status(200).json(reservation);
     }
-    catch(error) {
+    catch (error) {
         console.log(error);
         res.sendStatus(500).json({error: error});
     }
@@ -57,7 +58,7 @@ router.post('/', async function (req, res) {
         const taskDate = new Date(taskMoment);
 
         const host = req.get('host');
-        const token =  Buffer.from(String(reservationId)).toString('base64');
+        const token = Buffer.from(String(reservationId)).toString('base64');
         const link = 'http://' + host + '/feedback?token=' + token;
         const tokenLifetimeEnd = moment.tz(taskMoment, reservationData.timezone).add(1, 'day').format();
 
@@ -66,7 +67,7 @@ router.post('/', async function (req, res) {
             lifetime_end: tokenLifetimeEnd
         });
 
-        const task = schedule.scheduleJob(taskDate, function(){
+        const task = schedule.scheduleJob(taskDate, function () {
             sendEmail(reservationData.email, reservationData.feedbackEmailMessage + link);
         });
 
@@ -104,8 +105,13 @@ router.delete('/', async function (req, res) {
         res.sendStatus(204).end();
     }
     catch (error) {
-        console.log(error);
-        res.sendStatus(500).json({error: error});
+        if (error instanceof Sequelize.ForeignKeyConstraintError) {
+            res.status(500).send("Foreign key constraint error").end();
+        }
+        else {
+            console.log(error);
+            res.sendStatus(500).end();
+        }
     }
 });
 

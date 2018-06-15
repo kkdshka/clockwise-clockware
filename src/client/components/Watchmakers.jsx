@@ -16,6 +16,7 @@ export default class Watchmakers extends Component {
             isModalUpdateOpened: false,
             name: {isValid: false, message: ''},
             formError: false,
+            foreignKeyConstraintError: false,
             editing: {},
         };
     }
@@ -58,6 +59,9 @@ export default class Watchmakers extends Component {
             .then(res => {
                 if (res.status === 204) {
                     this.setState({watchmakers: watchmakers.filter(watchmaker => watchmaker.id !== id)});
+                }
+                else if (res.status === 500 && res.error === "Foreign key constraint error") {
+                    this.setState({foreignKeyConstraintError: true});
                 }
             });
     };
@@ -133,6 +137,14 @@ export default class Watchmakers extends Component {
         return cities.map(city => {
             return <option key={'city' + city.id} value={city.id}>{cityTranslations.getName(city.id)}</option>
         });
+    }
+
+    renderForeignKeyConstraintError() {
+        const {foreignKeyConstraintError} = this.state;
+
+        if(foreignKeyConstraintError) {
+            return <div className="alert alert-danger">{strings.foreignKeyConstraintError}</div>
+        }
     }
 
     renderFormError() {
@@ -282,6 +294,7 @@ export default class Watchmakers extends Component {
             </div>
             <div className="row mt-4">
                 <div className="col-md-4">
+                    {this.renderForeignKeyConstraintError()}
                     <h4 className="row justify-content-md-center">{strings.watchmakers}</h4>
                     <table className="table table-striped">
                         <thead>

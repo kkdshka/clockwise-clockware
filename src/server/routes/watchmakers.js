@@ -4,6 +4,7 @@ const path = require('path');
 const watchmakersRepository = require('../repositories/watchmakersRepository');
 const auth = require('../authenticationMiddleware');
 const validation = require('../validation');
+const Sequelize = require('sequelize');
 
 router.get('/', auth, function (req, res) {
     res.sendFile(path.join(__dirname, "../../../index.html"));
@@ -88,8 +89,13 @@ router.delete('/', async function (req, res) {
         res.sendStatus(204).end();
     }
     catch (error) {
-        console.log(error);
-        res.sendStatus(500).json({error: error});
+        if (error instanceof Sequelize.ForeignKeyConstraintError) {
+            res.status(500).send("Foreign key constraint error").end();
+        }
+        else {
+            console.log(error);
+            res.sendStatus(500).end();
+        }
     }
 });
 

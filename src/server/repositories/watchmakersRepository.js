@@ -21,7 +21,7 @@ function deleteWatchmaker(id) {
         where: {
             id: id
         }
-    }).catch(error => console.log(error));
+    });
 }
 
 function getAllWatchmakers() {

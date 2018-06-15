@@ -57,7 +57,8 @@ const strings = new LocalizedStrings({
         feedbacks: "Feedbacks",
         watchmakerName: "Watchmaker name",
         clientEmail: "Client email",
-        deletingMessage: "Are you sure?"
+        deletingMessage: "Are you sure?",
+        foreignKeyConstraintError: "The entity you tried to delete is associated with other entities and can not be deleted"
 },
     ru: {
         main: "Главная",
@@ -114,7 +115,8 @@ const strings = new LocalizedStrings({
         feedbacks: "Отзывы",
         watchmakerName: "Имя мастера",
         clientEmail: "Почта клиента",
-        deletingMessage: "Вы уверены?"
+        deletingMessage: "Вы уверены?",
+        foreignKeyConstraintError: "Запись, которую вы попытались удалить, связана с другими записями и не может быть удалена"
     }
 });
 

@@ -19,7 +19,13 @@ function editReservation(data) {
 
 function deleteReservation(id) {
     return axios.delete('/admin/reservations/', {data: {id: id}})
-        .catch(error => console.log(error));
+        .then(res => res)
+        .catch(error => {
+            return {
+                error: error.response.data,
+                status: error.response.status
+            }
+        });
 }
 
 function getReservationById(id) {

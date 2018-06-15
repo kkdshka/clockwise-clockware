@@ -18,7 +18,12 @@ function editWatchmaker(data) {
 
 function deleteWatchmaker(id) {
     return axios.delete('/admin/watchmakers/', {data: {id: id}})
-        .catch(error => console.log(error));
+        .catch(error => {
+            return {
+                error: error.response.data,
+                status: error.response.status
+            }
+        });
 }
 
 function getFreeWatchmakers(params) {

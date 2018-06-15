@@ -24,7 +24,7 @@ function deleteReservation(id) {
         where: {
             id: id
         }
-    }).catch(error => console.log(error));
+    })
 }
 
 function getAllReservations() {

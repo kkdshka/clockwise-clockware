@@ -18,7 +18,12 @@ function editClient(data) {
 
 function deleteClient(id) {
     return axios.delete('/admin/clients/', {data: {id: id}})
-        .catch(error => console.log(error));
+        .catch(error => {
+            return {
+                error: error.response.data,
+                status: error.response.status
+            }
+        });
 }
 
 module.exports = {

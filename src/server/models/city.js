@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('city', {
+    const City =  sequelize.define('city', {
         name: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -18,4 +18,8 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER
         },
     }, {timestamps: false});
+    City.associate = function (models) {
+        City.hasMany(models.city_translation, {foreignKey: 'city_id', hooks: true, onDelete: 'cascade'})
+    };
+    return City;
 };

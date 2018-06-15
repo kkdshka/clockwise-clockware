@@ -24,6 +24,7 @@ export default class Reservations extends React.Component {
                 time: {isValid: false, message: ''},
             },
             formError: false,
+            foreignKeyConstraintError: false,
             editing: {},
         };
     }
@@ -98,6 +99,9 @@ export default class Reservations extends React.Component {
             .then(res => {
                 if (res.status === 204) {
                     this.setState({reservations: reservations.filter(reservation => reservation.id !== id)});
+                }
+                else if (res.status === 500 && res.error === "Foreign key constraint error") {
+                    this.setState({foreignKeyConstraintError: true});
                 }
             });
     };
@@ -179,6 +183,14 @@ export default class Reservations extends React.Component {
     dateToString(date) {
         const newDate = new Date(date);
         return newDate.toLocaleDateString() + " " + newDate.toLocaleTimeString();
+    }
+
+    renderForeignKeyConstraintError() {
+        const {foreignKeyConstraintError} = this.state;
+
+        if(foreignKeyConstraintError) {
+            return <div className="alert alert-danger">{strings.foreignKeyConstraintError}</div>
+        }
     }
 
     renderFormError() {
@@ -422,6 +434,7 @@ export default class Reservations extends React.Component {
             </div>
             <div className="row mt-4">
                 <div className="col">
+                    {this.renderForeignKeyConstraintError()}
                     <h4 className="row justify-content-md-center">{strings.reservations}</h4>
                     <table className="table table-striped">
                         <thead>

@@ -19,6 +19,7 @@ export default class Clients extends React.Component {
                 email: {isValid: false, message: ''},
             },
             formError: false,
+            foreignKeyConstraintError: false,
             editing: {},
         };
     }
@@ -68,6 +69,9 @@ export default class Clients extends React.Component {
                 if (res.status === 204) {
                     this.setState({clients: clients.filter(client => client.id !== id)});
                 }
+                else if (res.status === 500 && res.error === "Foreign key constraint error") {
+                    this.setState({foreignKeyConstraintError: true});
+                }
             });
     };
 
@@ -112,6 +116,14 @@ export default class Clients extends React.Component {
 
         this.hideModalUpdate();
     };
+
+    renderForeignKeyConstraintError() {
+        const {foreignKeyConstraintError} = this.state;
+
+        if(foreignKeyConstraintError) {
+            return <div className="alert alert-danger">{strings.foreignKeyConstraintError}</div>
+        }
+    }
 
     renderFormError() {
         const {formError} = this.state;
@@ -255,6 +267,7 @@ export default class Clients extends React.Component {
             </div>
             <div className="row mt-4">
                 <div className="col-md-6">
+                    {this.renderForeignKeyConstraintError()}
                     <h4 className="row justify-content-md-center">{strings.clients}</h4>
                     <table className="table table-striped">
                         <thead>
