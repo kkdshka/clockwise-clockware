@@ -265,8 +265,8 @@ export default class Clients extends React.Component {
                                 cityTranslations={cityTranslations}/>
                 </div>
             </div>
-            <div className="row mt-4">
-                <div className="col-md-6">
+            <div className="row justify-content-between">
+                <div className="col-md-5">
                     {this.renderForeignKeyConstraintError()}
                     <h4 className="row justify-content-md-center">{strings.clients}</h4>
                     <table className="table table-striped">
@@ -286,7 +286,7 @@ export default class Clients extends React.Component {
                         <i className="fa fa-plus"/> {strings.add}
                     </button>
                 </div>
-                <div className="col-md-6">
+                <div className="col-md-1">
                     <div>{this.renderModalCreate()}</div>
                     <div>{this.renderModalUpdate()}</div>
                 </div>

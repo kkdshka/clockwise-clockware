@@ -281,8 +281,8 @@ export default class Cities extends React.Component {
                                 cityTranslations={cityTranslations}/>
                 </div>
             </div>
-            <div className="row mt-4">
-                <div className="col-sm-6">
+            <div className="row justify-content-between">
+                <div className="col-md-4">
                     {this.renderForeignKeyConstraintError()}
                     <h4 className="row justify-content-md-center">{strings.cities}</h4>
                     <table className="table table-striped">
