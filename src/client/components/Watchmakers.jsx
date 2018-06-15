@@ -67,7 +67,7 @@ export default class Watchmakers extends Component {
     };
 
     handleOnSubmitAdd = () => {
-        const {name: {isValid}} = this.state;
+        const {name: {isValid}, watchmakers} = this.state;
         const {addName, addCity, addRating} = this.refs;
 
         if (!isValid) {
@@ -82,10 +82,10 @@ export default class Watchmakers extends Component {
             rating: addRating.value
         };
 
-        restApiClient.addWatchmaker(data);
-
-        restApiClient.getWatchmakers()
-            .then(watchmakers => this.setState({watchmakers: watchmakers}));
+        restApiClient.addWatchmaker(data).then((res) => {
+            restApiClient.getWatchmakers()
+                .then(watchmakers => this.setState({watchmakers: watchmakers}));
+        });
 
         this.hideModalCreate();
     };
@@ -100,10 +100,12 @@ export default class Watchmakers extends Component {
             id: id
         };
 
-        restApiClient.editWatchmaker(data);
+        restApiClient.editWatchmaker(data)
+            .then(() => {
+                restApiClient.getWatchmakers()
+                    .then(watchmakers => this.setState({watchmakers: watchmakers}));
+            });
 
-        restApiClient.getWatchmakers()
-            .then(watchmakers => this.setState({watchmakers: watchmakers}));
 
         this.hideModalUpdate();
     };
@@ -124,7 +126,8 @@ export default class Watchmakers extends Component {
                     </button>
                 </td>
                 <td>
-                    <DeleteButton handleDelete={this.handleOnDeleteClick(watchmaker.id)} deletingMessage={strings.deletingMessage}/>
+                    <DeleteButton handleDelete={this.handleOnDeleteClick(watchmaker.id)}
+                                  deletingMessage={strings.deletingMessage}/>
                 </td>
             </tr>
         });
@@ -142,7 +145,7 @@ export default class Watchmakers extends Component {
     renderForeignKeyConstraintError() {
         const {foreignKeyConstraintError} = this.state;
 
-        if(foreignKeyConstraintError) {
+        if (foreignKeyConstraintError) {
             return <div className="alert alert-danger">{strings.foreignKeyConstraintError}</div>
         }
     }

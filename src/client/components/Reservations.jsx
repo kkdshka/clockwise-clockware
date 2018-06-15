@@ -134,10 +134,12 @@ export default class Reservations extends React.Component {
             this.setState({formError: false});
         }
 
-        restApiClient.addReservation(data);
+        restApiClient.addReservation(data)
+            .then(() => {
+                restApiClient.getReservations()
+                    .then(reservations => this.setState({reservations: reservations}));
+            });
 
-        restApiClient.getReservations()
-            .then(reservations => this.setState({reservations: reservations}));
 
         this.hideModalCreate();
     };
@@ -172,10 +174,12 @@ export default class Reservations extends React.Component {
             this.setState({formError: false});
         }
 
-        restApiClient.editReservation(data);
+        restApiClient.editReservation(data)
+            .then(() => {
+                restApiClient.getReservations()
+                    .then(reservations => this.setState({reservations: reservations}));
+            });
 
-        restApiClient.getReservations()
-            .then(reservations => this.setState({reservations: reservations}));
 
         this.hideModalUpdate();
     };
@@ -188,7 +192,7 @@ export default class Reservations extends React.Component {
     renderForeignKeyConstraintError() {
         const {foreignKeyConstraintError} = this.state;
 
-        if(foreignKeyConstraintError) {
+        if (foreignKeyConstraintError) {
             return <div className="alert alert-danger">{strings.foreignKeyConstraintError}</div>
         }
     }
@@ -224,7 +228,8 @@ export default class Reservations extends React.Component {
                     </button>
                 </td>
                 <td>
-                    <DeleteButton handleDelete={this.handleOnDeleteClick(reservation.id)} deletingMessage={strings.deletingMessage}/>
+                    <DeleteButton handleDelete={this.handleOnDeleteClick(reservation.id)}
+                                  deletingMessage={strings.deletingMessage}/>
                 </td>
             </tr>
         });

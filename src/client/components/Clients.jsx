@@ -91,10 +91,12 @@ export default class Clients extends React.Component {
             this.setState({formError: false});
         }
 
-        restApiClient.addClient(data);
+        restApiClient.addClient(data)
+            .then(() => {
+                restApiClient.getClients()
+                    .then(clients => this.setState({clients: clients}));
+            });
 
-        restApiClient.getClients()
-            .then(clients => this.setState({clients: clients}));
 
         this.hideModalCreate();
     };
@@ -109,10 +111,12 @@ export default class Clients extends React.Component {
             id: id
         };
 
-        restApiClient.editClient(data);
+        restApiClient.editClient(data)
+            .then(() => {
+                restApiClient.getClients()
+                    .then(clients => this.setState({clients: clients}));
+            });
 
-        restApiClient.getClients()
-            .then(clients => this.setState({clients: clients}));
 
         this.hideModalUpdate();
     };
@@ -120,7 +124,7 @@ export default class Clients extends React.Component {
     renderForeignKeyConstraintError() {
         const {foreignKeyConstraintError} = this.state;
 
-        if(foreignKeyConstraintError) {
+        if (foreignKeyConstraintError) {
             return <div className="alert alert-danger">{strings.foreignKeyConstraintError}</div>
         }
     }
@@ -146,7 +150,8 @@ export default class Clients extends React.Component {
                     </button>
                 </td>
                 <td>
-                    <DeleteButton handleDelete={this.handleOnDeleteClick(client.id)} deletingMessage={strings.deletingMessage}/>
+                    <DeleteButton handleDelete={this.handleOnDeleteClick(client.id)}
+                                  deletingMessage={strings.deletingMessage}/>
                 </td>
             </tr>
         });
