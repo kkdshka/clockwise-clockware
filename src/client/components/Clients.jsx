@@ -270,9 +270,9 @@ export default class Clients extends React.Component {
                                 cityTranslations={cityTranslations}/>
                 </div>
             </div>
+            {this.renderForeignKeyConstraintError()}
             <div className="row justify-content-between">
                 <div className="col-md-5">
-                    {this.renderForeignKeyConstraintError()}
                     <h4 className="row justify-content-md-center">{strings.clients}</h4>
                     <table className="table table-striped">
                         <thead>

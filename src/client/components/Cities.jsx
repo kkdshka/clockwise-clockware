@@ -129,7 +129,8 @@ export default class Cities extends React.Component {
                     </button>
                 </td>
                 <td>
-                    <DeleteButton handleDelete={this.handleOnDeleteClick(city.id)} deletingMessage={strings.deletingMessage}/>
+                    <DeleteButton handleDelete={this.handleOnDeleteClick(city.id)}
+                                  deletingMessage={strings.deletingMessage}/>
                 </td>
             </tr>
         });
@@ -138,7 +139,7 @@ export default class Cities extends React.Component {
     renderForeignKeyConstraintError() {
         const {foreignKeyConstraintError} = this.state;
 
-        if(foreignKeyConstraintError) {
+        if (foreignKeyConstraintError) {
             return <div className="alert alert-danger">{strings.foreignKeyConstraintError}</div>
         }
     }
@@ -281,9 +282,9 @@ export default class Cities extends React.Component {
                                 cityTranslations={cityTranslations}/>
                 </div>
             </div>
+            {this.renderForeignKeyConstraintError()}
             <div className="row justify-content-between">
                 <div className="col-md-4">
-                    {this.renderForeignKeyConstraintError()}
                     <h4 className="row justify-content-md-center">{strings.cities}</h4>
                     <table className="table table-striped">
                         <thead>

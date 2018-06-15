@@ -295,9 +295,9 @@ export default class Watchmakers extends Component {
                                 cityTranslations={cityTranslations}/>
                 </div>
             </div>
+            {this.renderForeignKeyConstraintError()}
             <div className="row justify-content-between">
                 <div className="col-md-4">
-                    {this.renderForeignKeyConstraintError()}
                     <h4 className="row justify-content-md-center">{strings.watchmakers}</h4>
                     <table className="table table-striped">
                         <thead>
