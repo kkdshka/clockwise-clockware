@@ -23,6 +23,11 @@ export default class Reservations extends React.Component {
                 date: {isValid: false, message: ''},
                 time: {isValid: false, message: ''},
             },
+            columnDirections: {
+                date: {direction: 'asc'},
+                city: {direction: 'asc'},
+                watchmaker: {direction: 'asc'}
+            },
             formError: false,
             foreignKeyConstraintError: false,
             editing: {},
@@ -421,6 +426,45 @@ export default class Reservations extends React.Component {
         }
     }
 
+    renderColumnHeader = (columnName, header) => {
+        const icon = this.state.columnDirections[columnName].direction === 'asc' ? "fa fa-arrow-up" : "fa fa-arrow-down";
+        return <div style={{cursor: "pointer"}} onClick={() => this.sort(columnName)}>
+            {header} <i className={icon}/>
+        </div>
+    };
+
+    sort = (columnName) => {
+        const {reservations} = this.state;
+        const sortDirection = this.state.columnDirections[columnName].direction;
+        const newSortDirection = sortDirection === 'asc' ? "desc" : "asc";
+
+        if (columnName === 'date') {
+            reservations.sort((date1, date2) => {
+                if (sortDirection === "asc") {
+                    return new Date(date1.start_time) > new Date(date2.start_time) ? 1 : -1;
+                } else if (sortDirection === 'desc') {
+                    return new Date(date1.start_time) > new Date(date2.start_time) ? -1 : 1;
+                }
+            });
+        } else if (columnName === 'city' || columnName === 'watchmaker') {
+            reservations.sort((a, b) => {
+                if (sortDirection === "asc") {
+                    return a[columnName].name > b[columnName].name ? 1 : -1;
+                } else if (sortDirection === 'desc') {
+                    return a[columnName].name > b[columnName].name ? -1 : 1;
+                }
+            });
+        }
+
+        this.setState({
+            reservations: reservations,
+            columnDirections: {
+                ...this.state.columnDirections,
+                [columnName]: {direction: newSortDirection}
+            }
+        });
+    };
+
     update = () => {
         restApiClient.getCities()
             .then(cities => this.setState({cities}));
@@ -445,11 +489,11 @@ export default class Reservations extends React.Component {
                         <thead>
                         <tr>
                             <th>{strings.name}</th>
-                            <th>{strings.city}</th>
+                            <th>{this.renderColumnHeader('city', strings.city)}</th>
                             <th>{strings.email}</th>
                             <th>{strings.clockSize}</th>
-                            <th>{strings.date}</th>
-                            <th>{strings.watchmaker}</th>
+                            <th>{this.renderColumnHeader('date', strings.date)}</th>
+                            <th>{this.renderColumnHeader('watchmaker', strings.watchmaker)}</th>
                             <th/>
                             <th/>
                         </tr>
