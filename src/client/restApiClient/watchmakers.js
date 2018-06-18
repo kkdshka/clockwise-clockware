@@ -1,7 +1,7 @@
 import axios from "axios/index";
 
 function getWatchmakers() {
-    return axios.get('/admin/watchmakers/data')
+    return axios.get('/admin/watchmakers/watchmakers-data')
         .then(res => res.data)
         .catch(error => console.log(error));
 }

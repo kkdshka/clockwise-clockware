@@ -1,7 +1,7 @@
 import axios from "axios/index";
 
 function getReservations() {
-    return axios.get('/admin/reservations/data')
+    return axios.get('/admin/reservations/reservations-data')
         .then(res => res.data)
         .catch(error => console.log(error));
 }

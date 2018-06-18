@@ -15,7 +15,7 @@ router.get('/', auth, function (req, res) {
     res.sendFile(path.join(__dirname, "../../../index.html"));
 });
 
-router.get('/data', async function (req, res) {
+router.get('/reservations-data', async function (req, res) {
     try {
         await reservationsRepository.getAll().then((models) => {
             res.status(200).json(models);

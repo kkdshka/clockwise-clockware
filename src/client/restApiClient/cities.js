@@ -1,7 +1,7 @@
 import axios from "axios/index";
 
 function getCities() {
-    return axios.get('/admin/cities/data')
+    return axios.get('/admin/cities/cities-data')
         .then(res => res.data)
         .catch(error => console.log(error));
 }
