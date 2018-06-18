@@ -15,7 +15,7 @@ export default class Order extends React.Component {
             freeWatchmakers: [],
             chosenWatchmaker: {},
             reservation: {},
-            confirmation: 'closed',
+            isConfirmationOpened: false,
             validationResult: {
                 name: {isValid: false, message: ''},
                 email: {isValid: false, message: ''},
@@ -150,7 +150,7 @@ export default class Order extends React.Component {
         restApiClient.addReservation(reservation)
             .then(res => {
                 if (res.status === 201) {
-                    this.setState({confirmation: 'opened'});
+                    this.setState({isConfirmationOpened: true});
                 }
             });
         this.hideModal();
@@ -168,15 +168,24 @@ export default class Order extends React.Component {
     };
 
     renderConfirmation() {
-        const {confirmation, reservation: {email}} = this.state;
+        const {isConfirmationOpened, reservation: {email}} = this.state;
 
-        if (confirmation === 'opened') {
-            return (
-                <div className="alert alert-success">
-                    <h5>{strings.confirmationMessage + ": " + email}</h5>
+        return <Modal visible={isConfirmationOpened} onClickBackdrop={() => 'Click ok!'}>
+            <div className="modal-body">
+                <div className="container">
+                    <div className="alert alert-success row">
+                        <div className="col">
+                            <h5>{strings.confirmationMessage + ": " + email}</h5>
+                        </div>
+                    </div>
                 </div>
-            )
-        }
+            </div>
+            <div className="modal-footer">
+                <button className={'btn btn-success float-right'}
+                        onClick={() => window.location.href = window.location.href}>Ok
+                </button>
+            </div>
+        </Modal>
     }
 
     isActive(watchmakerId) {
@@ -220,6 +229,12 @@ export default class Order extends React.Component {
     hideModal = () => {
         this.setState({
             isModalOpened: false
+        });
+    };
+
+    hideConfirmation = () => {
+        this.setState({
+            isConfirmationOpened: false
         });
     };
 
