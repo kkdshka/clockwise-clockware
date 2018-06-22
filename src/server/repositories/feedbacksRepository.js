@@ -28,13 +28,13 @@ function deleteFeedback(id) {
 
 function getAllFeedbacks() {
     return Feedback.findAll({
-        include: [{model: Reservation, include: {model: Client}}, {model: Watchmaker}]
+        include: [{model: Client}, {model: Watchmaker}]
     }).catch(error => console.log(error));
 }
 
 function getTenLastFeedbacks() {
     return Feedback.findAll({
-        include: [{model: Reservation, include: {model: Watchmaker}}],
+        include: [{model: Client}, {model: Watchmaker}],
         limit: 10,
         order: [['id', 'DESC']]
     }).catch(error => console.log(error));

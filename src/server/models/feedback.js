@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         },
     }, {timestamps: false});
     Feedback.associate = function(models) {
-        Feedback.belongsTo(models.reservation, {foreignKey: 'reservation_id', foreignKeyConstraint: true});
+        Feedback.belongsTo(models.client, {foreignKey: 'client_id', foreignKeyConstraint: true});
         Feedback.belongsTo(models.watchmaker, {foreignKey: 'watchmaker_id', foreignKeyConstraint: true});
     };
     return Feedback;

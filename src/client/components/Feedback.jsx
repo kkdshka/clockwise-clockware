@@ -28,12 +28,13 @@ export default class Feedback extends React.Component {
     handleOnSubmitClick = () => {
         const {feedback} = this.refs;
         const {reservation, rating} = this.state;
+        console.log(reservation);
 
         const feedbackData = {
             feedback: feedback.value,
             rating: rating,
-            reservation_id: reservation.id,
-            watchmaker_id: reservation.watchmaker.id,
+            client_id: reservation.client_id,
+            watchmaker_id: reservation.watchmaker_id,
             token: window.location.href.split('?token=')[1]
         };
 

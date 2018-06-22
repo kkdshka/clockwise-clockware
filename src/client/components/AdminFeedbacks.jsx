@@ -28,7 +28,7 @@ export default class AdminFeedbacks extends React.Component {
                 <td>{feedback.watchmaker.name}</td>
                 <td>{feedback.rating}</td>
                 <td>{feedback.feedback}</td>
-                <td>{feedback.reservation.client.email}</td>
+                <td>{feedback.client.email}</td>
             </tr>
         });
     }
