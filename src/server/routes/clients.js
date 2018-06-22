@@ -75,7 +75,7 @@ router.delete('/', async function (req, res) {
     }
     catch (error) {
         if (error instanceof Sequelize.ForeignKeyConstraintError) {
-            res.status(500).send("Foreign key constraint error").end();
+            res.status(409).send("Foreign key constraint error").end();
         }
         else {
             console.log(error);

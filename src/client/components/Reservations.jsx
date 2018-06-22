@@ -105,7 +105,7 @@ export default class Reservations extends React.Component {
                 if (res.status === 204) {
                     this.setState({reservations: reservations.filter(reservation => reservation.id !== id)});
                 }
-                else if (res.status === 500 && res.error === "Foreign key constraint error") {
+                else if (res.status === 409 && res.error === "Foreign key constraint error") {
                     this.setState({foreignKeyConstraintError: true});
                 }
             });

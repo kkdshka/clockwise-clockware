@@ -69,7 +69,7 @@ export default class Clients extends React.Component {
                 if (res.status === 204) {
                     this.setState({clients: clients.filter(client => client.id !== id)});
                 }
-                else if (res.status === 500 && res.error === "Foreign key constraint error") {
+                else if (res.status === 409 && res.error === "Foreign key constraint error") {
                     this.setState({foreignKeyConstraintError: true});
                 }
             });
