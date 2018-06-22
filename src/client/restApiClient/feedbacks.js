@@ -1,7 +1,7 @@
 import axios from "axios/index";
 
 function getFeedbacks() {
-    return axios.get('/admin/feedbacks/data')
+    return axios.get('/admin/feedbacks/feedbacks-data')
         .then(res => res.data)
         .catch(error => console.log(error));
 }

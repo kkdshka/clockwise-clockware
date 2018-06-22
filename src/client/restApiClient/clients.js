@@ -1,7 +1,7 @@
 import axios from "axios/index";
 
 function getClients() {
-    return axios.get('/admin/clients/data')
+    return axios.get('/admin/clients/clients-data')
         .then(res => res.data)
         .catch(error => console.log(error));
 }
