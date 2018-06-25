@@ -42,19 +42,6 @@ export default class Reservations extends React.Component {
         restApiClient.getReservations()
             .then(reservations => this.setState({reservations: reservations}));
 
-        restApiClient.getCities()
-            .then(cities => {
-                this.setState({cities});
-                this.setState({
-                    citiesById: cities.reduce((citiesById, city) => {
-                        citiesById[city.id] = city;
-                        return citiesById;
-                    }, {})
-                });
-            });
-
-        restApiClient.getWatchmakers()
-            .then(watchmakers => this.setState({watchmakers}));
     }
 
     validator(fieldName, element, message) {
@@ -261,6 +248,19 @@ export default class Reservations extends React.Component {
         this.setState({
             isModalCreateOpened: true
         });
+        restApiClient.getCities()
+            .then(cities => {
+                this.setState({cities});
+                this.setState({
+                    citiesById: cities.reduce((citiesById, city) => {
+                        citiesById[city.id] = city;
+                        return citiesById;
+                    }, {})
+                });
+            });
+
+        restApiClient.getWatchmakers()
+            .then(watchmakers => this.setState({watchmakers}));
     };
 
     hideModalCreate = () => {
@@ -343,6 +343,19 @@ export default class Reservations extends React.Component {
         this.setState({
             isModalUpdateOpened: true
         });
+        restApiClient.getCities()
+            .then(cities => {
+                this.setState({cities});
+                this.setState({
+                    citiesById: cities.reduce((citiesById, city) => {
+                        citiesById[city.id] = city;
+                        return citiesById;
+                    }, {})
+                });
+            });
+
+        restApiClient.getWatchmakers()
+            .then(watchmakers => this.setState({watchmakers}));
     };
 
     hideModalUpdate = () => {
