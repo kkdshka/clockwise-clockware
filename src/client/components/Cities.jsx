@@ -52,8 +52,9 @@ export default class Cities extends React.Component {
 
         restApiClient.deleteCity(id)
             .then(res => {
-                if (res.status === 204) {
-                    this.setState({cities: cities.filter(city => city.id != id)});
+                if (res.status === 200) {
+                    restApiClient.getCities()
+                        .then(cities => this.setState({cities: cities}));
                 }
                 else if (res.status === 409 && res.error === "Foreign key constraint error") {
                     this.setState({foreignKeyConstraintError: true});

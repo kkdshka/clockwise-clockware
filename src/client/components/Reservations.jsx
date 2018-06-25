@@ -89,8 +89,9 @@ export default class Reservations extends React.Component {
 
         restApiClient.deleteReservation(id)
             .then(res => {
-                if (res.status === 204) {
-                    this.setState({reservations: reservations.filter(reservation => reservation.id !== id)});
+                if (res.status === 200) {
+                    restApiClient.getReservations()
+                        .then(reservations => this.setState({reservations: reservations}));
                 }
                 else if (res.status === 409 && res.error === "Foreign key constraint error") {
                     this.setState({foreignKeyConstraintError: true});

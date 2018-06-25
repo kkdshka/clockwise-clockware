@@ -86,7 +86,7 @@ router.delete('/', async function (req, res) {
     const id = req.body.id;
     try {
         await watchmakersRepository.delete(id);
-        res.sendStatus(204).end();
+        res.sendStatus(200).end();
     }
     catch (error) {
         if (error instanceof Sequelize.ForeignKeyConstraintError) {

@@ -57,8 +57,9 @@ export default class Watchmakers extends Component {
 
         restApiClient.deleteWatchmaker(id)
             .then(res => {
-                if (res.status === 204) {
-                    this.setState({watchmakers: watchmakers.filter(watchmaker => watchmaker.id !== id)});
+                if (res.status === 200) {
+                    restApiClient.getWatchmakers()
+                        .then(watchmakers => this.setState({watchmakers: watchmakers}));
                 }
                 else if (res.status === 409 && res.error === "Foreign key constraint error") {
                     this.setState({foreignKeyConstraintError: true});
