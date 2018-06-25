@@ -66,8 +66,9 @@ export default class Clients extends React.Component {
 
         restApiClient.deleteClient(id)
             .then(res => {
-                if (res.status === 204) {
-                    this.setState({clients: clients.filter(client => client.id !== id)});
+                if (res.status === 200) {
+                    restApiClient.getClients()
+                        .then(clients => this.setState({clients: clients}));
                 }
                 else if (res.status === 409 && res.error === "Foreign key constraint error") {
                     this.setState({foreignKeyConstraintError: true});
