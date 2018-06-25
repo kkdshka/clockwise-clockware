@@ -129,10 +129,12 @@ export default class Order extends React.Component {
                 start_time: params.start_time,
                 finish_time: params.finish_time
             }
-        }).then(freeWatchmakers => this.setState({freeWatchmakers: freeWatchmakers}));
+        }).then(freeWatchmakers => {
+            this.setState({freeWatchmakers: freeWatchmakers});
+            this.openModal();
+        });
 
         this.setState({reservation: params});
-        this.openModal();
     };
 
     handleOnSubmitWatchmaker = (event) => {
