@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         },
         rating: DataTypes.INTEGER,
+        avatar:DataTypes.STRING,
         id: {
             allowNull: false,
             autoIncrement: true,

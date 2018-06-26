@@ -38,11 +38,7 @@ router.get('/free-watchmakers', async function (req, res) {
 });
 
 router.post('/', async function (req, res) {
-    const watchmakerData = {
-        name: req.body.name,
-        city_id: req.body.city_id,
-        rating: req.body.rating
-    };
+    const watchmakerData = req.body;
 
     if (!validation.isValidWatchmakerName(watchmakerData.name)) {
         res.sendStatus(400).json({error: 'Название города не может быть пустым'});
@@ -60,12 +56,7 @@ router.post('/', async function (req, res) {
 });
 
 router.put('/', async function (req, res) {
-    const watchmakerData = {
-        name: req.body.name,
-        city_id: req.body.city_id,
-        rating: req.body.rating,
-        id: req.body.id
-    };
+    const watchmakerData = req.body;
 
     if (!validation.isValidWatchmakerName(watchmakerData.name)) {
         res.sendStatus(400).json({error: 'Название города не может быть пустым'});
