@@ -19,7 +19,9 @@ export default class Feedback extends React.Component {
         const {language} = this.props;
         strings.setLanguage(language);
 
-        const reservationId = Buffer.from(String(window.location.href.split('?token=')[1] || ''), 'base64').toString('ascii');
+        const reservationId = Buffer.from(String(window.location.href.split('?token=')[1] || ''), 'base64')
+            .toString('ascii')
+            .split('=')[1];
         restApiClient.getReservationById(reservationId)
             .then(reservation => this.setState({reservation}));
     }

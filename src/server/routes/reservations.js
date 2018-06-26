@@ -58,7 +58,8 @@ router.post('/', async function (req, res) {
         const taskDate = new Date(taskMoment);
 
         const host = req.get('host');
-        const token = Buffer.from(String(reservationId)).toString('base64');
+        const salt = 'anLiscj89uq98chaFocnaCauhc87=';
+        const token = Buffer.from(String(salt + reservationId)).toString('base64');
         const link = 'http://' + host + '/feedback?token=' + token;
         const tokenLifetimeEnd = moment.tz(taskMoment, reservationData.timezone).add(1, 'day').format();
 
