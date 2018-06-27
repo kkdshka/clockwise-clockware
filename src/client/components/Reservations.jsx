@@ -495,9 +495,9 @@ export default class Reservations extends React.Component {
                                 cityTranslations={cityTranslations}/>
                 </div>
             </div>
-            {this.renderForeignKeyConstraintError()}
             <div className="row mt-4">
                 <div className="col">
+                    {this.renderForeignKeyConstraintError()}
                     <h4 className="row justify-content-md-center">{strings.reservations}</h4>
                     <table className="table table-striped">
                         <thead>
