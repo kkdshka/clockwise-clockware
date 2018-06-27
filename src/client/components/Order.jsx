@@ -207,8 +207,9 @@ export default class Order extends React.Component {
         return freeWatchmakers.map(watchmaker => {
             return <tr key={'watchmaker' + watchmaker.id} className={this.isActive(watchmaker.id)}
                        onClick={this.handleOnWatchmakerClick(watchmaker)}>
-                <td>{watchmaker.name}</td>
-                <td>{watchmaker.rating}</td>
+                <td className="align-middle"><img src={watchmaker.avatar} /></td>
+                <td className="align-middle">{watchmaker.name}</td>
+                <td className="align-middle">{watchmaker.rating}</td>
             </tr>
         });
     }
@@ -249,6 +250,7 @@ export default class Order extends React.Component {
         return <table className="table table-striped table-hover">
             <thead>
             <tr>
+                <th />
                 <th>{strings.name}</th>
                 <th>{strings.rating}</th>
             </tr>

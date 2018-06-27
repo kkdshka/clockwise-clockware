@@ -5,6 +5,7 @@ import Modal from 'react-bootstrap4-modal';
 import validation from '../validation';
 import strings from '../localization.js';
 import DeleteButton from "./DeleteButton.jsx";
+import CloudinaryUploadWidget from './CloudinaryUploadWidget.jsx';
 
 export default class Watchmakers extends Component {
     constructor(props) {
@@ -18,6 +19,7 @@ export default class Watchmakers extends Component {
             formError: false,
             foreignKeyConstraintError: false,
             editing: {},
+            uploadedImageUrl: ''
         };
     }
 
@@ -117,22 +119,39 @@ export default class Watchmakers extends Component {
 
         return watchmakers.map(watchmaker => {
             return <tr key={'watchmaker' + watchmaker.id}>
-                <td>{watchmaker.name}</td>
-                <td>{cityTranslations.getName(watchmaker.city_id)}</td>
-                <td>{watchmaker.rating}</td>
-                <td>
+                <td className="align-middle"><CloudinaryUploadWidget
+                    resultHandler={this.onUploadImageResultHandler}
+                    url={watchmaker.avatar}
+                    entity={watchmaker}
+                /></td>
+                <td className="align-middle">{watchmaker.name}</td>
+                <td className="align-middle">{cityTranslations.getName(watchmaker.city_id)}</td>
+                <td className="align-middle">{watchmaker.rating}</td>
+                <td className="align-middle">
                     <button type="button" className="btn btn-warning"
                             onClick={this.handleOnEditClick(watchmaker)}>
                         <i className="fa fa-pencil"/>
                     </button>
                 </td>
-                <td>
+                <td className="align-middle">
                     <DeleteButton handleDelete={this.handleOnDeleteClick(watchmaker.id)}
                                   deletingMessage={strings.deletingMessage}/>
                 </td>
             </tr>
         });
     }
+
+    onUploadImageResultHandler = (result, watchmaker) => {
+        if (result) {
+            const imageURL = result[0].url;
+            watchmaker.avatar = imageURL;
+            restApiClient.editWatchmaker(watchmaker)
+                .then(() => {
+                    restApiClient.getWatchmakers()
+                        .then(watchmakers => this.setState({watchmakers: watchmakers}));
+                });
+        }
+    };
 
     renderCities() {
         const {cities} = this.state;
@@ -298,11 +317,13 @@ export default class Watchmakers extends Component {
             </div>
             {this.renderForeignKeyConstraintError()}
             <div className="row justify-content-between">
-                <div className="col-md-4">
+                <div className="col-md-8">
+                    {this.renderForeignKeyConstraintError()}
                     <h4 className="row justify-content-md-center">{strings.watchmakers}</h4>
                     <table className="table table-striped">
                         <thead>
                         <tr>
+                            <th/>
                             <th>{strings.name}</th>
                             <th>{strings.city}</th>
                             <th>{strings.rating}</th>
