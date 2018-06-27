@@ -119,7 +119,7 @@ export default class Watchmakers extends Component {
 
         return watchmakers.map(watchmaker => {
             return <tr key={'watchmaker' + watchmaker.id}>
-                <td><CloudinaryUploadWidget
+                <td className="align-middle"><CloudinaryUploadWidget
                     resultHandler={this.onUploadImageResultHandler}
                     url={watchmaker.avatar}
                     entity={watchmaker}
