@@ -315,7 +315,6 @@ export default class Watchmakers extends Component {
                                 cityTranslations={cityTranslations}/>
                 </div>
             </div>
-            {this.renderForeignKeyConstraintError()}
             <div className="row justify-content-between">
                 <div className="col-md-8">
                     {this.renderForeignKeyConstraintError()}
