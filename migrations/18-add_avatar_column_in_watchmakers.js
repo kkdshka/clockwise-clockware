@@ -5,7 +5,7 @@ module.exports = {
         return queryInterface.addColumn('watchmakers', 'avatar',
             {
                 type: Sequelize.STRING,
-                defaultValue: "http://res.cloudinary.com/kkdshka/image/upload/v1530018330/f0g06nmi8pw9cam6mp9s.jpg"
+                defaultValue: "https://res.cloudinary.com/kkdshka/image/upload/v1530086808/watchmaker.png"
             });
     },
     down: (queryInterface) => {
