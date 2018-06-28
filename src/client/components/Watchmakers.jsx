@@ -44,9 +44,6 @@ export default class Watchmakers extends Component {
 
         restApiClient.getWatchmakers()
             .then(watchmakers => this.setState({watchmakers: watchmakers}));
-
-        restApiClient.getCities()
-            .then(cities => this.setState({cities}));
     }
 
     handleOnEditClick = (watchmaker) => () => {
@@ -179,6 +176,8 @@ export default class Watchmakers extends Component {
     }
 
     openModalCreate = () => {
+        restApiClient.getCities()
+            .then(cities => this.setState({cities}));
         this.setState({
             isModalCreateOpened: true
         });
@@ -238,6 +237,8 @@ export default class Watchmakers extends Component {
     }
 
     openModalUpdate = () => {
+        restApiClient.getCities()
+            .then(cities => this.setState({cities}));
         this.setState({
             isModalUpdateOpened: true
         });
