@@ -4,24 +4,20 @@ const CityTranslation = db.city_translation;
 
 //city = {name, id}
 function addCity(cityData) {
-    return City.create(cityData).then(city => city.id)
-        .catch(error => console.log(error));
+    return City.create(cityData).then(city => city.id);
 }
 
 function addCityTranslations(cityTranslations) {
-    return db.sequelize.queryInterface.bulkInsert('city_translations', cityTranslations, {})
-        .catch(error => console.log(error));
+    return db.sequelize.queryInterface.bulkInsert('city_translations', cityTranslations, {});
 }
 
 function editCity(city) {
-    return City.update(city, {where: {id: city.id}})
-        .catch(error => console.log(error));
+    return City.update(city, {where: {id: city.id}});
 }
 
 function editCityTranslations(cityTranslations) {
     return cityTranslations.forEach((translation) => {
-        return CityTranslation.update(translation, {where: {id: translation.id}})
-            .catch(error => console.log(error));
+        return CityTranslation.update(translation, {where: {id: translation.id}});
     });
 }
 
@@ -30,14 +26,13 @@ function deleteCity(id) {
 }
 
 function getAllCities() {
-    return City.findAll()
-        .catch(error => console.log(error));
+    return City.findAll();
 }
 
 function getCityTranslations() {
     return CityTranslation.findAll({
         include: {model: City}
-    }).catch(error => console.log(error));
+    });
 }
 
 module.exports = {

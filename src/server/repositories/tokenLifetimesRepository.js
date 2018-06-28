@@ -4,14 +4,13 @@ const Sequelize = require('sequelize');
 const op = Sequelize.Op;
 
 function addToken(token) {
-    return TokenLifetime.create(token)
-        .catch(error => console.log(error));
+    return TokenLifetime.create(token);
 }
 
 function deleteToken(tokenId) {
     return TokenLifetime.destroy({
         where: {id: tokenId}
-    }).catch(error => console.log(error));
+    });
 }
 
 function findAndDeleteExpiredTokens() {
@@ -21,18 +20,16 @@ function findAndDeleteExpiredTokens() {
                 [op.lte]: Date.now(),
             }
         }
-    }).catch(error => console.log(error));
+    });
 }
 
 function getTokenLifetime(token) {
     return TokenLifetime.find({where: {token: token}})
-        .then(token => token.get())
-        .catch(error => console.log(error));
+        .then(token => token.get());
 }
 
 function updateToken(token) {
-    return TokenLifetime.update(token, {where: {id: token.id}})
-        .catch(error => console.log(error));
+    return TokenLifetime.update(token, {where: {id: token.id}});
 }
 
 module.exports = {
