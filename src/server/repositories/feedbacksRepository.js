@@ -6,8 +6,7 @@ const Client = db.client;
 
 //client = {name, city, email, id}
 function addFeedback(feedback) {
-    return Feedback.create(feedback)
-        .catch(error => console.log(error));
+    return Feedback.create(feedback);
 }
 
 function editFeedback(feedback) {
@@ -15,7 +14,7 @@ function editFeedback(feedback) {
         where: {
             id: feedback.id
         }
-    }).catch(error => console.log(error));
+    });
 }
 
 function deleteFeedback(id) {
@@ -23,13 +22,13 @@ function deleteFeedback(id) {
         where: {
             id: id
         }
-    }).catch(error => console.log(error));
+    });
 }
 
 function getAllFeedbacks() {
     return Feedback.findAll({
         include: [{model: Client}, {model: Watchmaker}]
-    }).catch(error => console.log(error));
+    });
 }
 
 function getTenLastFeedbacks() {
@@ -37,13 +36,13 @@ function getTenLastFeedbacks() {
         include: [{model: Client}, {model: Watchmaker}],
         limit: 10,
         order: [['id', 'DESC']]
-    }).catch(error => console.log(error));
+    });
 }
 
 function getAllWatchmakerFeedbacks(id) {
     return Feedback.findAll({
         where: {watchmaker_id: id}
-    }).catch(error => console.log(error));
+    });
 }
 
 module.exports = {

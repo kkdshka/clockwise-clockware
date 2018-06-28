@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         },
     }, {timestamps: false});
     CityTranslation.associate = function (models) {
-        CityTranslation.belongsTo(models.city, {foreignKey: 'city_id', foreignKeyConstraint: true})
+        CityTranslation.belongsTo(models.city, {foreignKey: 'city_id'})
     };
     return CityTranslation;
 };

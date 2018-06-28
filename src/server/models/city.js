@@ -18,8 +18,9 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER
         },
     }, {timestamps: false});
-    City.associate = function (models) {
-        City.hasMany(models.city_translation, {foreignKey: 'city_id', hooks: true, onDelete: 'cascade'})
+
+    City.associate = models => {
+        City.hasMany(models.city_translation, {foreignKey: 'city_id', hooks: true, onDelete: 'cascade'});
     };
     return City;
 };
