@@ -16,10 +16,12 @@ export default class Watchmakers extends Component {
             isModalCreateOpened: false,
             isModalUpdateOpened: false,
             name: {isValid: false, message: ''},
+            avatar: {isValid: false, invalidAvatarMessage: ''},
             formError: false,
             foreignKeyConstraintError: false,
             editing: {},
-            uploadedImageUrl: ''
+            uploadedImageUrl: '',
+            selectedFile: ''
         };
     }
 
@@ -34,6 +36,23 @@ export default class Watchmakers extends Component {
         }
         else {
             this.setState({name: {isValid: false, message: strings.notEmptyNameWarning}});
+            event.currentTarget.className = 'form-control form-control-sm is-invalid';
+        }
+    };
+
+    handleFileValidation = event => {
+        const file = event.target.files[0];
+
+        const {isModalCreateOpened} = this.state;
+
+        const modalName = isModalCreateOpened ? 'add' : 'edit';
+
+        if (validation.isValidImageFile(this.refs[modalName + "Avatar"].value)) {
+            this.setState({avatar: {isValid: true, message: ''}, selectedFile: file});
+            event.currentTarget.className = 'form-control form-control-sm is-valid';
+        }
+        else {
+            this.setState({avatar: {isValid: false, invalidAvatarMessage: strings.notValidImageWarning}});
             event.currentTarget.className = 'form-control form-control-sm is-invalid';
         }
     };
@@ -66,9 +85,9 @@ export default class Watchmakers extends Component {
             });
     };
 
-    handleOnSubmitAdd = () => {
-        const {name: {isValid}, watchmakers} = this.state;
-        const {addName, addCity, addRating} = this.refs;
+    handleOnSubmitAdd = (e) => {
+        const {name: {isValid}, selectedFile} = this.state;
+        const {addName, addCity, addRating, addAvatar} = this.refs;
 
         if (!isValid) {
             this.setState({formError: true});
@@ -79,13 +98,19 @@ export default class Watchmakers extends Component {
         const data = {
             name: addName.value,
             city_id: addCity.value,
-            rating: addRating.value
+            rating: addRating.value,
         };
 
         restApiClient.addWatchmaker(data).then((res) => {
-            restApiClient.getWatchmakers()
-                .then(watchmakers => this.setState({watchmakers: watchmakers}));
+            const avatar = new FormData();
+            avatar.append('file', selectedFile);
+            avatar.append('id', res.id);
+            restApiClient.addWatchmakerAvatar(avatar).then(() => {
+                restApiClient.getWatchmakers()
+                    .then(watchmakers => this.setState({watchmakers: watchmakers}));
+            });
         });
+
 
         this.hideModalCreate();
     };
@@ -190,7 +215,7 @@ export default class Watchmakers extends Component {
     };
 
     renderModalCreate() {
-        const {isModalCreateOpened, name: {message}} = this.state;
+        const {isModalCreateOpened, name: {message}, avatar: {invalidAvatarMessage}} = this.state;
 
         if (isModalCreateOpened) {
             return <Modal visible={true} onClickBackdrop={this.hideModalCreate}>
@@ -222,6 +247,12 @@ export default class Watchmakers extends Component {
                                 <option>5</option>
                             </select>
                         </div>
+                        <div className="form-group">
+                            <label htmlFor="add-avatar">{strings.avatar + ":"}</label>
+                            <input type="file" className="form-control-file" id="add-avatar" ref="addAvatar"
+                                   onChange={this.handleFileValidation}/>
+                            <div className="invalid-feedback">{invalidAvatarMessage}</div>
+                        </div>
                     </form>
                 </div>
                 <div className="modal-footer">
@@ -251,7 +282,7 @@ export default class Watchmakers extends Component {
     };
 
     renderModalUpdate() {
-        const {isModalUpdateOpened, editing: {name, city, rating}, name: {message}} = this.state;
+        const {isModalUpdateOpened, editing: {name, city, rating}, name: {message}, avatar: {invalidAvatarMessage}} = this.state;
 
         if (isModalUpdateOpened) {
             return <Modal visible={true} onClickBackdrop={this.hideModalUpdate}>
@@ -285,6 +316,12 @@ export default class Watchmakers extends Component {
                                 <option>4</option>
                                 <option>5</option>
                             </select>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="edit-avatar">{strings.avatar + ":"}</label>
+                            <input type="file" className="form-control-file" id="edit-avatar" ref="editAvatar"
+                                   onChange={this.handleFileValidation}/>
+                            <div className="invalid-feedback">{invalidAvatarMessage}</div>
                         </div>
                     </form>
                 </div>

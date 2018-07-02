@@ -16,7 +16,6 @@ export default class CloudinaryUploadWidget extends Component {
                     <img src={url} onClick={this.uploadWidget.bind(this)} className="btn upload-button" />
                 </div>
             </div>
-
         );
     }
 }

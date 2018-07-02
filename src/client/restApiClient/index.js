@@ -23,6 +23,7 @@ module.exports = {
     addWatchmaker: watchmakers.addWatchmaker,
     editWatchmaker: watchmakers.editWatchmaker,
     deleteWatchmaker: watchmakers.deleteWatchmaker,
+    addWatchmakerAvatar: watchmakers.addWatchmakerAvatar,
     getFeedbacks: feedbacks.getFeedbacks,
     addFeedback: feedbacks.addFeedback,
     editFeedback: feedbacks.editFeedback,

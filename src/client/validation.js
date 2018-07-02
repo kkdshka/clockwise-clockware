@@ -45,8 +45,19 @@ function isValidCityName(name) {
     return name.length > 0;
 }
 
+function isValidImageFile(file) {
+    const validExtentions = ['jpg', 'jpeg', 'png'];
+    const splitFile = file.split('.');
+    const fileExtention = splitFile[(splitFile.length - 1)];
+    return validExtentions.indexOf(fileExtention) >= 0 ? true : false;
+}
+
 function isValidClient(clientData) {
     return isValidName(clientData.name) && isValidEmail(clientData.email);
+}
+
+function isValidPassword(password) {
+    return password.length > 7;
 }
 
 module.exports = {
@@ -57,5 +68,7 @@ module.exports = {
     isValidReservation: isValidReservation,
     isValidWatchmakerName: isValidWatchmakerName,
     isValidCityName: isValidCityName,
-    isValidClient: isValidClient
+    isValidClient: isValidClient,
+    isValidPassword: isValidPassword,
+    isValidImageFile: isValidImageFile
 };

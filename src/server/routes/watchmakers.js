@@ -5,6 +5,18 @@ const watchmakersRepository = require('../repositories/watchmakersRepository');
 const auth = require('../authenticationMiddleware');
 const validation = require('../validation');
 const Sequelize = require('sequelize');
+const cloudinary = require('cloudinary');
+const multer = require('multer');
+require('dotenv').config();
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+const storage = multer.memoryStorage();
+const upload = multer({storage});
 
 router.get('/', auth, function (req, res) {
     res.sendFile(path.join(__dirname, "../../../index.html"));
@@ -37,6 +49,23 @@ router.get('/free-watchmakers', async function (req, res) {
     }
 });
 
+router.post('/watchmaker-avatar', upload.single('file'), (req, res) => {
+    cloudinary.v2.uploader.unsigned_upload_stream('watchmaker',
+        async (error, result) => {
+        try {
+            await watchmakersRepository.edit({
+                id: req.body.id,
+                avatar: result.url
+            });
+            res.sendStatus(204).end(req.file.buffer);
+        }
+        catch (e) {
+            console.log(error);
+            res.sendStatus(500).json({error: error});
+        }
+        }).end(req.file.buffer)
+});
+
 router.post('/', async function (req, res) {
     const watchmakerData = req.body;
 
@@ -46,8 +75,8 @@ router.post('/', async function (req, res) {
     }
 
     try {
-        await watchmakersRepository.add(watchmakerData);
-        res.sendStatus(201).end();
+        const watchmaker = await watchmakersRepository.add(watchmakerData);
+        res.status(201).send(watchmaker).end();
     }
     catch (error) {
         console.log(error);

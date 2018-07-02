@@ -8,6 +8,12 @@ function getWatchmakers() {
 
 function addWatchmaker(data) {
     return axios.post('/admin/watchmakers/', data)
+        .then(res => res.data)
+        .catch(error => console.log(error));
+}
+
+function addWatchmakerAvatar(avatar) {
+    return axios.post('/admin/watchmakers/watchmaker-avatar', avatar)
         .catch(error => console.log(error));
 }
 
@@ -37,5 +43,6 @@ module.exports = {
     addWatchmaker: addWatchmaker,
     editWatchmaker: editWatchmaker,
     deleteWatchmaker: deleteWatchmaker,
-    getFreeWatchmakers: getFreeWatchmakers
+    getFreeWatchmakers: getFreeWatchmakers,
+    addWatchmakerAvatar: addWatchmakerAvatar
 };

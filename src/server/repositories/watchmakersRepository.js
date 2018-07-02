@@ -4,7 +4,7 @@ const City = db.city;
 
 //watchmaker = {name, city, rate, id}
 function addWatchmaker(watchmaker) {
-    return Watchmaker.create(watchmaker);
+    return Watchmaker.create(watchmaker).then((res) => res);
 }
 
 function editWatchmaker(watchmaker) {
