@@ -86,10 +86,10 @@ export default class Watchmakers extends Component {
     };
 
     handleOnSubmitAdd = (e) => {
-        const {name: {isValid}, selectedFile} = this.state;
+        const {name, avatar, selectedFile} = this.state;
         const {addName, addCity, addRating, addAvatar} = this.refs;
 
-        if (!isValid) {
+        if (!name.isValid || !avatar.isValid) {
             this.setState({formError: true});
             return;
         }
@@ -196,7 +196,7 @@ export default class Watchmakers extends Component {
         const {formError} = this.state;
 
         if (formError) {
-            return <div className="alert alert-danger">}{strings.fillFields}</div>
+            return <div className="alert alert-danger">{strings.fillFields}</div>
         }
     }
 
