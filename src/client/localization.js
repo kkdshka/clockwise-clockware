@@ -58,7 +58,12 @@ const strings = new LocalizedStrings({
         watchmakerName: "Watchmaker name",
         clientEmail: "Client email",
         deletingMessage: "Are you sure?",
-        foreignKeyConstraintError: "The entity you tried to delete is associated with other entities and can not be deleted"
+        foreignKeyConstraintError: "The entity you tried to delete is associated with other entities and can not be deleted",
+        passwordWarning: "Password must contain minimum 8 characters",
+        signIn: "Sign in",
+        avatar: "Avatar",
+        notValidImageWarning: "Image can be in .jpg, .jpeg or .png formats",
+        register: "Register"
 },
     ru: {
         main: "Главная",
@@ -116,7 +121,12 @@ const strings = new LocalizedStrings({
         watchmakerName: "Имя мастера",
         clientEmail: "Почта клиента",
         deletingMessage: "Вы уверены?",
-        foreignKeyConstraintError: "Запись, которую вы попытались удалить, связана с другими записями и не может быть удалена"
+        foreignKeyConstraintError: "Запись, которую вы попытались удалить, связана с другими записями и не может быть удалена",
+        passwordWarning: "Пароль должен быть не менее 8 символов",
+        signIn: "Войти",
+        avatar: "Аватар",
+        notValidImageWarning: "Формат изображения может быть только .jpg, .jpeg или .png",
+        register: "Регистрация"
     }
 });
 

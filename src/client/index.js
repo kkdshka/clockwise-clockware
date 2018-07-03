@@ -12,6 +12,9 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import CityTranslations from './cityTranslatios.js';
 import Feedback from "./components/Feedback.jsx";
 import AdminFeedbacks from "./components/AdminFeedbacks.jsx";
+import Registration from "./components/Registration.jsx";
+import SignIn from "./components/SignIn.jsx";
+import PersonalPage from "./components/PersonalPage.jsx"
 
 const cityTranslations = new CityTranslations(getLanguage());
 
@@ -38,6 +41,12 @@ ReactDOM.render(
                    render={() => <Cities language={getLanguage()} cityTranslations={cityTranslations}/>}/>
             <Route path="/admin/reservations"
                    render={() => <Reservations language={getLanguage()} cityTranslations={cityTranslations}/>}/>
+            <Route path="/sign-in"
+                   render={() => <SignIn language={getLanguage()} cityTranslations={cityTranslations}/>}/>
+            <Route path="/register"
+                   render={() => <Registration language={getLanguage()} cityTranslations={cityTranslations}/>}/>
+            <Route path="/personal-page"
+                   render={() => <PersonalPage language={getLanguage()} cityTranslations={cityTranslations}/>}/>
             <Route render={() => <NotFound language={getLanguage()} cityTranslations={cityTranslations}/>}/>
         </Switch>
     </Router>,
