@@ -87,7 +87,7 @@ export default class Watchmakers extends Component {
 
     handleOnSubmitAdd = (e) => {
         const {name, avatar, selectedFile} = this.state;
-        const {addName, addCity, addRating, addAvatar} = this.refs;
+        const {addName, addCity, addRating} = this.refs;
 
         if (!name.isValid || !avatar.isValid) {
             this.setState({formError: true});
@@ -111,13 +111,13 @@ export default class Watchmakers extends Component {
             });
         });
 
-
         this.hideModalCreate();
     };
 
     handleOnSubmitEdit = () => {
-        const {editing: {id}} = this.state;
+        const {editing: {id}, name, avatar, selectedFile} = this.state;
         const {editName, editCity, editRating} = this.refs;
+
         const data = {
             name: editName.value,
             city_id: editCity.value,
@@ -125,12 +125,24 @@ export default class Watchmakers extends Component {
             id: id
         };
 
+        if (selectedFile) {
+            restApiClient.editWatchmaker(data).then(() => {
+                const avatar = new FormData();
+                avatar.append('file', selectedFile);
+                avatar.append('id', id);
+                restApiClient.addWatchmakerAvatar(avatar)
+                    .then(() => {
+                        restApiClient.getWatchmakers()
+                            .then(watchmakers => this.setState({watchmakers: watchmakers}));
+                    });
+            });
+        }
+
         restApiClient.editWatchmaker(data)
             .then(() => {
                 restApiClient.getWatchmakers()
                     .then(watchmakers => this.setState({watchmakers: watchmakers}));
             });
-
 
         this.hideModalUpdate();
     };
