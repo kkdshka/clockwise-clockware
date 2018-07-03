@@ -28,22 +28,18 @@ export default class Home extends React.Component {
             <div className="custom-header">
                 <div className="container">
                     <div className="row align-items-center justify-content-between">
-                        <div className="col-10">
+                        <div className="col-9">
                             <h4 className="text-center"><em>Clockwise Clockware</em></h4>
                             <h5>{strings.header}</h5>
                         </div>
-                        <div className="col-2">
-                            <div className="row justify-content-end">
+                        <div className="col-3">
+                            <div className="d-flex justify-content-end">
                                 <Localization update={this.update} color="outline-secondary"
                                               cityTranslations={cityTranslations}/>
                             </div>
-                            <div className="row mt-2 justify-content-between">
-                                <div className="col-10">
-                                    <Link className="nav-link" to="/sign-in">{strings.signIn}</Link>
-                                </div>
-                                <div className="col-1">
-                                    <Link className="nav-link" to="/register">{strings.register}</Link>
-                                </div>
+                            <div className="d-flex mt-1">
+                                <Link className="ml-auto nav-link" to="/sign-in">{strings.signIn}</Link>
+                                <Link className="ml-auto nav-link" to="/register">{strings.register}</Link>
                             </div>
                         </div>
                     </div>
