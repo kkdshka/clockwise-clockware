@@ -20,6 +20,11 @@ export default class Navigation extends React.Component {
                         </li>
                     </ul>
                     <ul className="navbar-nav ml-auto">
+                        <li className={"nav-item pr-4"}>
+                            <Link className="nav-link" to="/sign-in">
+                                {window.location.pathname === '/sign-in' ? strings.register : strings.signIn}
+                            </Link>
+                        </li>
                         <li className={"nav-item"}>
                             <Localization update={update} cityTranslations={cityTranslations} color="secondary"/>
                         </li>
