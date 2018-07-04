@@ -5,6 +5,7 @@ const clientsRepository = require('../repositories/clientsRepository');
 const auth = require('../authenticationMiddleware');
 const validation = require('../validation');
 const Sequelize = require('sequelize');
+const bcrypt = require('bcrypt');
 
 router.get('/', auth, function (req, res) {
     res.sendFile(path.join(__dirname, "../../../index.html"));
@@ -23,10 +24,7 @@ router.get('/clients-data', async function (req, res) {
 });
 
 router.post('/', async function (req, res) {
-    const clientData = {
-        name: req.body.name,
-        email: req.body.email
-    };
+    const clientData = req.body;
 
     const errors = check(clientData);
     if (errors.length > 0) {
@@ -35,6 +33,9 @@ router.post('/', async function (req, res) {
     }
 
     try {
+        if (clientData.plaintextPassword) {
+            clientData.password = await bcrypt.hash(clientData.plaintextPassword, 5);
+        }
         await clientsRepository.add(clientData);
         res.sendStatus(201).end();
     }

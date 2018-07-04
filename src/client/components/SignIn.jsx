@@ -52,7 +52,7 @@ export default class SignIn extends React.Component {
                             <input type="password" className="form-control" id="password" ref="password"/>
                         </div>
                         <div className="d-flex align-items-center">
-                            <button className="btn btn-primary"
+                            <button type="button" className="btn btn-primary"
                                     onClick={this.handleOnSubmitForm}>{strings.confirm}
                             </button>
                             <Link className="ml-auto" to="/register">{strings.register}</Link>

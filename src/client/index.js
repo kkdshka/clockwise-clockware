@@ -14,7 +14,8 @@ import Feedback from "./components/Feedback.jsx";
 import AdminFeedbacks from "./components/AdminFeedbacks.jsx";
 import Registration from "./components/Registration.jsx";
 import SignIn from "./components/SignIn.jsx";
-import PersonalPage from "./components/PersonalPage.jsx"
+import PersonalPage from "./components/PersonalPage.jsx";
+import Success from "./components/Success.jsx";
 
 const cityTranslations = new CityTranslations(getLanguage());
 
@@ -47,6 +48,8 @@ ReactDOM.render(
                    render={() => <Registration language={getLanguage()} cityTranslations={cityTranslations}/>}/>
             <Route path="/personal-page"
                    render={() => <PersonalPage language={getLanguage()} cityTranslations={cityTranslations}/>}/>
+            <Route path="/success"
+                   render={() => <Success language={getLanguage()} cityTranslations={cityTranslations}/>}/>
             <Route render={() => <NotFound language={getLanguage()} cityTranslations={cityTranslations}/>}/>
         </Switch>
     </Router>,
