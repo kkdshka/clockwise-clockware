@@ -30,7 +30,7 @@ function deleteClient(id) {
 }
 
 function getAllClients() {
-    return Client.findAll();
+    return Client.findAll({attributes: ['name', 'email', 'id']});
 }
 
 module.exports = {
