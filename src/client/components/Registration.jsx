@@ -18,7 +18,8 @@ export default class Registration extends React.Component {
             },
             formError: false,
             passwordDoesNotMatchError: false,
-            confirmation: false
+            confirmation: false,
+            alreadyExistsError: false
         };
     }
 
@@ -48,7 +49,6 @@ export default class Registration extends React.Component {
     handleValidation = (type, message) => event => this.validator(type, event.currentTarget, message);
 
     handleOnSubmitForm = () => {
-
         const {name, email, password, confirmPassword} = this.refs;
 
         if (password.value !== confirmPassword.value) {
@@ -72,11 +72,13 @@ export default class Registration extends React.Component {
             this.setState({formError: false});
         }
 
-        restApiClient.addClient(data).then(() => {
-            this.setState({confirmation: true});
+        restApiClient.addClient(data).then((res) => {
+            if(res.status === 201) {
+                window.location.href = '/success';
+            }
+            console.log(res.error);
+            this.setState({alreadyExistsError: true});
         });
-
-        window.location.href = '/success';
     };
 
     update = () => {
@@ -84,7 +86,7 @@ export default class Registration extends React.Component {
     };
 
     renderErrors = () => {
-        const {passwordDoesNotMatchError, formError} = this.state;
+        const {passwordDoesNotMatchError, formError, alreadyExistsError} = this.state;
 
         if (formError) {
             return <div className="alert alert-danger">
@@ -94,6 +96,11 @@ export default class Registration extends React.Component {
         if (passwordDoesNotMatchError) {
             return <div className="alert alert-danger">
                 {strings.passwordDoesNotMatchError}
+            </div>
+        }
+        if (alreadyExistsError) {
+            return <div className="alert alert-danger">
+                {strings.clientAlreadyExistsError}
             </div>
         }
     };

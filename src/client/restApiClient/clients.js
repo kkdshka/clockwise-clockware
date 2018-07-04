@@ -8,7 +8,13 @@ function getClients() {
 
 function addClient(data) {
     return axios.post('/admin/clients/', data)
-        .catch(error => console.log(error));
+        .catch(error => {
+            console.log(error);
+            return {
+                error: error.response.data.error,
+                status: error.response.status
+            }
+        });
 }
 
 function editClient(data) {

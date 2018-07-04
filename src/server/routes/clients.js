@@ -40,6 +40,9 @@ router.post('/', async function (req, res) {
         res.sendStatus(201).end();
     }
     catch (error) {
+        if(error.message === 'Client already exists') {
+            res.status(400).json({error: error.message});
+        }
         console.log(error);
         res.sendStatus(500).json({error: error});
     }

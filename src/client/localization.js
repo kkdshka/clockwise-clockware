@@ -65,7 +65,8 @@ const strings = new LocalizedStrings({
         notValidImageWarning: "Image can be in .jpg, .jpeg or .png formats",
         register: "Register",
         passwordDoesNotMatchError: "Password does not match the confirm password",
-        confirmRegistration: "Registration successful"
+        confirmRegistration: "Registration successful",
+        clientAlreadyExistsError: "Client already exists"
 },
     ru: {
         main: "Главная",
@@ -130,7 +131,8 @@ const strings = new LocalizedStrings({
         notValidImageWarning: "Формат изображения может быть только .jpg, .jpeg или .png",
         register: "Регистрация",
         passwordDoesNotMatchError: "Пароли не совпадают",
-        confirmRegistration: "Регистрация успешна"
+        confirmRegistration: "Регистрация успешна",
+        clientAlreadyExistsError: "Клиент уже существует"
     }
 });
 

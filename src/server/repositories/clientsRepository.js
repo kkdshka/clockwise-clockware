@@ -8,6 +8,9 @@ function addClient(client) {
             return Client.create(client)
                 .then((res) => res.id)
         }
+        if(model.password) {
+            throw new Error('Client already exists');
+        }
         return Client.update(client, {where: {email: client.email}})
             .then(() => model.id)
     });
