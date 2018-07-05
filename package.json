@@ -4,7 +4,7 @@
   "description": "Web application for receiving orders online",
   "main": "index.js",
   "scripts": {
-    "start": "node src/server/index.js",
+    "start": "nodemon src/server/index.js",
     "postinstall": "./node_modules/.bin/webpack --mode production",
     "webpack": "./node_modules/.bin/webpack -w --mode development",
     "test": "mocha --compilers babel-core/register ./test/*test.js",
@@ -25,6 +25,7 @@
     "dotenv": "^5.0.1",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
+    "jsonwebtoken": "^8.3.0",
     "moment": "^2.22.1",
     "moment-timezone": "^0.5.17",
     "multer": "^1.3.1",

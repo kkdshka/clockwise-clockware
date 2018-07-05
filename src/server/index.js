@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const clearingTokens = require('./clearingTokensService');
 
 const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(session({
     secret: '2C44-4D44-WppQ38S',
@@ -27,6 +28,7 @@ const login = require('./routes/login');
 const logout = require('./routes/logout');
 const feedback = require('./routes/feedback');
 const adminFeedbacks = require('./routes/adminFeedbacks');
+const signInClient = require('./routes/signInClient');
 
 app.use(express.static(__dirname +'./../../')); //serves the index.html
 
@@ -39,6 +41,7 @@ app.use('/admin', admin);
 app.use('/login', login);
 app.use('/logout', logout);
 app.use('/feedback', feedback);
+app.use('/sign-in', signInClient);
 
 app.use('/', index);
 const PORT = process.env.PORT || 3000;

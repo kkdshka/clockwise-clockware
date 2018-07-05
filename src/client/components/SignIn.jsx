@@ -1,14 +1,16 @@
 import React from 'react';
-import axios from "axios/index";
 import Navigation from './Navigation.jsx';
 import strings from '../localization.js';
 import {Link} from 'react-router-dom';
+import restApiClient from '../restApiClient';
+import Auth from '../authentication';
 
 export default class SignIn extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            error: false
+            error: false,
+            authorized: false
         };
     }
 
@@ -16,8 +18,21 @@ export default class SignIn extends React.Component {
         strings.setLanguage(this.props.language);
     }
 
-    handleOnSubmit = (event) => {
+    componentDidMount() {
 
+    }
+
+    handleOnSubmit = () => {
+        const {email, password} = this.refs;
+
+        const signInData = {
+            email: email.value,
+            password: password.value
+        };
+
+        restApiClient.signIn(signInData).then((res) => {
+            Auth.authenticateUser(res.token);
+        });
     };
 
 
@@ -45,7 +60,7 @@ export default class SignIn extends React.Component {
                         {error && <div className="alert alert-danger">{strings.authenticationWarning}</div>}
                         <div className="form-group">
                             <label htmlFor="email">{strings.email + ":"}</label>
-                            <input type="text" className="form-control" id="login" ref="login"/>
+                            <input type="text" className="form-control" id="login" ref="email"/>
                         </div>
                         <div className="form-group">
                             <label htmlFor="password">{strings.password + ":"}</label>
@@ -53,9 +68,9 @@ export default class SignIn extends React.Component {
                         </div>
                         <div className="d-flex align-items-center">
                             <button type="button" className="btn btn-primary"
-                                    onClick={this.handleOnSubmitForm}>{strings.confirm}
+                                    onClick={this.handleOnSubmit}>{strings.confirm}
                             </button>
-                            <Link className="ml-auto" to="/register">{strings.register}</Link>
+                            <Link className="ml-auto" to="/register">{strings.signUp}</Link>
                         </div>
                     </form>
                 </div>

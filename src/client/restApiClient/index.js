@@ -3,6 +3,7 @@ import clients from './clients';
 import watchmakers from './watchmakers';
 import reservations from './reservations';
 import feedbacks from "./feedbacks";
+import signIn from "./signIn"
 
 module.exports = {
     getCities: cities.getCities,
@@ -28,5 +29,6 @@ module.exports = {
     addFeedback: feedbacks.addFeedback,
     editFeedback: feedbacks.editFeedback,
     deleteFeedback: feedbacks.deleteFeedback,
-    getTenLastFeedbacks: feedbacks.getTenLastFeedbacks
+    getTenLastFeedbacks: feedbacks.getTenLastFeedbacks,
+    signIn: signIn.signIn
 };
