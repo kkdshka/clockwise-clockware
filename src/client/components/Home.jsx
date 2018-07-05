@@ -39,7 +39,7 @@ export default class Home extends React.Component {
                             </div>
                             <div className="d-flex mt-1">
                                 <Link className="ml-auto nav-link" to="/sign-in">{strings.signIn}</Link>
-                                <Link className="ml-auto nav-link" to="/register">{strings.register}</Link>
+                                <Link className="ml-auto nav-link" to="/register">{strings.signUp}</Link>
                             </div>
                         </div>
                     </div>

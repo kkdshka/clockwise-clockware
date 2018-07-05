@@ -8,6 +8,13 @@ export default class Navigation extends React.Component {
         strings.setLanguage(this.props.language);
     }
 
+    renderLink() {
+        if(window.location.pathname === '/sign-in') {
+            return <Link className="nav-link" to="/register">{strings.signUp}</Link>
+        }
+        return <Link className="nav-link" to="/sign-in">{strings.signIn}</Link>
+    }
+
     render() {
         const {update, cityTranslations} = this.props;
 
@@ -21,9 +28,7 @@ export default class Navigation extends React.Component {
                     </ul>
                     <ul className="navbar-nav ml-auto">
                         <li className={"nav-item pr-4"}>
-                            <Link className="nav-link" to="/sign-in">
-                                {window.location.pathname === '/sign-in' ? strings.register : strings.signIn}
-                            </Link>
+                            {this.renderLink()}
                         </li>
                         <li className={"nav-item"}>
                             <Localization update={update} cityTranslations={cityTranslations} color="secondary"/>

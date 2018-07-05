@@ -128,7 +128,7 @@ export default class Registration extends React.Component {
                     {this.renderErrors()}
                     <div className="panel panel-default">
                         <div className="panel-heading">
-                            <h4 className="text-center">{strings.register}</h4>
+                            <h4 className="text-center">{strings.signUp}</h4>
                         </div>
                     </div>
                     <form className="form mt-4" onSubmit={this.handleOnSubmitForm}>
