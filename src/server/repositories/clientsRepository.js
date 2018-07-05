@@ -5,14 +5,12 @@ const Client = db.client;
 function addClient(client) {
     return Client.findOne({where: {email: client.email}}).then((model) => {
         if(!model) {
-            return Client.create(client)
-                .then((res) => res.id)
+            return Client.create(client);
         }
         if(model.password) {
             throw new Error('Client already exists');
         }
-        return Client.update(client, {where: {email: client.email}})
-            .then(() => model.id)
+        return Client.update(client, {where: {email: client.email}});
     });
 }
 
