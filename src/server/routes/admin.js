@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
-const auth = require('../authenticationMiddleware');
+const auth = require('../authenticationAdminMiddleware');
 
 /* GET home page. */
 router.get('/*', auth, function (req, res) {

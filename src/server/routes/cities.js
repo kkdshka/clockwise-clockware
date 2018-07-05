@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const citiesRepository = require('../repositories/citiesRepository');
-const auth = require('../authenticationMiddleware');
+const auth = require('../authenticationAdminMiddleware');
 const validation = require('../validation');
 const Sequelize = require('sequelize');
 
