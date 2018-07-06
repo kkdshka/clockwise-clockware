@@ -2,13 +2,25 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import Localization from './Localization.jsx';
 import strings from '../localization.js';
+import Auth from '../authentication';
 
 export default class Navigation extends React.Component {
     componentWillMount() {
         strings.setLanguage(this.props.language);
     }
 
+    handleSignOut = () => {
+        Auth.deauthenticateUser();
+        Auth.redirect('/');
+    };
+
     renderLink() {
+        if(Auth.isUserAuthenticated()) {
+            return <button className="btn btn-secondary" onClick={this.handleSignOut}>{strings.signOut}</button>
+        }
+        if(window.location.pathname === '/personal-page') {
+            return <Link className="nav-link" to="/">{strings.logout}</Link>
+        }
         if(window.location.pathname === '/sign-in') {
             return <Link className="nav-link" to="/register">{strings.signUp}</Link>
         }

@@ -66,7 +66,9 @@ const strings = new LocalizedStrings({
         signUp: "Sign up",
         passwordDoesNotMatchError: "Password does not match the confirm password",
         confirmRegistration: "Registration successful",
-        clientAlreadyExistsError: "Client already exists"
+        clientAlreadyExistsError: "Client already exists",
+        personalPage: "Personal page",
+        signOut: "Sign out"
 },
     ru: {
         main: "Главная",
@@ -132,7 +134,9 @@ const strings = new LocalizedStrings({
         signUp: "Регистрация",
         passwordDoesNotMatchError: "Пароли не совпадают",
         confirmRegistration: "Регистрация успешна",
-        clientAlreadyExistsError: "Клиент уже существует"
+        clientAlreadyExistsError: "Клиент уже существует",
+        personalPage: "Личная страница",
+        signOut: "Выйти"
     }
 });
 

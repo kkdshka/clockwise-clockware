@@ -18,10 +18,6 @@ export default class SignIn extends React.Component {
         strings.setLanguage(this.props.language);
     }
 
-    componentDidMount() {
-
-    }
-
     handleOnSubmit = () => {
         const {email, password} = this.refs;
 
@@ -30,8 +26,8 @@ export default class SignIn extends React.Component {
             password: password.value
         };
 
-        restApiClient.signIn(signInData).then((res) => {
-            Auth.authenticateUser(res.token);
+        restApiClient.signIn(signInData).then(() => {
+            Auth.redirect('/personal-page');
         });
     };
 

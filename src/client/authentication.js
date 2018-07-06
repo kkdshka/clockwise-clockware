@@ -1,41 +1,16 @@
 class Auth {
-
-    /**
-     * Authenticate a user. Save a token string in Local Storage
-     *
-     * @param {string} token
-     */
-    static authenticateUser(token) {
-        localStorage.setItem('token', token);
-    }
-
-    /**
-     * Check if a user is authenticated - check if a token is saved in Local Storage
-     *
-     * @returns {boolean}
-     */
+    //@returns {boolean}
     static isUserAuthenticated() {
-        return localStorage.getItem('token') !== null;
+        return document.cookie.match(/^(.*;)?\s*token\s*=\s*[^;]+(.*)?$/);
     }
 
-    /**
-     * Deauthenticate a user. Remove a token from Local Storage.
-     *
-     */
     static deauthenticateUser() {
-        localStorage.removeItem('token');
+        document.cookie = 'token=;expires=Thu, 01 Jan 1970 00:00:01 GMT;'
     }
 
-    /**
-     * Get a token value.
-     *
-     * @returns {string}
-     */
-
-    static getToken() {
-        return localStorage.getItem('token');
+    static redirect(path) {
+        window.location.href = path;
     }
-
 }
 
 export default Auth;

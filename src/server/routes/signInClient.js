@@ -24,10 +24,7 @@ router.post('/', (req, res) => {
                     {
                         expiresIn: '2h'
                     });
-                return res.status(200).json({
-                    success: 'Welcome to the JWT Auth',
-                    token: JWTToken
-                });
+                return res.status(200).cookie('token', JWTToken).end();
             }
             return res.status(401).json({
                 failed: 'Unauthorized Access',

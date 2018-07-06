@@ -3,6 +3,7 @@ import Order from './Order.jsx';
 import Localization from './Localization.jsx';
 import strings from '../localization.js';
 import {Link} from 'react-router-dom';
+import Auth from '../authentication';
 
 export default class Home extends React.Component {
     componentWillMount() {
@@ -21,6 +22,23 @@ export default class Home extends React.Component {
         this.forceUpdate();
     };
 
+    handleSignOut = () => {
+        Auth.deauthenticateUser();
+    };
+
+    renderLinks() {
+        if(!Auth.isUserAuthenticated()) {
+            return <div className="d-flex mt-1">
+                <Link className="ml-auto btn btn-link" to="/sign-in">{strings.signIn}</Link>
+                <Link className="ml-auto btn btn-link" to="/register">{strings.signUp}</Link>
+            </div>
+        }
+        return <div className="d-flex mt-1">
+            <Link className="ml-auto btn btn-link" to="/personal-page">{strings.personalPage}</Link>
+            <button type='button' className="ml-auto btn btn-link" onClick={this.handleSignOut}>{strings.signOut}</button>
+        </div>
+    }
+
     render() {
         const {cityTranslations} = this.props;
 
@@ -37,10 +55,7 @@ export default class Home extends React.Component {
                                 <Localization update={this.update} color="outline-secondary"
                                               cityTranslations={cityTranslations}/>
                             </div>
-                            <div className="d-flex mt-1">
-                                <Link className="ml-auto nav-link" to="/sign-in">{strings.signIn}</Link>
-                                <Link className="ml-auto nav-link" to="/register">{strings.signUp}</Link>
-                            </div>
+                            {this.renderLinks()}
                         </div>
                     </div>
                 </div>
