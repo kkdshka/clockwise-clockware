@@ -29,7 +29,7 @@ const login = require('./routes/login');
 const logout = require('./routes/logout');
 const feedback = require('./routes/feedback');
 const adminFeedbacks = require('./routes/adminFeedbacks');
-const signInClient = require('./routes/signInClient');
+const client = require('./routes/clientAuth');
 const personalPage = require('./routes/personalPage');
 
 app.use(express.static(__dirname +'./../../')); //serves the index.html
@@ -43,7 +43,7 @@ app.use('/admin', admin);
 app.use('/login', login);
 app.use('/logout', logout);
 app.use('/feedback', feedback);
-app.use('/sign-in', signInClient);
+app.use('/client', client);
 app.use('/personal-page', personalPage);
 
 app.use('/', index);
