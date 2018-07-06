@@ -24,6 +24,7 @@ export default class Home extends React.Component {
 
     handleSignOut = () => {
         Auth.deauthenticateUser();
+        Auth.redirect('/');
     };
 
     renderLinks() {

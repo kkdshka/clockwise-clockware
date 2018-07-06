@@ -24,7 +24,8 @@ router.post('/', (req, res) => {
                     {
                         expiresIn: '2h'
                     });
-                return res.status(200).cookie('token', JWTToken).end();
+                return res.status(200).cookie('token', JWTToken, { httpOnly: true })
+                    .cookie('isAuthorized', 'true').end();
             }
             return res.status(401).json({
                 failed: 'Unauthorized Access',
