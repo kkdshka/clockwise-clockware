@@ -76,7 +76,6 @@ export default class Registration extends React.Component {
             if(res.status === 201) {
                 window.location.href = '/success';
             }
-            console.log(res.error);
             this.setState({alreadyExistsError: true});
         });
     };
