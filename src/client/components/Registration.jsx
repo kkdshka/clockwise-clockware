@@ -5,6 +5,7 @@ const validation = require('../validation');
 import Navigation from './Navigation.jsx';
 import {Link} from 'react-router-dom';
 import restApiClient from '../restApiClient/index';
+import Auth from "../authentication";
 
 
 export default class Registration extends React.Component {
@@ -73,10 +74,12 @@ export default class Registration extends React.Component {
         }
 
         restApiClient.addClient(data).then((res) => {
-            if(res.status === 201) {
-                window.location.href = '/success';
+            if (res.status === 201) {
+                Auth.redirect('/success');
             }
-            this.setState({alreadyExistsError: true});
+            else {
+                this.setState({alreadyExistsError: true});
+            }
         });
     };
 
@@ -104,14 +107,6 @@ export default class Registration extends React.Component {
         }
     };
 
-    renderConfirmation = () => {
-        if(this.state.confirmation) {
-            return <div className="alert alert-success">
-                {strings.confirmRegistration}
-            </div>
-        }
-    };
-
     render() {
         const {validationResult: {name, email, password}} = this.state;
 
@@ -123,7 +118,6 @@ export default class Registration extends React.Component {
             </div>
             <div className="row justify-content-center">
                 <div className="col-4 mt-4">
-                    {this.renderConfirmation()}
                     {this.renderErrors()}
                     <div className="panel panel-default">
                         <div className="panel-heading">

@@ -15,7 +15,8 @@ import AdminFeedbacks from "./components/AdminFeedbacks.jsx";
 import Registration from "./components/Registration.jsx";
 import SignIn from "./components/SignIn.jsx";
 import PersonalPage from "./components/PersonalPage.jsx";
-import Success from "./components/Success.jsx";
+import RegistrationSuccess from "./components/RegistrationSuccess.jsx";
+import PasswordRecovery from './components/PasswordRecovery.jsx';
 
 const cityTranslations = new CityTranslations(getLanguage());
 
@@ -49,7 +50,9 @@ ReactDOM.render(
             <Route path="/personal-page"
                    render={() => <PersonalPage language={getLanguage()} cityTranslations={cityTranslations}/>}/>
             <Route path="/success"
-                   render={() => <Success language={getLanguage()} cityTranslations={cityTranslations}/>}/>
+                   render={() => <RegistrationSuccess language={getLanguage()} cityTranslations={cityTranslations}/>}/>
+            <Route path="/password-recovery"
+                   render={() => <PasswordRecovery language={getLanguage()} cityTranslations={cityTranslations}/>}/>
             <Route render={() => <NotFound language={getLanguage()} cityTranslations={cityTranslations}/>}/>
         </Switch>
     </Router>,

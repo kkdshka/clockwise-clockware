@@ -3,7 +3,7 @@ import strings from '../localization.js';
 import Navigation from './Navigation.jsx';
 import {Link} from 'react-router-dom';
 
-export default class Success extends React.Component {
+export default class RegistrationSuccess extends React.Component {
     componentWillMount() {
         strings.setLanguage(this.props.language);
     }
@@ -22,7 +22,7 @@ export default class Success extends React.Component {
             <div className="row justify-content-center">
                 <div className="col col-lg-6 mt-4">
                     <div className="alert alert-success">
-                        {strings.confirmRegistration}
+                        {strings.confirmRegistration + " "}<Link to="/sign-in">{strings.signIn}</Link>
                     </div>
                 </div>
             </div>
