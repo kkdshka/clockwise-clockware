@@ -5,6 +5,7 @@ import reservations from './reservations';
 import feedbacks from "./feedbacks";
 import clientAuth from "./clientAuth";
 import personalPage from "./personalPage";
+import passwordRecovery from "./passwordRecovery";
 
 module.exports = {
     getCities: cities.getCities,
@@ -34,5 +35,7 @@ module.exports = {
     signIn: clientAuth.signIn,
     signOut: clientAuth.signOut,
     getPersonalPage: personalPage.getPersonalPage,
-    getClientReservations: personalPage.getClientReservations
+    getClientReservations: personalPage.getClientReservations,
+    sendLink: passwordRecovery.sendLink,
+    changePassword: passwordRecovery.changePassword
 };

@@ -68,7 +68,10 @@ const strings = new LocalizedStrings({
         confirmRegistration: "Registration successful. Now you can",
         clientAlreadyExistsError: "Client already exists",
         personalPage: "Personal page",
-        signOut: "Sign out"
+        signOut: "Sign out",
+        forgotPassword: "Forgot password",
+        passwordRecovery: "Password recovery",
+        sendLinkConfirmation: "We have just sent you an email to reset your password"
 },
     ru: {
         main: "Главная",
@@ -136,7 +139,10 @@ const strings = new LocalizedStrings({
         confirmRegistration: "Регистрация успешна. Теперь вы можете",
         clientAlreadyExistsError: "Клиент уже существует",
         personalPage: "Личная страница",
-        signOut: "Выйти"
+        signOut: "Выйти",
+        forgotPassword: "Забыли пароль",
+        passwordRecovery: "Восстановление пароля",
+        sendLinkConfirmation: "Мы отправили вам письмо для восстановления пароля"
     }
 });
 

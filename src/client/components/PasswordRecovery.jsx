@@ -3,14 +3,12 @@ import Navigation from './Navigation.jsx';
 import strings from '../localization.js';
 import {Link} from 'react-router-dom';
 import restApiClient from '../restApiClient';
-import Auth from '../authentication';
 
 export default class SignIn extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            error: false,
-            authorized: false
+            confirmation: false,
         };
     }
 
@@ -19,15 +17,14 @@ export default class SignIn extends React.Component {
     }
 
     handleOnSubmit = () => {
-        const {email, password} = this.refs;
+        const {email} = this.refs;
 
-        const signInData = {
+        const recoveryData = {
             email: email.value,
-            password: password.value
         };
 
-        restApiClient.signIn(signInData).then(() => {
-            Auth.redirect('/personal-page');
+        restApiClient.sendLink(recoveryData).then(() => {
+            this.setState({confirmation: true});
         });
     };
 
@@ -37,7 +34,7 @@ export default class SignIn extends React.Component {
     };
 
     render() {
-        const {error} = this.state;
+        const {confirmation} = this.state;
 
         return <div className="container">
             <div className="row">
@@ -45,31 +42,28 @@ export default class SignIn extends React.Component {
                     <Navigation update={this.update} language={this.props.language}/>
                 </div>
             </div>
+            <div className="row mt-4">
+                <div className="col">
+                    {confirmation && <div className="alert alert-success">{strings.sendLinkConfirmation}</div>}
+                </div>
+            </div>
             <div className="row justify-content-md-center">
                 <div className="col-4 mt-4">
                     <div className="panel panel-default">
                         <div className="panel-heading">
-                            <h4 className="text-center">{strings.signIn}</h4>
+                            <h4 className="text-center">{strings.passwordRecovery}</h4>
                         </div>
                     </div>
                     <form className={'form mt-4'}>
-                        {error && <div className="alert alert-danger">{strings.authenticationWarning}</div>}
                         <div className="form-group">
                             <label htmlFor="email">{strings.email + ":"}</label>
                             <input type="text" className="form-control" id="login" ref="email"/>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="password">{strings.password + ":"}</label>
-                            <input type="password" className="form-control" id="password" ref="password"/>
                         </div>
                         <div className="d-flex align-items-center">
                             <button type="button" className="btn btn-primary"
                                     onClick={this.handleOnSubmit}>{strings.confirm}
                             </button>
                             <Link className="ml-auto" to="/register">{strings.signUp}</Link>
-                        </div>
-                        <div className="d-flex">
-                            <Link className="ml-auto" to="/password-recovery">{strings.forgotPassword + "?"}</Link>
                         </div>
                     </form>
                 </div>
