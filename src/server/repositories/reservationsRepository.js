@@ -36,7 +36,17 @@ function getAllReservations() {
 function getReservationById(id) {
     return Reservation.findOne({
         where: {id: id},
-        include: [City, Watchmaker]
+        include: [City, Watchmaker, Client]
+    });
+}
+
+function getReservationsByEmail(email) {
+    return Reservation.findAll({
+        include: [City, Watchmaker,
+            {
+                model: Client,
+                where: {email: email}
+            }]
     });
 }
 
@@ -45,5 +55,6 @@ module.exports = {
     edit: editReservation,
     delete: deleteReservation,
     getAll: getAllReservations,
-    getById: getReservationById
+    getById: getReservationById,
+    getByEmail: getReservationsByEmail
 };

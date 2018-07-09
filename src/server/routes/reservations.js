@@ -43,7 +43,6 @@ router.post('/', async function (req, res) {
     const errors = check(reservationData);
     if (errors.length > 0) {
         res.sendStatus(400).json({errors: errors});
-        console.log(errors);
         return;
     }
 

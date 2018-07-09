@@ -3,7 +3,8 @@ import clients from './clients';
 import watchmakers from './watchmakers';
 import reservations from './reservations';
 import feedbacks from "./feedbacks";
-import clientAuth from "./clientAuth"
+import clientAuth from "./clientAuth";
+import personalPage from "./personalPage";
 
 module.exports = {
     getCities: cities.getCities,
@@ -31,5 +32,7 @@ module.exports = {
     deleteFeedback: feedbacks.deleteFeedback,
     getTenLastFeedbacks: feedbacks.getTenLastFeedbacks,
     signIn: clientAuth.signIn,
-    signOut: clientAuth.signOut
+    signOut: clientAuth.signOut,
+    getPersonalPage: personalPage.getPersonalPage,
+    getClientReservations: personalPage.getClientReservations
 };
