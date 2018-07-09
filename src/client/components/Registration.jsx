@@ -144,7 +144,7 @@ export default class Registration extends React.Component {
                             <div className="invalid-feedback">{password.message}</div>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="confirmPassword">{strings.password + ":"}</label>
+                            <label htmlFor="confirmPassword">{strings.repeatPassword + ":"}</label>
                             <input type="password" className="form-control " id="confirm-password" ref="confirmPassword"
                                    onBlur={this.handleValidation('password', strings.passwordWarning)}/>
                             <div className="invalid-feedback">{password.message}</div>

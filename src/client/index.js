@@ -16,7 +16,8 @@ import Registration from "./components/Registration.jsx";
 import SignIn from "./components/SignIn.jsx";
 import PersonalPage from "./components/PersonalPage.jsx";
 import RegistrationSuccess from "./components/RegistrationSuccess.jsx";
-import PasswordRecovery from './components/PasswordRecovery.jsx';
+import ForgotPassword from './components/passwordRecovery/ForgotPassword.jsx';
+import RecoverPassword from './components/passwordRecovery/RecoverPassword.jsx'
 
 const cityTranslations = new CityTranslations(getLanguage());
 
@@ -28,31 +29,35 @@ ReactDOM.render(
     <Router>
         <Switch>
             <Route exact path="/" render={() => <Home language={getLanguage()} cityTranslations={cityTranslations}/>}/>
-            <Route path="/feedback"
-                   render={() => <Feedback language={getLanguage()} cityTranslations={cityTranslations}/>}/>
-            <Route exact path="/admin"
-                   render={() => <AdminHome language={getLanguage()} cityTranslations={cityTranslations}/>}/>
+
             <Route path="/login" render={() => <Login language={getLanguage()}/>}/>
-            <Route path="/admin/watchmakers"
-                   render={() => <Watchmakers language={getLanguage()} cityTranslations={cityTranslations}/>}/>
-            <Route path="/admin/feedbacks"
-                   render={() => <AdminFeedbacks language={getLanguage()} cityTranslations={cityTranslations}/>}/>
-            <Route path="/admin/clients"
-                   render={() => <Clients language={getLanguage()} cityTranslations={cityTranslations}/>}/>
-            <Route path="/admin/cities"
-                   render={() => <Cities language={getLanguage()} cityTranslations={cityTranslations}/>}/>
-            <Route path="/admin/reservations"
-                   render={() => <Reservations language={getLanguage()} cityTranslations={cityTranslations}/>}/>
-            <Route path="/sign-in"
-                   render={() => <SignIn language={getLanguage()} cityTranslations={cityTranslations}/>}/>
-            <Route path="/register"
-                   render={() => <Registration language={getLanguage()} cityTranslations={cityTranslations}/>}/>
-            <Route path="/personal-page"
-                   render={() => <PersonalPage language={getLanguage()} cityTranslations={cityTranslations}/>}/>
-            <Route path="/success"
-                   render={() => <RegistrationSuccess language={getLanguage()} cityTranslations={cityTranslations}/>}/>
-            <Route path="/password-recovery"
-                   render={() => <PasswordRecovery language={getLanguage()} cityTranslations={cityTranslations}/>}/>
+
+            <Route path="/feedback" render={() => <Feedback language={getLanguage()} cityTranslations={cityTranslations}/>}/>
+
+            <Route exact path="/admin" render={() => <AdminHome language={getLanguage()} cityTranslations={cityTranslations}/>}/>
+
+            <Route path="/admin/watchmakers" render={() => <Watchmakers language={getLanguage()} cityTranslations={cityTranslations}/>}/>
+
+            <Route path="/admin/feedbacks" render={() => <AdminFeedbacks language={getLanguage()} cityTranslations={cityTranslations}/>}/>
+
+            <Route path="/admin/clients" render={() => <Clients language={getLanguage()} cityTranslations={cityTranslations}/>}/>
+
+            <Route path="/admin/cities" render={() => <Cities language={getLanguage()} cityTranslations={cityTranslations}/>}/>
+
+            <Route path="/admin/reservations" render={() => <Reservations language={getLanguage()} cityTranslations={cityTranslations}/>}/>
+
+            <Route path="/sign-in" render={() => <SignIn language={getLanguage()} cityTranslations={cityTranslations}/>}/>
+
+            <Route path="/register" render={() => <Registration language={getLanguage()} cityTranslations={cityTranslations}/>}/>
+
+            <Route path="/personal-page" render={() => <PersonalPage language={getLanguage()} cityTranslations={cityTranslations}/>}/>
+
+            <Route path="/success" render={() => <RegistrationSuccess language={getLanguage()} cityTranslations={cityTranslations}/>}/>
+
+            <Route path="/forgot-password" render={() => <ForgotPassword language={getLanguage()} cityTranslations={cityTranslations}/>}/>
+
+            <Route path="/password-recovery" render={() => <RecoverPassword language={getLanguage()} cityTranslations={cityTranslations}/>}/>
+
             <Route render={() => <NotFound language={getLanguage()} cityTranslations={cityTranslations}/>}/>
         </Switch>
     </Router>,

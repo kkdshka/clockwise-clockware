@@ -69,7 +69,7 @@ export default class SignIn extends React.Component {
                             <Link className="ml-auto" to="/register">{strings.signUp}</Link>
                         </div>
                         <div className="d-flex">
-                            <Link className="ml-auto" to="/password-recovery">{strings.forgotPassword + "?"}</Link>
+                            <Link className="ml-auto" to="/forgot-password">{strings.forgotPassword + "?"}</Link>
                         </div>
                     </form>
                 </div>

@@ -1,8 +1,8 @@
 import React from 'react';
-import Navigation from './Navigation.jsx';
-import strings from '../localization.js';
+import Navigation from '../Navigation.jsx';
+import strings from '../../localization.js';
 import {Link} from 'react-router-dom';
-import restApiClient from '../restApiClient';
+import restApiClient from '../../restApiClient/index';
 
 export default class SignIn extends React.Component {
     constructor(props) {
@@ -21,6 +21,7 @@ export default class SignIn extends React.Component {
 
         const recoveryData = {
             email: email.value,
+            message: strings.passwordRecoveryEmailMessage
         };
 
         restApiClient.sendLink(recoveryData).then(() => {

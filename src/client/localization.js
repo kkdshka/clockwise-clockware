@@ -42,6 +42,7 @@ const strings = new LocalizedStrings({
         authenticationWarning: "Wrong login or password",
         login: "Login",
         password: "Password",
+        repeatPassword: "Repeat password",
         notFound: "Page not found",
         watchmaker: "Watchmaker",
         contactUs: "Contact us",
@@ -71,7 +72,10 @@ const strings = new LocalizedStrings({
         signOut: "Sign out",
         forgotPassword: "Forgot password",
         passwordRecovery: "Password recovery",
-        sendLinkConfirmation: "We have just sent you an email to reset your password"
+        sendLinkConfirmation: "We have just sent you an email to reset your password",
+        passwordRecoveryEmailMessage: "You have submitted a password change request. Follow the link if it were you: ",
+        changedPasswordConfirmation: "Password successfully changed",
+        enterNewPassword: "Enter new password"
 },
     ru: {
         main: "Главная",
@@ -112,7 +116,8 @@ const strings = new LocalizedStrings({
         notEmptyNameWarning: "Название не может быть пустым",
         authenticationWarning: "Неправильные логин или пароль",
         login: "Логин",
-        password: "Пароль",
+        password: "Введите пароль",
+        repeatPassword: "Повторно введите пароль",
         notFound: "Ресурс не найден",
         watchmaker: "Мастер",
         contactUs: "Свяжитесь с нами",
@@ -142,7 +147,10 @@ const strings = new LocalizedStrings({
         signOut: "Выйти",
         forgotPassword: "Забыли пароль",
         passwordRecovery: "Восстановление пароля",
-        sendLinkConfirmation: "Мы отправили вам письмо для восстановления пароля"
+        sendLinkConfirmation: "Мы отправили вам письмо для восстановления пароля",
+        passwordRecoveryEmailMessage: "Вы подтвердили смену пароля. Перейдите по ссылке: ",
+        changedPasswordConfirmation: "Пароль успешно изменен",
+        enterNewPassword: "Введите новый пароль"
     }
 });
 
