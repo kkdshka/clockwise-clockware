@@ -10,6 +10,7 @@ const validation = require('../validation');
 const schedule = require('node-schedule');
 const moment = require('moment-timezone');
 const Sequelize = require('sequelize');
+require('dotenv').config();
 
 router.get('/', auth, function (req, res) {
     res.sendFile(path.join(__dirname, "../../../index.html"));
@@ -57,7 +58,7 @@ router.post('/', async function (req, res) {
         const taskDate = new Date(taskMoment);
 
         const host = req.get('host');
-        const salt = 'anLiscj89uq98chaFocnaCauhc87=';
+        const salt = process.env.TOKEN_SALT;
         const token = Buffer.from(String(salt + reservationId)).toString('base64');
         const link = 'http://' + host + '/feedback?token=' + token;
         const tokenLifetimeEnd = moment.tz(taskMoment, reservationData.timezone).add(1, 'day').format();
