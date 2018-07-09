@@ -31,9 +31,14 @@ function getAllClients() {
     return Client.findAll({attributes: ['name', 'email', 'id']});
 }
 
+function getClientByEmail(email) {
+    return Client.findOne({where: {email: email}});
+}
+
 module.exports = {
     add: addClient,
     edit: editClient,
     delete: deleteClient,
-    getAll: getAllClients
+    getAll: getAllClients,
+    getByEmail: getClientByEmail
 };
