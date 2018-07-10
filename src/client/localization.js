@@ -74,8 +74,10 @@ const strings = new LocalizedStrings({
         passwordRecovery: "Password recovery",
         sendLinkConfirmation: "We have just sent you an email to reset your password",
         passwordRecoveryEmailMessage: "You have submitted a password change request. Follow the link if it were you: ",
-        changedPasswordConfirmation: "Password successfully changed",
-        enterNewPassword: "Enter new password"
+        changedPasswordConfirmation: "Password successfully changed. Page will reload in",
+        seconds: "seconds",
+        enterNewPassword: "Enter new password",
+        unknownError: "Something went wrong"
 },
     ru: {
         main: "Главная",
@@ -149,8 +151,10 @@ const strings = new LocalizedStrings({
         passwordRecovery: "Восстановление пароля",
         sendLinkConfirmation: "Мы отправили вам письмо для восстановления пароля",
         passwordRecoveryEmailMessage: "Вы подтвердили смену пароля. Перейдите по ссылке: ",
-        changedPasswordConfirmation: "Пароль успешно изменен",
-        enterNewPassword: "Введите новый пароль"
+        changedPasswordConfirmation: "Пароль успешно изменен. Страница перезагрузится через",
+        seconds: "секунд",
+        enterNewPassword: "Введите новый пароль",
+        unknownError: "Что-то пошло не так"
     }
 });
 

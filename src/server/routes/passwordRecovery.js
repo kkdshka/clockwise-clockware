@@ -7,6 +7,7 @@ const sendEmail = require('../sender');
 const schedule = require('node-schedule');
 const moment = require('moment-timezone');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 router.get('/recover', async function (req, res) {
         try {
@@ -59,6 +60,26 @@ router.post('/send-link', async function (req, res) {
         console.log(error);
     }
 
+});
+
+router.post('/recover', async (req, res) => {
+    const clientData = req.body;
+
+    try {
+        clientData.password = await bcrypt.hash(clientData.plaintextPassword, 5);
+        return jwt.verify(clientData.token, process.env.JWT_SECRET, (err, decoded) => {
+            if (err) {
+                return res.status(409).json({error: "token is expired"});
+            }
+            clientData.id = decoded.id;
+            return clientRepository.edit(clientData).then(() => {
+                return res.sendStatus(204);
+            });
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({error: error});
+    }
 });
 
 module.exports = router;

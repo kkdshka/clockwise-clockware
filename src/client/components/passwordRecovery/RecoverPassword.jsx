@@ -1,8 +1,8 @@
 import React from 'react';
 import Navigation from '../Navigation.jsx';
 import strings from '../../localization.js';
-import {Link} from 'react-router-dom';
 import restApiClient from '../../restApiClient/index';
+import Auth from "../../authentication";
 
 const validation = require('../../validation');
 
@@ -16,7 +16,9 @@ export default class SignIn extends React.Component {
             validationResult: {
                 password: {isValid: false, message: ""},
                 repeatPassword: {isValid: false, message: ""}
-            }
+            },
+            seconds: 3,
+            unknownError: false
         };
     }
 
@@ -46,9 +48,8 @@ export default class SignIn extends React.Component {
     handleValidation = (type, message) => event => this.validator(type, event.currentTarget, message);
 
     handleOnSubmit = () => {
-        const {validationResult} = this.state;
+        const {validationResult, seconds} = this.state;
         const {password, repeatPassword} = this.refs;
-        let recoveryData;
 
         if (!validationResult.password.isValid || !validationResult.repeatPassword.isValid) {
             this.setState({formError: true});
@@ -57,9 +58,10 @@ export default class SignIn extends React.Component {
             this.setState({formError: false});
         }
 
+        let recoveryData;
         if (password.value === repeatPassword.value) {
             recoveryData = {
-                plaintPassword: password.value,
+                plaintextPassword: password.value,
                 token: window.location.href.split('?token=')[1]
             };
             this.setState({passwordDoesNotMatchError: false});
@@ -70,14 +72,29 @@ export default class SignIn extends React.Component {
         }
 
         restApiClient.changePassword(recoveryData).then((res) => {
-            if (res.status === 200) {
+            if (res.status === 204) {
                 this.setState({confirmation: true});
+
+                const timerId = setInterval(() => {
+                    this.setState(prevState => ({seconds: prevState.seconds - 1}));
+                }, 1000);
+
+                setTimeout(() => {
+                    restApiClient.destroyToken(window.location.href.split('?token=')[1]).then(() => {
+                        clearInterval(timerId);
+                        Auth.redirect('/');
+                    });
+                }, 3000);
+            }
+            else {
+                console.log(res);
+                this.setState({unknownError: true});
             }
         });
     };
 
     renderErrors = () => {
-        const {passwordDoesNotMatchError, formError} = this.state;
+        const {passwordDoesNotMatchError, formError, unknownError} = this.state;
 
         if (formError) {
             return <div className="alert alert-danger">
@@ -89,6 +106,11 @@ export default class SignIn extends React.Component {
                 {strings.passwordDoesNotMatchError}
             </div>
         }
+        if (unknownError) {
+            return <div className="alert alert-danger">
+                {strings.unknownError}
+            </div>
+        }
     };
 
     update = () => {
@@ -96,7 +118,7 @@ export default class SignIn extends React.Component {
     };
 
     render() {
-        const {confirmation, validationResult: {password, repeatPassword}, passwordDoesNotMatchError} = this.state;
+        const {confirmation, validationResult: {password, repeatPassword}, seconds} = this.state;
 
         return <div className="container">
             <div className="row">
@@ -107,7 +129,9 @@ export default class SignIn extends React.Component {
             <div className="row mt-4">
                 <div className="col">
                     {this.renderErrors()}
-                    {confirmation && <div className="alert alert-success">{strings.changedPasswordConfirmation}</div>}
+                    {confirmation && <div className="alert alert-success">
+                        {strings.changedPasswordConfirmation + " " + seconds + " " + strings.seconds}
+                    </div>}
                 </div>
             </div>
             <div className="row justify-content-md-center">

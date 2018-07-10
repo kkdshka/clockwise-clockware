@@ -32,6 +32,7 @@ const adminFeedbacks = require('./routes/adminFeedbacks');
 const client = require('./routes/clientAuth');
 const personalPage = require('./routes/personalPage');
 const passwordRecovery = require('./routes/passwordRecovery');
+const token = require ('./routes/token');
 
 app.use(express.static(__dirname +'./../../')); //serves the index.html
 
@@ -47,6 +48,7 @@ app.use('/feedback', feedback);
 app.use('/client', client);
 app.use('/personal-page', personalPage);
 app.use('/password-recovery', passwordRecovery);
+app.use('/token', token);
 
 app.use('/', index);
 const PORT = process.env.PORT || 3000;
