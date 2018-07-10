@@ -2,8 +2,8 @@ import axios from "axios/index";
 
 function signIn(signInData) {
     return axios.post('/client/sign-in', signInData)
-        .then(res => res.data)
-        .catch(error => console.log(error.response));
+        .then(res => res)
+        .catch(error => error.response);
 }
 
 function signOut() {

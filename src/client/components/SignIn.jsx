@@ -10,7 +10,9 @@ export default class SignIn extends React.Component {
         super(props);
         this.state = {
             error: false,
-            authorized: false
+            authorized: false,
+            confirmation: false,
+            seconds: 3
         };
     }
 
@@ -26,8 +28,23 @@ export default class SignIn extends React.Component {
             password: password.value
         };
 
-        restApiClient.signIn(signInData).then(() => {
-            Auth.redirect('/personal-page');
+        restApiClient.signIn(signInData).then((res) => {
+            if (res.status === 200) {
+                this.setState({confirmation: true});
+
+                const timerId = setInterval(() => {
+                    this.setState(prevState => ({seconds: prevState.seconds - 1}));
+                }, 1000);
+
+                setTimeout(() => {
+                    clearInterval(timerId);
+                    Auth.redirect('/personal-page');
+                }, 3000);
+            }
+            else {
+                console.log(res);
+                this.setState({error: true});
+            }
         });
     };
 
@@ -37,12 +54,20 @@ export default class SignIn extends React.Component {
     };
 
     render() {
-        const {error} = this.state;
+        const {error, confirmation, seconds} = this.state;
 
         return <div className="container">
             <div className="row">
                 <div className="col">
                     <Navigation update={this.update} language={this.props.language}/>
+                </div>
+            </div>
+            <div className="row mt-4">
+                <div className="col">
+                    {error && <div className="alert alert-danger">{strings.authenticationWarning}</div>}
+                    {confirmation && <div className="alert alert-success">
+                        {strings.signInConfirmation + " " + seconds + " " + strings.seconds}
+                    </div>}
                 </div>
             </div>
             <div className="row justify-content-md-center">
@@ -53,7 +78,6 @@ export default class SignIn extends React.Component {
                         </div>
                     </div>
                     <form className={'form mt-4'}>
-                        {error && <div className="alert alert-danger">{strings.authenticationWarning}</div>}
                         <div className="form-group">
                             <label htmlFor="email">{strings.email + ":"}</label>
                             <input type="text" className="form-control" id="login" ref="email"/>

@@ -77,7 +77,8 @@ const strings = new LocalizedStrings({
         changedPasswordConfirmation: "Password successfully changed. Page will reload in",
         seconds: "seconds",
         enterNewPassword: "Enter new password",
-        unknownError: "Something went wrong"
+        unknownError: "Something went wrong",
+        signInConfirmation: "You've successfully signed in. Page will reload in"
 },
     ru: {
         main: "Главная",
@@ -154,7 +155,8 @@ const strings = new LocalizedStrings({
         changedPasswordConfirmation: "Пароль успешно изменен. Страница перезагрузится через",
         seconds: "секунд",
         enterNewPassword: "Введите новый пароль",
-        unknownError: "Что-то пошло не так"
+        unknownError: "Что-то пошло не так",
+        signInConfirmation: "Вы успешно вошли. Страница перезагрузится через"
     }
 });
 
