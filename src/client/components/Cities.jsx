@@ -91,11 +91,11 @@ export default class Cities extends React.Component {
         };
 
         restApiClient.addCity(data).then(() => {
-            cityTranslations.onCitiesChange();
-            restApiClient.getCities()
-                .then(cities => this.setState({cities: cities}));
-        }).catch(error => console.log(error));
-
+            cityTranslations.onCitiesChange().then(() => {
+                restApiClient.getCities()
+                    .then(cities => this.setState({cities: cities}));
+            });
+        });
 
         this.hideModalCreate();
     };

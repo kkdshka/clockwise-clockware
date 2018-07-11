@@ -124,9 +124,6 @@ function check(reservationData) {
     if (!validation.isValidEmail(reservationData.email)) {
         errors.push('Invalid email');
     }
-    if (!validation.isValidDate(reservationData.start_time, reservationData.finish_time)) {
-        errors.push('Invalid date');
-    }
     return errors;
 }
 

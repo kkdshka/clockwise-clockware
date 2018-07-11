@@ -10,7 +10,6 @@ router.delete('/', async (req, res) => {
         const tokenLifetime = await tokenLifetimeRepository.getTokenLifetime(token);
         tokenLifetime.is_used = true;
         return tokenLifetimeRepository.updateToken(tokenLifetime).then(() => {
-            console.log(3);
             return res.sendStatus(204);
         });
     } catch(error) {
