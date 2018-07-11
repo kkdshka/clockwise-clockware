@@ -79,8 +79,12 @@ const strings = new LocalizedStrings({
         seconds: "seconds",
         enterNewPassword: "Enter new password",
         unknownError: "Something went wrong",
-        signInConfirmation: "You've successfully signed in. Page will reload in"
-},
+        signInConfirmation: "You've successfully signed in. Page will reload in",
+        from: "From",
+        to: "To",
+        filter: "Filter",
+        choose: "Choose"
+    },
     ru: {
         main: "Главная",
         clients: "Клиенты",
@@ -158,7 +162,11 @@ const strings = new LocalizedStrings({
         seconds: "секунд",
         enterNewPassword: "Введите новый пароль",
         unknownError: "Что-то пошло не так",
-        signInConfirmation: "Вы успешно вошли. Страница перезагрузится через"
+        signInConfirmation: "Вы успешно вошли. Страница перезагрузится через",
+        from: "От",
+        to: "До",
+        filter: "Фильтр",
+        choose: "Выберите"
     }
 });
 

@@ -8,6 +8,7 @@ import moment from 'moment-timezone';
 import timeHelper from '../timeHelper';
 import DeleteButton from "./DeleteButton.jsx";
 import stringHelper from "../stringHelper";
+import ReservationFilter from './ReservationsFilter.jsx';
 
 export default class Reservations extends React.Component {
     constructor(props) {
@@ -165,6 +166,10 @@ export default class Reservations extends React.Component {
 
 
         this.hideModalUpdate();
+    };
+
+    handleOnFilterSubmit = (params) => {
+        console.log(params);
     };
 
     dateToString(date) {
@@ -487,7 +492,10 @@ export default class Reservations extends React.Component {
                                 cityTranslations={cityTranslations}/>
                 </div>
             </div>
-            <div className="row mt-4">
+            <div className="row mt-2">
+                <ReservationFilter cityTranslations={cityTranslations} onSubmit={this.handleOnFilterSubmit}/>
+            </div>
+            <div className="row mt-2">
                 <div className="col">
                     {this.renderForeignKeyConstraintError()}
                     <h4 className="row justify-content-md-center">{strings.reservations}</h4>
