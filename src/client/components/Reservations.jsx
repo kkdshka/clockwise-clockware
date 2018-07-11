@@ -7,6 +7,7 @@ import strings from '../localization.js';
 import moment from 'moment-timezone';
 import timeHelper from '../timeHelper';
 import DeleteButton from "./DeleteButton.jsx";
+import stringHelper from "../stringHelper";
 
 export default class Reservations extends React.Component {
     constructor(props) {
@@ -14,6 +15,7 @@ export default class Reservations extends React.Component {
         this.state = {
             reservations: [],
             cities: [],
+            citiesById: [],
             watchmakers: [],
             isModalCreateOpened: false,
             isModalUpdateOpened: false,
@@ -44,40 +46,36 @@ export default class Reservations extends React.Component {
 
     }
 
-    validator(fieldName, element, message) {
-        const {validationResult, isModalCreateOpened} = this.state;
-
-        function capitalize(string) {
-            return string.replace(/(?:^|\s)\S/g, function (l) {
-                return l.toUpperCase();
-            });
-        }
+    handleValidation = (fieldName, message) => event => {
+        const {validationResult, citiesById, isModalCreateOpened} = this.state;
 
         const modalName = isModalCreateOpened ? 'add' : 'edit';
 
-        if (fieldName === 'time') {
-            if (validation.isValidTime(this.refs[modalName + 'Time'].value, this.refs[modalName + 'Date'].value)) {
-                this.setState({validationResult: {...validationResult, time: {isValid: true, message: ''}}});
-                element.className = 'form-control form-control-sm is-valid';
-            }
-            else {
-                this.setState({validationResult: {...validationResult, time: {isValid: false, message: message}}});
-                element.className = 'form-control form-control-sm is-invalid';
-            }
+        if(fieldName === 'time') {
+            validation.validate(fieldName, event.currentTarget, {
+                time: this.refs[modalName + "Time"].value,
+                date: this.refs[modalName + "Date"].value,
+                timezone: citiesById[this.refs[modalName + "City"].value].timezone
+            }, (isValid) => {
+                this.setState({
+                    validationResult: {
+                        ...validationResult,
+                        [fieldName]: {isValid: isValid, message: isValid ? '' : message}
+                    }
+                });
+            });
             return;
         }
 
-        if (validation['isValid' + capitalize(fieldName)](this.refs[modalName + capitalize(fieldName)].value)) {
-            this.setState({validationResult: {...validationResult, [fieldName]: {isValid: true, message: ''}}});
-            element.className = 'form-control form-control-sm is-valid';
-        }
-        else {
-            this.setState({validationResult: {...validationResult, [fieldName]: {isValid: false, message: message}}});
-            element.className = 'form-control form-control-sm is-invalid';
-        }
-    }
-
-    handleValidation = (type, message) => event => this.validator(type, event.currentTarget, message);
+        validation.validate(fieldName, event.currentTarget, this.refs[modalName + stringHelper.capitalize(fieldName)].value, (isValid) => {
+            this.setState({
+                validationResult: {
+                    ...validationResult,
+                    [fieldName]: {isValid: isValid, message: isValid ? '' : message}
+                }
+            });
+        })
+    };
 
     handleOnEditClick = (reservation) => () => {
         this.setState({editing: reservation});
@@ -101,7 +99,15 @@ export default class Reservations extends React.Component {
 
     handleOnSubmitAdd = () => {
         const {addName, addEmail, addCity, addClockSize, addDate, addTime, addWatchmakerId} = this.refs;
-        const {citiesById} = this.state;
+        const {citiesById, validationResult} = this.state;
+
+        if (!validation.isValidData(validationResult)) {
+            this.setState({formError: true});
+            return;
+        }
+        else {
+            this.setState({formError: false});
+        }
 
         const startMoment = moment.tz(addDate.value + " " + addTime.value, citiesById[addCity.value].timezone);
         const timezone = citiesById[addCity.value].timezone;
@@ -118,14 +124,6 @@ export default class Reservations extends React.Component {
             feedbackEmailMessage: strings.feedbackEmailMessage,
             timezone: timezone
         };
-
-        if (!validation.isValidReservation(data)) {
-            this.setState({formError: true});
-            return;
-        }
-        else {
-            this.setState({formError: false});
-        }
 
         restApiClient.addReservation(data)
             .then(() => {
@@ -158,14 +156,6 @@ export default class Reservations extends React.Component {
             feedbackEmailMessage: strings.feedbackEmailMessage,
             timezone: timezone
         };
-
-        if (!validation.isValidReservation(data)) {
-            this.setState({formError: true});
-            return;
-        }
-        else {
-            this.setState({formError: false});
-        }
 
         restApiClient.editReservation(data)
             .then(() => {
@@ -247,7 +237,8 @@ export default class Reservations extends React.Component {
 
     openModalCreate = () => {
         this.setState({
-            isModalCreateOpened: true
+            isModalCreateOpened: true,
+            formError: false
         });
         restApiClient.getCities()
             .then(cities => {
@@ -342,7 +333,8 @@ export default class Reservations extends React.Component {
 
     openModalUpdate = () => {
         this.setState({
-            isModalUpdateOpened: true
+            isModalUpdateOpened: true,
+            formError: false
         });
         restApiClient.getCities()
             .then(cities => {

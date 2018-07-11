@@ -4,8 +4,8 @@ import Modal from 'react-bootstrap4-modal';
 import strings from '../localization.js';
 import moment from 'moment-timezone';
 import timeHelper from '../timeHelper';
-
-const validation = require('../validation');
+import stringHelper from "../stringHelper";
+import validation from '../validation';
 
 export default class Order extends React.Component {
     constructor(props) {
@@ -46,38 +46,34 @@ export default class Order extends React.Component {
             .then(feedbacks => this.setState({feedbacks}));
     }
 
-    validator(fieldName, element, message) {
-        const {validationResult} = this.state;
+    handleValidation = (fieldName, message) => event => {
+        const {validationResult, citiesById} = this.state;
 
-        if (fieldName === 'time') {
-            if (validation.isValidTime(this.refs.time.value, this.refs.date.value)) {
-                this.setState({validationResult: {...validationResult, time: {isValid: true, message: ''}}});
-                element.className = 'form-control form-control-sm is-valid';
-            }
-            else {
-                this.setState({validationResult: {...validationResult, time: {isValid: false, message: message}}});
-                element.className = 'form-control form-control-sm is-invalid';
-            }
+        if(fieldName === 'time') {
+            validation.validate(fieldName, event.currentTarget, {
+                time: this.refs.time.value,
+                date: this.refs.date.value,
+                timezone: citiesById[this.refs.city.value].timezone
+            }, (isValid) => {
+                this.setState({
+                    validationResult: {
+                        ...validationResult,
+                        [fieldName]: {isValid: isValid, message: isValid ? '' : message}
+                    }
+                });
+            });
             return;
         }
 
-        function capitalize(string) {
-            return string.replace(/(?:^|\s)\S/g, function (l) {
-                return l.toUpperCase();
+        validation.validate(fieldName, event.currentTarget, this.refs[fieldName].value, (isValid) => {
+            this.setState({
+                validationResult: {
+                    ...validationResult,
+                    [fieldName]: {isValid: isValid, message: isValid ? '' : message}
+                }
             });
-        }
-
-        if (validation['isValid' + capitalize(fieldName)](this.refs[fieldName].value)) {
-            this.setState({validationResult: {...validationResult, [fieldName]: {isValid: true, message: ''}}});
-            element.className = 'form-control form-control-sm is-valid';
-        }
-        else {
-            this.setState({validationResult: {...validationResult, [fieldName]: {isValid: false, message: message}}});
-            element.className = 'form-control form-control-sm is-invalid';
-        }
-    }
-
-    handleValidation = (type, message) => event => this.validator(type, event.currentTarget, message);
+        })
+    };
 
     renderFormError() {
         const {formError} = this.state;
@@ -288,7 +284,6 @@ export default class Order extends React.Component {
         const {feedbacks} = this.state;
 
         return <ul className="feedback-list list-group">
-            {/*<li className="list-group-item"><h6>{strings.feedbacks}</h6></li>*/}
             {feedbacks.map(feedback => {
                 if (feedback.feedback.length > 0) {
                     return <li className="list-group-item" key={'feedback' + feedback.id}>

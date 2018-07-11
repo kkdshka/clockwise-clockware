@@ -1,7 +1,85 @@
 const moment = require('moment');
 
+function validate(fieldName, currentElement, value, setStateCallback) {
+    switch (fieldName) {
+
+        case "name":
+        case "enName":
+        case "ruName":
+            if (isValidName(value)) {
+                currentElement.className = 'form-control form-control-sm is-valid';
+                setStateCallback(true);
+            } else {
+                currentElement.className = 'form-control form-control-sm is-invalid';
+                return setStateCallback(false);
+            }
+            break;
+
+        case "password":
+        case "repeatPassword":
+            if (isValidPassword(value)) {
+                currentElement.className = 'form-control form-control-sm is-valid';
+                setStateCallback(true);
+            } else {
+                currentElement.className = 'form-control form-control-sm is-invalid';
+                return setStateCallback(false);
+            }
+            break;
+
+        case "email":
+            if (isValidEmail(value)) {
+                currentElement.className = 'form-control form-control-sm is-valid';
+                setStateCallback(true);
+            } else {
+                currentElement.className = 'form-control form-control-sm is-invalid';
+                return setStateCallback(false);
+            }
+            break;
+
+        case "date":
+            if (isValidDate(value)) {
+                currentElement.className = 'form-control form-control-sm is-valid';
+                setStateCallback(true);
+            } else {
+                currentElement.className = 'form-control form-control-sm is-invalid';
+                return setStateCallback(false);
+            }
+            break;
+
+        case "time":
+            if (isValidTime(value.time, value.date, value.timezone)) {
+                currentElement.className = 'form-control form-control-sm is-valid';
+                setStateCallback(true);
+            } else {
+                currentElement.className = 'form-control form-control-sm is-invalid';
+                return setStateCallback(false);
+            }
+            break;
+
+        case "avatar":
+            if (isValidImageFile(value)) {
+                currentElement.className = 'form-control form-control-sm is-valid';
+                setStateCallback(true);
+            } else {
+                currentElement.className = 'form-control form-control-sm is-invalid';
+                return setStateCallback(false);
+            }
+            break;
+    }
+}
+
+function isValidData(validationResult) {
+    let res = true;
+    for (let propertyName in validationResult) {
+        if (!validationResult[propertyName].isValid) {
+            return res = false;
+        }
+    }
+    return res;
+}
+
 function isValidName(name) {
-    return name.length > 2;
+    return name.length > 1;
 }
 
 function isValidEmail(email) {
@@ -16,44 +94,23 @@ function isValidDate(date) {
     return new Date(date) > today;
 }
 
-function isValidTime(time, date) {
-    const reservationDate = new Date(date);
-    const today = new Date();
-    if (reservationDate.getDate() === today.getDate() && reservationDate.getMonth() === today.getMonth() && reservationDate.getFullYear() === today.getFullYear()) {
-        const currentHours = today.getHours();
-        const reservationHours = (new Date('1970-01-01T' + time)).getHours();
-        return reservationHours > 8 && reservationHours > currentHours && reservationHours < 18;
+function isValidTime(time, date, timezone) {
+    if(!time || !date || !timezone) {
+        return false;
     }
-    else {
-        return new Date('1970-01-01T' + time) > new Date('1970-01-01T08:59') && new Date('1970-01-01T' + time) < new Date('1970-01-01T18:01');
+    const reservationDate = moment(date);
+    const reservationTime = moment.tz(date + "T" + time, timezone);
+    if (reservationDate.isSame(moment(), 'day')) {
+        return reservationTime.isAfter(moment.tz(timezone)) && reservationTime.isBefore(moment.tz(date + "T" + "18:01", timezone));
     }
-}
-
-function isValidDateToSend(startTime, finishTime) {
-    return moment(startTime).isBefore(moment(finishTime)) && moment().isBefore(moment(startTime));
-}
-
-function isValidReservation(params) {
-    return isValidName(params.name) && isValidEmail(params.email) && isValidDateToSend(params.start_time, params.finish_time);
-}
-
-function isValidWatchmakerName(name) {
-    return name.length > 0;
-}
-
-function isValidCityName(name) {
-    return name.length > 0;
+    return reservationTime.isAfter(moment(date + "T" + "08:59", timezone)) && reservationTime.isBefore(moment(date + "T" + "18:01", timezone));
 }
 
 function isValidImageFile(file) {
     const validExtentions = ['jpg', 'jpeg', 'png'];
     const splitFile = file.split('.');
     const fileExtention = splitFile[(splitFile.length - 1)];
-    return validExtentions.indexOf(fileExtention) >= 0 ? true : false;
-}
-
-function isValidClient(clientData) {
-    return isValidName(clientData.name) && isValidEmail(clientData.email);
+    return validExtentions.indexOf(fileExtention) >= 0;
 }
 
 function isValidPassword(password) {
@@ -61,14 +118,12 @@ function isValidPassword(password) {
 }
 
 module.exports = {
+    validate: validate,
+    isValidData: isValidData,
     isValidName: isValidName,
     isValidEmail: isValidEmail,
     isValidDate: isValidDate,
     isValidTime: isValidTime,
-    isValidReservation: isValidReservation,
-    isValidWatchmakerName: isValidWatchmakerName,
-    isValidCityName: isValidCityName,
-    isValidClient: isValidClient,
     isValidPassword: isValidPassword,
     isValidImageFile: isValidImageFile
 };

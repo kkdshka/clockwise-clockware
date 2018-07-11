@@ -6,6 +6,7 @@ import Navigation from './Navigation.jsx';
 import {Link} from 'react-router-dom';
 import restApiClient from '../restApiClient/index';
 import Auth from "../authentication";
+import stringHelper from "../stringHelper";
 
 
 export default class Registration extends React.Component {
@@ -47,10 +48,21 @@ export default class Registration extends React.Component {
         }
     }
 
-    handleValidation = (type, message) => event => this.validator(type, event.currentTarget, message);
+    handleValidation = (fieldName, message) => event => {
+        const {validationResult} = this.state;
+
+        validation.validate(fieldName, event.currentTarget, this.refs[fieldName].value, (isValid) => {
+            this.setState({
+                validationResult: {
+                    ...validationResult,
+                    [fieldName]: {isValid: isValid, message: isValid ? '' : message}
+                }
+            });
+        })
+    };
 
     handleOnSubmitForm = () => {
-        const {name, email, password, confirmPassword} = this.refs;
+        const {name, email, password, confirmPassword, validationResult} = this.refs;
 
         if (password.value !== confirmPassword.value) {
             this.setState({passwordDoesNotMatchError: true});
@@ -65,7 +77,7 @@ export default class Registration extends React.Component {
             plaintextPassword: password.value
         };
 
-        if (!validation.isValidClient(data)) {
+        if (!validation.isValidData(validationResult)) {
             this.setState({formError: true});
             return;
         }

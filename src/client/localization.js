@@ -28,7 +28,8 @@ const strings = new LocalizedStrings({
         nameWarning: "Name should consist of three letters and more",
         emailWarning: "Enter correct email",
         dateWarning: "Choose date from today",
-        timeWarning: "Choose time from 9:00 (or later than now, if you choose today) to 18:00",
+        timeWarning: "Choose time from 9:00 (or later than now, if you choose today) to 18:00. \n" +
+                     "Also check if date is chosen.",
         addClient: "Add client",
         editClient: "Edit client",
         add: "Add",
@@ -106,7 +107,8 @@ const strings = new LocalizedStrings({
         nameWarning: "Имя не может быть короче трех букв",
         emailWarning: "Введите правильный почтовый адрес",
         dateWarning: "Введите дату с сегодняшней",
-        timeWarning: "Выберите время с 9:00 до 18:00 или если выбрана сегодняшняя дата - позже текущего времени",
+        timeWarning: "Выберите время с 9:00 до 18:00 или если выбрана сегодняшняя дата - позже текущего времени. \n " +
+                     "Также проверьте выбрана ли дата.",
         addClient: "Добавить клиента",
         editClient: "Изменить клиента",
         add: "Добавить",

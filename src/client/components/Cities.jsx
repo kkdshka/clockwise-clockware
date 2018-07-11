@@ -7,6 +7,7 @@ import strings from '../localization.js';
 import SelectTimezone from './SelectTimezone.jsx';
 import translations from "../localization";
 import DeleteButton from "./DeleteButton.jsx";
+import stringHelper from "../stringHelper";
 
 export default class Cities extends React.Component {
     constructor(props) {
@@ -15,31 +16,38 @@ export default class Cities extends React.Component {
             cities: [],
             isModalCreateOpened: false,
             isModalUpdateOpened: false,
-            name: {isValid: false, message: ''},
+            validationResult: {
+                ruName: {isValid: false, message: ""},
+                enName: {isValid: false, message: ""},
+            },
             formError: false,
             foreignKeyConstraintError: false,
             editing: {},
         };
     }
 
-    componentDidMount() {
-        restApiClient.getCities()
-            .then(cities => this.setState({cities: cities}));
+    componentWillMount() {
         strings.setLanguage(this.props.language);
     }
 
-    handleValidation = (fieldName) => event => {
-        const {isModalCreateOpened} = this.state;
+    componentDidMount() {
+        restApiClient.getCities()
+            .then(cities => this.setState({cities: cities}));
+    }
+
+    handleValidation = (fieldName, message) => event => {
+        const {validationResult, isModalCreateOpened} = this.state;
+
         const modalName = isModalCreateOpened ? 'add' : 'edit';
 
-        if (validation.isValidName(this.refs[modalName + fieldName].value)) {
-            this.setState({name: {isValid: true, message: ''}});
-            event.currentTarget.className = 'form-control is-valid';
-        }
-        else {
-            this.setState({name: {isValid: false, message: strings.notEmptyNameWarning}});
-            event.currentTarget.className = 'form-control is-invalid';
-        }
+        validation.validate(fieldName, event.currentTarget, this.refs[modalName + stringHelper.capitalize(fieldName)].value, (isValid) => {
+            this.setState({
+                validationResult: {
+                    ...validationResult,
+                    [fieldName]: {isValid: isValid, message: isValid ? '' : message}
+                }
+            });
+        })
     };
 
     handleOnEditClick = (city) => () => {
@@ -63,14 +71,15 @@ export default class Cities extends React.Component {
     };
 
     handleOnSubmitAdd = () => {
-        const {name} = this.state;
+        const {validationResult} = this.state;
         const {cityTranslations} = this.props;
 
-        if (!name.isValid) {
+        if (!validation.isValidData(validationResult)) {
             this.setState({formError: true});
             return;
+        } else {
+            this.setState({formError: false});
         }
-        this.setState({formError: false});
 
         const data = {
             name: this.refs.addEnName.value,
@@ -130,7 +139,8 @@ export default class Cities extends React.Component {
                     </button>
                 </td>
                 <td>
-                    <DeleteButton handleDelete={this.handleOnDeleteClick(city.id)} deletingMessage={strings.deletingMessage}/>
+                    <DeleteButton handleDelete={this.handleOnDeleteClick(city.id)}
+                                  deletingMessage={strings.deletingMessage}/>
                 </td>
             </tr>
         });
@@ -139,7 +149,7 @@ export default class Cities extends React.Component {
     renderForeignKeyConstraintError() {
         const {foreignKeyConstraintError} = this.state;
 
-        if(foreignKeyConstraintError) {
+        if (foreignKeyConstraintError) {
             return <div className="alert alert-danger">{strings.foreignKeyConstraintError}</div>
         }
     }
@@ -154,7 +164,8 @@ export default class Cities extends React.Component {
 
     openModalCreate = () => {
         this.setState({
-            isModalCreateOpened: true
+            isModalCreateOpened: true,
+            formError: false
         });
     };
 
@@ -165,7 +176,7 @@ export default class Cities extends React.Component {
     };
 
     renderModalCreate() {
-        const {isModalCreateOpened, name: {message}} = this.state;
+        const {isModalCreateOpened, validationResult: {ruName, enName}} = this.state;
 
         if (isModalCreateOpened) {
             return <Modal visible={true} onClickBackdrop={this.hideModalCreate}>
@@ -178,14 +189,14 @@ export default class Cities extends React.Component {
                         <div className="form-group">
                             <label htmlFor="add-en-name">{strings.enName + ":"}</label>
                             <input type="text" className="form-control" id="add-en-name" ref="addEnName"
-                                   onBlur={this.handleValidation('EnName')}/>
-                            <div className="invalid-feedback">{message}</div>
+                                   onBlur={this.handleValidation('enName', strings.notEmptyNameWarning)}/>
+                            <div className="invalid-feedback">{enName.message}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="add-ru-name">{strings.ruName + ":"}</label>
                             <input type="text" className="form-control" id="add-ru-name" ref="addRuName"
-                                   onBlur={this.handleValidation('RuName')}/>
-                            <div className="invalid-feedback">{message}</div>
+                                   onBlur={this.handleValidation('ruName', strings.notEmptyNameWarning)}/>
+                            <div className="invalid-feedback">{ruName.message}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="add-timezone">{strings.timezone + ":"}</label>
@@ -209,7 +220,8 @@ export default class Cities extends React.Component {
 
     openModalUpdate = () => {
         this.setState({
-            isModalUpdateOpened: true
+            isModalUpdateOpened: true,
+            formError: false
         });
     };
 
@@ -220,7 +232,7 @@ export default class Cities extends React.Component {
     };
 
     renderModalUpdate() {
-        const {isModalUpdateOpened, editing, name: {message}} = this.state;
+        const {isModalUpdateOpened, editing, validationResult: {ruName, enName}} = this.state;
         const {cityTranslations} = this.props;
 
         if (isModalUpdateOpened) {
@@ -235,15 +247,15 @@ export default class Cities extends React.Component {
                             <label htmlFor="edit-en-name">{strings.enName + ":"}</label>
                             <input type="text" className="form-control" id="edit-en-name" ref="editEnName"
                                    defaultValue={cityTranslations.getTranslation(editing.id, 'en')}
-                                   onBlur={this.handleValidation('EnName')}/>
-                            <div className="invalid-feedback">{message}</div>
+                                   onBlur={this.handleValidation('enName', strings.notEmptyNameWarning)}/>
+                            <div className="invalid-feedback">{enName.message}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="edit-ru-name">{strings.ruName + ":"}</label>
                             <input type="text" className="form-control" id="edit-ru-name" ref="editRuName"
                                    defaultValue={cityTranslations.getTranslation(editing.id, 'ru')}
-                                   onBlur={this.handleValidation('RuName')}/>
-                            <div className="invalid-feedback">{message}</div>
+                                   onBlur={this.handleValidation('ruName', strings.notEmptyNameWarning)}/>
+                            <div className="invalid-feedback">{ruName.message}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="edit-timezone">{strings.timezone + ":"}</label>

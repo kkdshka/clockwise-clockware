@@ -5,6 +5,7 @@ import Modal from 'react-bootstrap4-modal';
 import validation from "../validation";
 import strings from '../localization.js';
 import DeleteButton from "./DeleteButton.jsx";
+import stringHelper from "../stringHelper";
 
 export default class Clients extends React.Component {
     constructor(props) {
@@ -33,28 +34,20 @@ export default class Clients extends React.Component {
             .then(clients => this.setState({clients: clients}));
     }
 
-    validator(fieldName, element, message) {
-        const {isModalCreateOpened, validationResult} = this.state;
-
-        function capitalize(string) {
-            return string.replace(/(?:^|\s)\S/g, function (l) {
-                return l.toUpperCase();
-            });
-        }
+    handleValidation = (fieldName, message) => event => {
+        const {validationResult, isModalCreateOpened} = this.state;
 
         const modalName = isModalCreateOpened ? 'add' : 'edit';
 
-        if (validation['isValid' + capitalize(fieldName)](this.refs[modalName + capitalize(fieldName)].value)) {
-            this.setState({validationResult: {...validationResult, [fieldName]: {isValid: true, message: ''}}});
-            element.className = 'form-control form-control-sm is-valid';
-        }
-        else {
-            this.setState({validationResult: {...validationResult, [fieldName]: {isValid: false, message: message}}});
-            element.className = 'form-control form-control-sm is-invalid';
-        }
-    }
-
-    handleValidation = (type, message) => event => this.validator(type, event.currentTarget, message);
+        validation.validate(fieldName, event.currentTarget, this.refs[modalName + stringHelper.capitalize(fieldName)].value, (isValid) => {
+            this.setState({
+                validationResult: {
+                    ...validationResult,
+                    [fieldName]: {isValid: isValid, message: isValid ? '' : message}
+                }
+            });
+        })
+    };
 
     handleOnEditClick = (client) => () => {
         this.setState({editing: client});
@@ -78,13 +71,14 @@ export default class Clients extends React.Component {
 
     handleOnSubmitAdd = () => {
         const {addName, addEmail} = this.refs;
+        const {validationResult} = this.state;
 
         const data = {
             name: addName.value,
             email: addEmail.value
         };
 
-        if (!validation.isValidClient(data)) {
+        if (!validation.isValidData(validationResult)) {
             this.setState({formError: true});
             return;
         }
@@ -160,7 +154,8 @@ export default class Clients extends React.Component {
 
     openModalCreate = () => {
         this.setState({
-            isModalCreateOpened: true
+            isModalCreateOpened: true,
+            formError: false
         });
     };
 
@@ -209,7 +204,8 @@ export default class Clients extends React.Component {
 
     openModalUpdate = () => {
         this.setState({
-            isModalUpdateOpened: true
+            isModalUpdateOpened: true,
+            formError: false
         });
     };
 

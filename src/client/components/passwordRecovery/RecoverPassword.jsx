@@ -3,8 +3,7 @@ import Navigation from '../Navigation.jsx';
 import strings from '../../localization.js';
 import restApiClient from '../../restApiClient/index';
 import Auth from "../../authentication";
-
-const validation = require('../../validation');
+import validation from '../../validation';
 
 export default class SignIn extends React.Component {
     constructor(props) {
@@ -26,32 +25,19 @@ export default class SignIn extends React.Component {
         strings.setLanguage(this.props.language);
     }
 
-    validator(fieldName, element, message) {
+    handleValidation = (fieldName, message) => event => {
         const {validationResult} = this.state;
 
-        function capitalize(string) {
-            return string.replace(/(?:^|\s)\S/g, function (l) {
-                return l.toUpperCase();
-            });
-        }
-
-        if (validation.isValidPassword(this.refs[fieldName].value)) {
-            this.setState({validationResult: {...validationResult, [fieldName]: {isValid: true, message: ''}}});
-            element.className = 'form-control form-control-sm is-valid';
-        }
-        else {
-            this.setState({validationResult: {...validationResult, [fieldName]: {isValid: false, message: message}}});
-            element.className = 'form-control form-control-sm is-invalid';
-        }
-    }
-
-    handleValidation = (type, message) => event => this.validator(type, event.currentTarget, message);
+        validation.validate(fieldName, event.currentTarget, this.refs[fieldName].value, (isValid) => {
+            this.setState({validationResult: {...validationResult, [fieldName]: {isValid: isValid, message: isValid ? '' : message}}});
+        })
+    };
 
     handleOnSubmit = () => {
-        const {validationResult, seconds} = this.state;
+        const {validationResult} = this.state;
         const {password, repeatPassword} = this.refs;
 
-        if (!validationResult.password.isValid || !validationResult.repeatPassword.isValid) {
+        if (validation.isValidData(validationResult)) {
             this.setState({formError: true});
             return;
         } else {

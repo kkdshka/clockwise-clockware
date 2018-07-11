@@ -6,6 +6,7 @@ import validation from '../validation';
 import strings from '../localization.js';
 import DeleteButton from "./DeleteButton.jsx";
 import CloudinaryUploadWidget from './CloudinaryUploadWidget.jsx';
+import stringHelper from '../stringHelper';
 
 export default class Watchmakers extends Component {
     constructor(props) {
@@ -15,8 +16,10 @@ export default class Watchmakers extends Component {
             cities: [],
             isModalCreateOpened: false,
             isModalUpdateOpened: false,
-            name: {isValid: false, message: ''},
-            avatar: {isValid: false, invalidAvatarMessage: ''},
+            validationResult: {
+                name: {isValid: false, message: ''},
+                avatar: {isValid: false, message: ''},
+            },
             formError: false,
             foreignKeyConstraintError: false,
             editing: {},
@@ -25,36 +28,19 @@ export default class Watchmakers extends Component {
         };
     }
 
-    handleValidation = event => {
-        const {isModalCreateOpened} = this.state;
+    handleValidation = (fieldName, message) => event => {
+        const {validationResult, isModalCreateOpened} = this.state;
 
         const modalName = isModalCreateOpened ? 'add' : 'edit';
 
-        if (validation.isValidWatchmakerName(this.refs[modalName + "Name"].value)) {
-            this.setState({name: {isValid: true, message: ''}});
-            event.currentTarget.className = 'form-control form-control-sm is-valid';
-        }
-        else {
-            this.setState({name: {isValid: false, message: strings.notEmptyNameWarning}});
-            event.currentTarget.className = 'form-control form-control-sm is-invalid';
-        }
-    };
-
-    handleFileValidation = event => {
-        const file = event.target.files[0];
-
-        const {isModalCreateOpened} = this.state;
-
-        const modalName = isModalCreateOpened ? 'add' : 'edit';
-
-        if (validation.isValidImageFile(this.refs[modalName + "Avatar"].value)) {
-            this.setState({avatar: {isValid: true, message: ''}, selectedFile: file});
-            event.currentTarget.className = 'form-control form-control-sm is-valid';
-        }
-        else {
-            this.setState({avatar: {isValid: false, invalidAvatarMessage: strings.notValidImageWarning}});
-            event.currentTarget.className = 'form-control form-control-sm is-invalid';
-        }
+        validation.validate(fieldName, event.currentTarget, this.refs[modalName + stringHelper.capitalize(fieldName)].value, (isValid) => {
+            this.setState({
+                validationResult: {
+                    ...validationResult,
+                    [fieldName]: {isValid: isValid, message: isValid ? '' : message}
+                }
+            });
+        })
     };
 
     componentDidMount() {
@@ -86,10 +72,10 @@ export default class Watchmakers extends Component {
     };
 
     handleOnSubmitAdd = (e) => {
-        const {name, avatar, selectedFile} = this.state;
+        const {validationResult, selectedFile} = this.state;
         const {addName, addCity, addRating} = this.refs;
 
-        if (!name.isValid || !avatar.isValid) {
+        if (!validationResult.name.isValid) {
             this.setState({formError: true});
             return;
         }
@@ -102,20 +88,25 @@ export default class Watchmakers extends Component {
         };
 
         restApiClient.addWatchmaker(data).then((res) => {
-            const avatar = new FormData();
-            avatar.append('file', selectedFile);
-            avatar.append('id', res.id);
-            restApiClient.addWatchmakerAvatar(avatar).then(() => {
+            if (selectedFile) {
+                const avatar = new FormData();
+                avatar.append('file', selectedFile);
+                avatar.append('id', res.id);
+                restApiClient.addWatchmakerAvatar(avatar).then(() => {
+                    restApiClient.getWatchmakers()
+                        .then(watchmakers => this.setState({watchmakers: watchmakers}));
+                });
+            } else {
                 restApiClient.getWatchmakers()
                     .then(watchmakers => this.setState({watchmakers: watchmakers}));
-            });
+            }
         });
 
         this.hideModalCreate();
     };
 
     handleOnSubmitEdit = () => {
-        const {editing: {id}, name, avatar, selectedFile} = this.state;
+        const {editing: {id}, selectedFile} = this.state;
         const {editName, editCity, editRating} = this.refs;
 
         const data = {
@@ -125,8 +116,8 @@ export default class Watchmakers extends Component {
             id: id
         };
 
-        if (selectedFile) {
-            restApiClient.editWatchmaker(data).then(() => {
+        restApiClient.editWatchmaker(data).then(() => {
+            if (selectedFile) {
                 const avatar = new FormData();
                 avatar.append('file', selectedFile);
                 avatar.append('id', id);
@@ -135,14 +126,11 @@ export default class Watchmakers extends Component {
                         restApiClient.getWatchmakers()
                             .then(watchmakers => this.setState({watchmakers: watchmakers}));
                     });
-            });
-        }
-
-        restApiClient.editWatchmaker(data)
-            .then(() => {
+            } else {
                 restApiClient.getWatchmakers()
                     .then(watchmakers => this.setState({watchmakers: watchmakers}));
-            });
+            }
+        });
 
         this.hideModalUpdate();
     };
@@ -216,18 +204,19 @@ export default class Watchmakers extends Component {
         restApiClient.getCities()
             .then(cities => this.setState({cities}));
         this.setState({
-            isModalCreateOpened: true
+            isModalCreateOpened: true,
+            formError: false
         });
     };
 
     hideModalCreate = () => {
         this.setState({
-            isModalCreateOpened: false
+            isModalCreateOpened: false,
         });
     };
 
     renderModalCreate() {
-        const {isModalCreateOpened, name: {message}, avatar: {invalidAvatarMessage}} = this.state;
+        const {isModalCreateOpened, validationResult: {name, avatar}} = this.state;
 
         if (isModalCreateOpened) {
             return <Modal visible={true} onClickBackdrop={this.hideModalCreate}>
@@ -240,8 +229,8 @@ export default class Watchmakers extends Component {
                         <div className="form-group">
                             <label htmlFor="add-name">{strings.name + ":"}</label>
                             <input type="text" className="form-control" id="add-name" ref="addName"
-                                   onBlur={this.handleValidation}/>
-                            <div className="invalid-feedback">{message}</div>
+                                   onBlur={this.handleValidation('name', strings.nameWarning)}/>
+                            <div className="invalid-feedback">{name.message}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="add-city">{strings.city + ":"}</label>
@@ -262,8 +251,8 @@ export default class Watchmakers extends Component {
                         <div className="form-group">
                             <label htmlFor="add-avatar">{strings.avatar + ":"}</label>
                             <input type="file" className="form-control-file" id="add-avatar" ref="addAvatar"
-                                   onChange={this.handleFileValidation}/>
-                            <div className="invalid-feedback">{invalidAvatarMessage}</div>
+                                   onChange={this.handleValidation('avatar', strings.notValidImageWarning)}/>
+                            <div className="invalid-feedback">{avatar.message}</div>
                         </div>
                     </form>
                 </div>
@@ -283,7 +272,8 @@ export default class Watchmakers extends Component {
         restApiClient.getCities()
             .then(cities => this.setState({cities}));
         this.setState({
-            isModalUpdateOpened: true
+            isModalUpdateOpened: true,
+            formError: false
         });
     };
 
@@ -294,7 +284,7 @@ export default class Watchmakers extends Component {
     };
 
     renderModalUpdate() {
-        const {isModalUpdateOpened, editing: {name, city, rating}, name: {message}, avatar: {invalidAvatarMessage}} = this.state;
+        const {isModalUpdateOpened, editing: {name, city, rating}, validationResult} = this.state;
 
         if (isModalUpdateOpened) {
             return <Modal visible={true} onClickBackdrop={this.hideModalUpdate}>
@@ -308,8 +298,8 @@ export default class Watchmakers extends Component {
                             <label htmlFor="edit-name">{strings.name + ":"}</label>
                             <input type="text" className="form-control" id="edit-name" ref="editName"
                                    defaultValue={name}
-                                   onBlur={this.handleValidation}/>
-                            <div className="invalid-feedback">{message}</div>
+                                   onBlur={this.handleValidation('name', strings.nameWarning)}/>
+                            <div className="invalid-feedback">{validationResult.name.message}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="edit-city">{strings.city + ":"}</label>
@@ -332,8 +322,8 @@ export default class Watchmakers extends Component {
                         <div className="form-group">
                             <label htmlFor="edit-avatar">{strings.avatar + ":"}</label>
                             <input type="file" className="form-control-file" id="edit-avatar" ref="editAvatar"
-                                   onChange={this.handleFileValidation}/>
-                            <div className="invalid-feedback">{invalidAvatarMessage}</div>
+                                   onChange={this.handleValidation('avatar', strings.notValidImageWarning)}/>
+                            <div className="invalid-feedback">{validationResult.avatar.message}</div>
                         </div>
                     </form>
                 </div>
