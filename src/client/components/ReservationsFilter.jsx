@@ -70,16 +70,16 @@ export default class Reservations extends React.Component {
                 <div className="col">
                     <label htmlFor="city">{strings.city + ":"}</label>
                     <select className="form-control mr-2" id="city" ref="city"
-                            onChange={this.handleOnChange('city_id')} defaultValue={strings.choose}>
-                        <option key='default' disabled="true">{strings.choose}</option>
+                            onChange={this.handleOnChange('city_id')} >
+                        <option value="">{strings.all}</option>
                         {this.renderCities()}
                     </select>
                 </div>
                 <div className="col">
                     <label htmlFor="watchmaker">{strings.watchmaker + ":"}</label>
                     <select className="form-control mr-2" id="watchmaker" ref="watchmaker"
-                            onChange={this.handleOnChange('watchmaker_id')} defaultValue={strings.choose}>
-                        <option key='default' disabled="true">{strings.choose}</option>
+                            onChange={this.handleOnChange('watchmaker_id')}>
+                        <option value="">{strings.all}</option>
                         {this.renderWatchmakers()}
                     </select>
                 </div>

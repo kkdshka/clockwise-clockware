@@ -83,7 +83,8 @@ const strings = new LocalizedStrings({
         from: "From",
         to: "To",
         filter: "Filter",
-        choose: "Choose"
+        choose: "Choose",
+        all: "All"
     },
     ru: {
         main: "Главная",
@@ -166,7 +167,8 @@ const strings = new LocalizedStrings({
         from: "От",
         to: "До",
         filter: "Фильтр",
-        choose: "Выберите"
+        choose: "Выберите",
+        all: "Все"
     }
 });
 
