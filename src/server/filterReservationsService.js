@@ -2,13 +2,17 @@ const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const moment = require("moment-timezone");
 
+function isNotEmpty(array) {
+    return array.length > 0;
+}
+
 module.exports =  function(params) {
     const where = {};
-    if (params.city_id) {
-        where.city_id = params.city_id;
+    if (isNotEmpty(params.citiesId)) {
+        where[Op.or] = params.citiesId;
     }
-    if (params.watchmaker_id) {
-        where.watchmaker_id = params.watchmaker_id;
+    if (isNotEmpty(params.watchmakersId)) {
+        where[Op.or] = params.watchmakersId;
     }
     if(params.fromDate && params.toDate) {
         where.start_time = {
