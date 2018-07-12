@@ -38,5 +38,6 @@ module.exports = {
     getClientReservations: personalPage.getClientReservations,
     sendLink: passwordRecovery.sendLink,
     changePassword: passwordRecovery.changePassword,
-    destroyToken: passwordRecovery.destroyToken
+    destroyToken: passwordRecovery.destroyToken,
+    getFilteredReservations: reservations.getFilteredReservations
 };

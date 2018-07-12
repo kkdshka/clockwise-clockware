@@ -50,11 +50,22 @@ function getReservationsByEmail(email) {
     });
 }
 
+function getFilteredReservations(params) {
+    return Reservation.findAll({
+        include: [City, Watchmaker,
+            {
+                model: Client
+            }],
+        where: params
+    });
+}
+
 module.exports = {
     add: addReservation,
     edit: editReservation,
     delete: deleteReservation,
     getAll: getAllReservations,
     getById: getReservationById,
-    getByEmail: getReservationsByEmail
+    getByEmail: getReservationsByEmail,
+    getFilteredReservations: getFilteredReservations
 };

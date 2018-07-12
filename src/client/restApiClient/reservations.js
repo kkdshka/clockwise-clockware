@@ -28,6 +28,12 @@ function deleteReservation(id) {
         });
 }
 
+function getFilteredReservations(params) {
+    return axios.post('/admin/reservations/filter-reservations', params)
+        .then(res => res.data)
+        .catch(error => console.log(error));
+}
+
 function getReservationById(id) {
     return axios.get('/admin/reservations/:id', {params: {id: id}})
         .then(res => res.data)
@@ -39,5 +45,6 @@ module.exports = {
     addReservation: addReservation,
     editReservation: editReservation,
     deleteReservation: deleteReservation,
-    getReservationById: getReservationById
+    getReservationById: getReservationById,
+    getFilteredReservations: getFilteredReservations
 };

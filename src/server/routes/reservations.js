@@ -11,6 +11,7 @@ const schedule = require('node-schedule');
 const moment = require('moment-timezone');
 const Sequelize = require('sequelize');
 require('dotenv').config();
+const prepareFilter = require('../filterReservationsService');
 
 router.get('/', auth, function (req, res) {
     res.sendFile(path.join(__dirname, "../../../index.html"));
@@ -34,6 +35,16 @@ router.get('/:id', async function (req, res) {
         res.status(200).json(reservation);
     }
     catch (error) {
+        console.log(error);
+        res.sendStatus(500).json({error: error});
+    }
+});
+
+router.post('/filter-reservations', async (req, res) => {
+    try {
+        const reservations = await reservationsRepository.getFilteredReservations(prepareFilter(req.body));
+        res.status(200).json(reservations);
+    } catch (error) {
         console.log(error);
         res.sendStatus(500).json({error: error});
     }
@@ -115,6 +126,7 @@ router.delete('/', async function (req, res) {
         }
     }
 });
+
 
 function check(reservationData) {
     const errors = [];

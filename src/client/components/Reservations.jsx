@@ -52,7 +52,7 @@ export default class Reservations extends React.Component {
 
         const modalName = isModalCreateOpened ? 'add' : 'edit';
 
-        if(fieldName === 'time') {
+        if (fieldName === 'time') {
             validation.validate(fieldName, event.currentTarget, {
                 time: this.refs[modalName + "Time"].value,
                 date: this.refs[modalName + "Date"].value,
@@ -169,7 +169,12 @@ export default class Reservations extends React.Component {
     };
 
     handleOnFilterSubmit = (params) => {
-        console.log(params);
+        restApiClient.getFilteredReservations(params)
+            .then((reservations) => {
+                if (reservations) {
+                    this.setState({reservations: reservations});
+                }
+            });
     };
 
     dateToString(date) {
