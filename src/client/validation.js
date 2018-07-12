@@ -47,6 +47,7 @@ function validate(fieldName, currentElement, value, setStateCallback) {
             break;
 
         case "time":
+            console.log(value);
             if (isValidTime(value.time, value.date, value.timezone)) {
                 currentElement.className = 'form-control form-control-sm is-valid';
                 setStateCallback(true);
@@ -103,7 +104,7 @@ function isValidTime(time, date, timezone) {
     if (reservationDate.isSame(moment(), 'day')) {
         return reservationTime.isAfter(moment.tz(timezone)) && reservationTime.isBefore(moment.tz(date + "T" + "18:01", timezone));
     }
-    return reservationTime.isAfter(moment(date + "T" + "08:59", timezone)) && reservationTime.isBefore(moment(date + "T" + "18:01", timezone));
+    return reservationTime.isAfter(moment.tz(date + "T" + "08:59", timezone)) && reservationTime.isBefore(moment.tz(date + "T" + "18:01", timezone));
 }
 
 function isValidImageFile(file) {

@@ -94,7 +94,15 @@ export default class Order extends React.Component {
     handleOnSubmitForm = (event) => {
         event.preventDefault();
         const {name, city, email, clockSize, date, time} = this.refs;
-        const {citiesById} = this.state;
+        const {citiesById, validationResult} = this.state;
+
+        if (!validation.isValidData(validationResult)) {
+            this.setState({formError: true});
+            return;
+        }
+        else {
+            this.setState({formError: false});
+        }
 
         const timezone = citiesById[city.value].timezone;
         const startMoment = moment.tz(date.value + " " + time.value, timezone);
@@ -110,14 +118,6 @@ export default class Order extends React.Component {
             feedbackEmailMessage: strings.feedbackEmailMessage,
             timezone: timezone
         };
-
-        if (!validation.isValidReservation(params)) {
-            this.setState({formError: true});
-            return;
-        }
-        else {
-            this.setState({formError: false});
-        }
 
         restApiClient.getFreeWatchmakers({
             params: {
