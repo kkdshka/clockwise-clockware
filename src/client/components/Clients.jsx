@@ -63,7 +63,7 @@ export default class Clients extends React.Component {
                     restApiClient.getClients()
                         .then(clients => this.setState({clients: clients}));
                 }
-                else if (res.status === 409 && res.error === "Foreign key constraint error") {
+                else if (res.status === 409 && res.data === "Foreign key constraint error") {
                     this.setState({foreignKeyConstraintError: true});
                 }
             });
@@ -87,9 +87,11 @@ export default class Clients extends React.Component {
         }
 
         restApiClient.addClient(data)
-            .then(() => {
-                restApiClient.getClients()
-                    .then(clients => this.setState({clients: clients}));
+            .then((res) => {
+                if (res.status === 201) {
+                    restApiClient.getClients()
+                        .then(clients => this.setState({clients: clients}));
+                }
             });
 
 

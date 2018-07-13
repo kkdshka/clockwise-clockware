@@ -5,7 +5,7 @@ import restApiClient from '../../restApiClient/index';
 import Auth from "../../authentication";
 import validation from '../../validation';
 
-export default class SignIn extends React.Component {
+export default class RecoverPassword extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -29,7 +29,12 @@ export default class SignIn extends React.Component {
         const {validationResult} = this.state;
 
         validation.validate(fieldName, event.currentTarget, this.refs[fieldName].value, (isValid) => {
-            this.setState({validationResult: {...validationResult, [fieldName]: {isValid: isValid, message: isValid ? '' : message}}});
+            this.setState({
+                validationResult: {
+                    ...validationResult,
+                    [fieldName]: {isValid: isValid, message: isValid ? '' : message}
+                }
+            });
         })
     };
 
@@ -66,14 +71,17 @@ export default class SignIn extends React.Component {
                 }, 1000);
 
                 setTimeout(() => {
-                    restApiClient.destroyToken(window.location.href.split('?token=')[1]).then(() => {
-                        clearInterval(timerId);
-                        Auth.redirect('/');
+                    restApiClient.destroyToken(window.location.href.split('?token=')[1]).then((res) => {
+                        if (res.status === 204) {
+                            clearInterval(timerId);
+                            Auth.redirect('/');
+                        } else {
+                            this.setState({unknownError: true});
+                        }
                     });
                 }, 3000);
             }
             else {
-                console.log(res);
                 this.setState({unknownError: true});
             }
         });

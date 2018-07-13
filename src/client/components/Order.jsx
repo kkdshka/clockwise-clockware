@@ -31,25 +31,27 @@ export default class Order extends React.Component {
     }
 
     componentDidMount() {
-        restApiClient.getCities()
-            .then(cities => {
-                this.setState({cities: cities});
-                this.setState({
-                    citiesById: cities.reduce((citiesById, city) => {
-                        citiesById[city.id] = city;
-                        return citiesById;
-                    }, {})
+        restApiClient.getCities(
+            (cities) => {
+                restApiClient.getTenLastFeedbacks().then(feedbacks => {
+                    this.setState({
+                        feedbacks: feedbacks,
+                        cities: cities,
+                        citiesById: cities.reduce((citiesById, city) => {
+                            citiesById[city.id] = city;
+                            return citiesById;
+                        }, {})
+                    });
                 });
-            });
-
-        restApiClient.getTenLastFeedbacks()
-            .then(feedbacks => this.setState({feedbacks}));
+            },
+            (error) => console.log("Can't get cities because of" + error)
+        );
     }
 
     handleValidation = (fieldName, message) => event => {
         const {validationResult, citiesById} = this.state;
 
-        if(fieldName === 'time') {
+        if (fieldName === 'time') {
             validation.validate(fieldName, event.currentTarget, {
                 time: this.refs.time.value,
                 date: this.refs.date.value,
@@ -203,7 +205,7 @@ export default class Order extends React.Component {
         return freeWatchmakers.map(watchmaker => {
             return <tr key={'watchmaker' + watchmaker.id} className={this.isActive(watchmaker.id)}
                        onClick={this.handleOnWatchmakerClick(watchmaker)}>
-                <td className="align-middle"><img src={watchmaker.avatar} /></td>
+                <td className="align-middle"><img src={watchmaker.avatar}/></td>
                 <td className="align-middle">{watchmaker.name}</td>
                 <td className="align-middle">{watchmaker.rating}</td>
             </tr>
@@ -246,7 +248,7 @@ export default class Order extends React.Component {
         return <table className="table table-striped table-hover">
             <thead>
             <tr>
-                <th />
+                <th/>
                 <th>{strings.name}</th>
                 <th>{strings.rating}</th>
             </tr>

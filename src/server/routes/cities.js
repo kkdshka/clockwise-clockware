@@ -66,7 +66,7 @@ router.put('/', async function (req, res) {
     try {
         await citiesRepository.editTranslations(cityData.translations);
         await citiesRepository.editCity(cityData);
-        res.sendStatus(204).end();
+        res.sendStatus(200).end();
     }
     catch (error) {
         console.log(error);

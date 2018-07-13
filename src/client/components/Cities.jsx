@@ -22,17 +22,18 @@ export default class Cities extends React.Component {
             },
             formError: false,
             foreignKeyConstraintError: false,
+            unknownError: false,
             editing: {},
         };
     }
 
-    componentWillMount() {
-        strings.setLanguage(this.props.language);
-    }
-
     componentDidMount() {
-        restApiClient.getCities()
-            .then(cities => this.setState({cities: cities}));
+        strings.setLanguage(this.props.language);
+
+        restApiClient.getCities(
+            (cities) => this.setState({cities}),
+            (error) => console.log("Can't get cities because of" + error)
+        );
     }
 
     handleValidation = (fieldName, message) => event => {
@@ -56,18 +57,17 @@ export default class Cities extends React.Component {
     };
 
     handleOnDeleteClick = (id) => () => {
-        const {cities} = this.state;
-
-        restApiClient.deleteCity(id)
-            .then(res => {
-                if (res.status === 200) {
-                    restApiClient.getCities()
-                        .then(cities => this.setState({cities: cities}));
-                }
-                else if (res.status === 409 && res.error === "Foreign key constraint error") {
-                    this.setState({foreignKeyConstraintError: true});
-                }
-            });
+        restApiClient.deleteCity(id,
+            () => {
+                restApiClient.getCities(
+                    (cities) => this.setState({cities}),
+                    (error) => console.log("Can't get cities because of " + error)
+                );
+            },
+            (error, isConstraint) => {
+                isConstraint ? this.setState({foreignKeyConstraintError: true}) : console.log("Can't get cities because of " + error);
+            }
+        )
     };
 
     handleOnSubmitAdd = () => {
@@ -90,12 +90,17 @@ export default class Cities extends React.Component {
             ]
         };
 
-        restApiClient.addCity(data).then(() => {
-            cityTranslations.onCitiesChange().then(() => {
-                restApiClient.getCities()
-                    .then(cities => this.setState({cities: cities}));
-            });
-        });
+        restApiClient.addCity(data,
+            () => {
+                cityTranslations.onCitiesChange().then(() => {
+                    restApiClient.getCities(
+                        (cities) => this.setState({cities}),
+                        (error) => console.log("Can't get cities because of " + error)
+                    );
+                });
+            },
+            (error) => console.log("Can't add city because of " + error)
+        );
 
         this.hideModalCreate();
     };
@@ -114,12 +119,16 @@ export default class Cities extends React.Component {
             ]
         };
 
-        restApiClient.editCity(data).then(() => {
-            cityTranslations.onCitiesChange();
-            restApiClient.getCities()
-                .then(cities => this.setState({cities: cities}))
-                .catch(error => console.log(error));
-        }).catch(error => console.log(error));
+        restApiClient.editCity(data,
+            () => {
+                cityTranslations.onCitiesChange();
+                restApiClient.getCities(
+                    (cities) => this.setState({cities}),
+                    (error) => console.log("Can't get cities because of " + error)
+                );
+            },
+            (error) => console.log("Can't update city because of " + error)
+        );
 
 
         this.hideModalUpdate();
@@ -277,10 +286,10 @@ export default class Cities extends React.Component {
     }
 
     update = () => {
-        restApiClient.getCities(strings.getLanguage())
-            .then(cities => {
-                this.setState({cities: cities})
-            });
+        restApiClient.getCities(
+            (cities) => this.setState({cities}),
+            (error) => console.log("Can't get cities because of " + error)
+        );
         this.forceUpdate();
     };
 

@@ -8,7 +8,8 @@ function signIn(signInData) {
 
 function signOut() {
     axios.post('client/sign-out')
-        .catch(error => console.log(error));
+        .then(res => res)
+        .catch(error => error.response);
 }
 
 module.exports = {

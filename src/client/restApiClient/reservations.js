@@ -3,41 +3,37 @@ import axios from "axios/index";
 function getReservations() {
     return axios.get('/admin/reservations/reservations-data')
         .then(res => res.data)
-        .catch(error => console.log(error));
+        .catch(error => error.response);
 }
 
 function addReservation(data) {
     return axios.post('/admin/reservations/', data)
         .then(res => res)
-        .catch(error => console.log(error));
+        .catch(error => error.response);
 }
 
 function editReservation(data) {
     return axios.put('/admin/reservations/', data)
-        .catch(error => console.log(error));
+        .then(res => res)
+        .catch(error => error.response);
 }
 
 function deleteReservation(id) {
     return axios.delete('/admin/reservations/', {data: {id: id}})
         .then(res => res)
-        .catch(error => {
-            return {
-                error: error.response.data,
-                status: error.response.status
-            }
-        });
+        .catch(error => error.response);
 }
 
 function getFilteredReservations(params) {
     return axios.post('/admin/reservations/filter-reservations', params)
         .then(res => res.data)
-        .catch(error => console.log(error));
+        .catch(error => error.response);
 }
 
 function getReservationById(id) {
     return axios.get('/admin/reservations/:id', {params: {id: id}})
         .then(res => res.data)
-        .catch(error => console.log(error));
+        .catch(error => error.response);
 }
 
 module.exports = {

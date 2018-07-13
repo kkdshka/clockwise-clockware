@@ -2,7 +2,7 @@ import axios from "axios/index";
 
 function sendLink(recoveryData) {
     return axios.post('/password-recovery/send-link', recoveryData)
-        .then(res => res.data)
+        .then(res => res)
         .catch(error => error.response);
 }
 
@@ -15,7 +15,7 @@ function changePassword(data) {
 function destroyToken(token) {
     return axios.delete('/token', {data: {token: token}})
         .then(res => res)
-        .catch(err => err.response);
+        .catch(error => error.response);
 }
 
 module.exports = {

@@ -65,7 +65,7 @@ export default class Watchmakers extends Component {
                     restApiClient.getWatchmakers()
                         .then(watchmakers => this.setState({watchmakers: watchmakers}));
                 }
-                else if (res.status === 409 && res.error === "Foreign key constraint error") {
+                else if (res.status === 409 && res.data === "Foreign key constraint error") {
                     this.setState({foreignKeyConstraintError: true});
                 }
             });
@@ -201,12 +201,14 @@ export default class Watchmakers extends Component {
     }
 
     openModalCreate = () => {
-        restApiClient.getCities()
-            .then(cities => this.setState({cities}));
-        this.setState({
-            isModalCreateOpened: true,
-            formError: false
-        });
+        restApiClient.getCities(
+            (cities) => this.setState({
+                cities: cities,
+                isModalCreateOpened: true,
+                formError: false
+            }),
+            (error) => console.log("Can't get cities because of" + error)
+        );
     };
 
     hideModalCreate = () => {
@@ -269,12 +271,14 @@ export default class Watchmakers extends Component {
     }
 
     openModalUpdate = () => {
-        restApiClient.getCities()
-            .then(cities => this.setState({cities}));
-        this.setState({
-            isModalUpdateOpened: true,
-            formError: false
-        });
+        restApiClient.getCities(
+            (cities) => this.setState({
+                cities: cities,
+                isModalUpdateOpened: true,
+                formError: false
+            }),
+            (error) => console.log("Can't get cities because of" + error)
+        );
     };
 
     hideModalUpdate = () => {
@@ -340,8 +344,11 @@ export default class Watchmakers extends Component {
     }
 
     update = () => {
-        restApiClient.getCities(strings.getLanguage())
-            .then(cities => this.setState({cities}));
+        restApiClient.getCities(
+            (cities) => this.setState({cities}),
+            (error) => console.log("Can't get cities because of" + error)
+        );
+
         this.forceUpdate();
     };
 

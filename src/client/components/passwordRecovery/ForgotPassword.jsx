@@ -4,7 +4,7 @@ import strings from '../../localization.js';
 import {Link} from 'react-router-dom';
 import restApiClient from '../../restApiClient/index';
 
-export default class SignIn extends React.Component {
+export default class ForgotPassword extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -24,8 +24,8 @@ export default class SignIn extends React.Component {
             message: strings.passwordRecoveryEmailMessage
         };
 
-        restApiClient.sendLink(recoveryData).then(() => {
-            this.setState({confirmation: true});
+        restApiClient.sendLink(recoveryData).then((res) => {
+            res.status === 200 ? this.setState({confirmation: true}) : null;
         });
     };
 

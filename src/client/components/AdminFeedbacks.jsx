@@ -15,8 +15,8 @@ export default class AdminFeedbacks extends React.Component {
         strings.setLanguage(this.props.language);
 
         restApiClient.getFeedbacks()
-            .then(feedbacks => {
-                this.setState({feedbacks: feedbacks})
+            .then(res => {
+                res.status === 200 ? this.setState({feedbacks: res.data}) : null;
             });
     }
 

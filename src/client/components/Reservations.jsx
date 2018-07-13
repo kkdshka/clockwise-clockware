@@ -92,7 +92,7 @@ export default class Reservations extends React.Component {
                     restApiClient.getReservations()
                         .then(reservations => this.setState({reservations: reservations}));
                 }
-                else if (res.status === 409 && res.error === "Foreign key constraint error") {
+                else if (res.status === 409 && res.data === "Foreign key constraint error") {
                     this.setState({foreignKeyConstraintError: true});
                 }
             });
@@ -250,8 +250,8 @@ export default class Reservations extends React.Component {
             isModalCreateOpened: true,
             formError: false
         });
-        restApiClient.getCities()
-            .then(cities => {
+        restApiClient.getCities(
+            (cities) => {
                 this.setState({cities});
                 this.setState({
                     citiesById: cities.reduce((citiesById, city) => {
@@ -259,7 +259,9 @@ export default class Reservations extends React.Component {
                         return citiesById;
                     }, {})
                 });
-            });
+            },
+            (error) => console.log("Can't get cities because of" + error)
+        );
 
         restApiClient.getWatchmakers()
             .then(watchmakers => this.setState({watchmakers}));
@@ -346,8 +348,8 @@ export default class Reservations extends React.Component {
             isModalUpdateOpened: true,
             formError: false
         });
-        restApiClient.getCities()
-            .then(cities => {
+        restApiClient.getCities(
+            (cities) => {
                 this.setState({cities});
                 this.setState({
                     citiesById: cities.reduce((citiesById, city) => {
@@ -355,7 +357,9 @@ export default class Reservations extends React.Component {
                         return citiesById;
                     }, {})
                 });
-            });
+            },
+            (error) => console.log("Can't get cities because of" + error)
+        );
 
         restApiClient.getWatchmakers()
             .then(watchmakers => this.setState({watchmakers}));
@@ -482,8 +486,10 @@ export default class Reservations extends React.Component {
     };
 
     update = () => {
-        restApiClient.getCities()
-            .then(cities => this.setState({cities}));
+        restApiClient.getCities(
+            (cities) => this.setState({cities}),
+            (error) => console.log("Can't get cities because of" + error)
+        );
         this.forceUpdate();
     };
 

@@ -1,30 +1,51 @@
 import axios from "axios/index";
 
-function getCities() {
+function getCities(onSuccess, onError) {
     return axios.get('/admin/cities/cities-data')
-        .then(res => res.data)
-        .catch(error => console.log(error));
-}
-
-function addCity(data) {
-    return axios.post('/admin/cities/', data)
-        .catch(error => console.log(error));
-}
-
-function editCity(data) {
-    return axios.put('/admin/cities/', data)
-        .catch(error => console.log(error));
-}
-
-function deleteCity(id) {
-    return axios.delete('/admin/cities/', {data: {id: id}})
-        .then(res => res)
-        .catch(error => {
-            return {
-                error: error.response.data,
-                status: error.response.status
+        .then(res => {
+            if(res.status === 200) {
+                return onSuccess(res.data)
+            } else {
+                return onError("Unknown Error");
             }
-        });
+        })
+        .catch(error => onError(error.response.data));
+}
+
+function addCity(data, onSuccess, onError) {
+    return axios.post('/admin/cities/', data)
+        .then(res => {
+            if(res.status === 201) {
+                onSuccess();
+            }   else {
+                onError("Unknown Error");
+            }
+        })
+        .catch(error => onError(error.response.data));
+}
+
+function editCity(data, onSuccess, onError) {
+    return axios.put('/admin/cities/', data)
+        .then(res => {
+            if(res.status === 200) {
+                onSuccess();
+            }   else {
+                onError("Unknown Error");
+            }
+        })
+        .catch(error => onError(error.response.data));
+}
+
+function deleteCity(id, onSuccess, onError) {
+    return axios.delete('/admin/cities/', {data: {id: id}})
+        .then(res => {
+            if(res.status === 200) {
+                onSuccess();
+            }   else {
+                onError("Unknown Error", false);
+            }
+        })
+        .catch(error => onError(error.response.data, error.response.status === 409));
 }
 
 module.exports = {

@@ -28,13 +28,16 @@ export default class Reservations extends React.Component {
         if (opened) {
             this.setState({opened: !opened});
         } else {
-            restApiClient.getCities().then((cities) => {
-                this.setState({cities: cities});
-                restApiClient.getWatchmakers().then((watchmakers) => {
-                    this.setState({watchmakers: watchmakers});
-                    this.setState({opened: !opened});
-                });
-            });
+            restApiClient.getCities(
+                (cities) => {
+                    this.setState({cities: cities});
+                    restApiClient.getWatchmakers().then((watchmakers) => {
+                        this.setState({watchmakers: watchmakers});
+                        this.setState({opened: !opened});
+                    });
+                },
+                (error) => console.log("Can't get cities because of" + error)
+            );
         }
     };
 
